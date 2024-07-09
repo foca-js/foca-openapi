@@ -1,0 +1,10 @@
+node_modules/
+.idea/
+TODO
+dist/
+.npmrc
+coverage/
+.DS_Store
+*.log
+.tsbuildinfo
+.nx/
