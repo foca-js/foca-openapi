@@ -1,0 +1,6 @@
+dist/
+pnpm-lock.yaml
+CHANGELOG.md
+coverage/
+openapi.json
+/.nx/workspace-data
