@@ -47,8 +47,8 @@
     "CHANGELOG.md"
   ],
   "keywords": [],
-  "repository": "git@github.com:aomex/aomex.git",
-  "homepage": "https://aomex.js.org",
+  "repository": "git@github.com:foca-js/foca-openapi.git",
+  "homepage": "https://foca.js.org",
   "license": "MIT",
   "volta": {
     "node": "18.16.0",
