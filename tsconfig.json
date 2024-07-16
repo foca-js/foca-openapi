@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": false,
@@ -34,6 +34,5 @@
     "resolveJsonModule": true,
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo"
-  },
-  "exclude": ["packages/**/dist"]
+  }
 }

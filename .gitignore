@@ -7,4 +7,11 @@ coverage/
 .DS_Store
 *.log
 .tsbuildinfo
-.nx/
+*.js
+*.d.ts
+*.d.cts
+*.d.mts
+*.js.map
+/adapters
+openapi/openapi.yaml
+openapi/openapi.json
