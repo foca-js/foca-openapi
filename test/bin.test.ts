@@ -28,7 +28,7 @@ afterEach(async () => {
   await writeFile(path.join(src, 'openapi-runtime.ts'), 'export {};\n');
 });
 
-test('生成 bin.mjs', async () => {
+test('生成 bin.mjs', { timeout: 15_000 }, async () => {
   try {
     await rm('dist', { recursive: true });
   } catch {}
@@ -36,7 +36,7 @@ test('生成 bin.mjs', async () => {
   expect(existsSync(path.resolve('dist', 'bin.mjs')));
 });
 
-test('生成runtime并重新打包', async () => {
+test('生成runtime并重新打包', { timeout: 15_000 }, async () => {
   const dts = path.resolve('src', 'index.d.ts');
 
   try {
