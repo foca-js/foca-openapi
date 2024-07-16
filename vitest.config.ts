@@ -5,8 +5,8 @@ export default defineProject({
     coverage: {
       provider: 'v8',
       enabled: true,
-      include: ['packages/**/src/**'],
-      exclude: ['packages/console/src/bin.ts'],
+      include: ['src/**'],
+      exclude: ['src/bin.ts'],
       all: true,
       // lines: 99,
       // functions: 99,
@@ -18,12 +18,7 @@ export default defineProject({
     fileParallelism: false,
     logHeapUsage: true,
     environment: 'node',
-    retry: 1,
     globals: true,
-    snapshotFormat: {
-      escapeString: false,
-      printBasicPrototype: false,
-    },
     watch: false,
   },
 });

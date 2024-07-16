@@ -26,9 +26,6 @@ jobs:
           cache: 'pnpm'
           node-version-file: 'package.json'
       - run: pnpm install
-      - run: npx lerna version --force-publish --yes
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          pnpm --recursive publish
+          pnpm publish
