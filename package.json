@@ -6,7 +6,6 @@
     "test": "vitest",
     "generate": "aomex openapi-yaml && aomex openapi-json",
     "build": "tsup",
-    "preinstall": "only-allow pnpm",
     "prepare": "husky",
     "prepublishOnly": "tsup",
     "deploy:main": "sh scripts/develop-deploy-main.sh",
