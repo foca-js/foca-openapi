@@ -26,6 +26,10 @@ jobs:
           cache: 'pnpm'
           node-version-file: 'package.json'
       - run: pnpm install
+      - run: pnpm release-it --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
       - run: |
           npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
           pnpm publish
