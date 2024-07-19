@@ -25,7 +25,7 @@ export const taroAdapter = (opts: {
   /**
    * Taro.request()的默认参数，每次请求前都会合并对象
    */
-  requestOptions: Taro.request.Option;
+  requestOptions?: Taro.request.Option;
 }): OpenapiClientAdapter => {
   const {
     returningData = (response) => response.data,
@@ -49,7 +49,7 @@ export const taroAdapter = (opts: {
         url: baseURL + utils.uriConcatQuery(opts.uri, opts.query),
         method: opts.method.toUpperCase() as `${Uppercase<Methods>}`,
         data: body,
-        header: { ...requestOptions.header, ...opts.headers },
+        header: { ...requestOptions?.header, ...opts.headers },
         timeout: opts.timeout,
         credentials,
         responseType: opts.responseType === 'text' ? 'text' : undefined,
