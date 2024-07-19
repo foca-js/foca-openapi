@@ -30,19 +30,17 @@ export const documentToMeta = (docs: OpenAPIV3.Document) => {
 
   Object.entries(docs.paths).forEach(([uri, pathItem]) => {
     methods.forEach((method) => {
-      if (pathItem?.[method]) {
-        const methodItem = pathItem[method];
-        metas[method].push({
-          uri,
-          key:
-            methodItem.operationId ||
-            snakeCase(`${method}_${uri.replaceAll(':', '_by_')}`),
-          query: parseParameters(docs, pathItem, methodItem, 'query'),
-          params: parseParameters(docs, pathItem, methodItem, 'path'),
-          ...parseRequestBody(docs, methodItem),
-          ...parseResponse(docs, methodItem),
-        });
-      }
+      if (!pathItem || !pathItem[method]) return;
+      const methodItem = pathItem[method]!;
+      metas[method].push({
+        uri,
+        key:
+          methodItem.operationId || snakeCase(`${method}_${uri.replaceAll(':', '_by_')}`),
+        query: parseParameters(docs, pathItem, methodItem, 'query'),
+        params: parseParameters(docs, pathItem, methodItem, 'path'),
+        ...parseRequestBody(docs, methodItem),
+        ...parseResponse(docs, methodItem),
+      });
     });
   });
 
