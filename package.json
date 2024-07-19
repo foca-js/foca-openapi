@@ -19,14 +19,14 @@
       "require": "./dist/index.js"
     },
     "./adapters/fetch": {
-      "types": "./dist/adapters/fetch.d.ts",
-      "import": "./dist/adapters/esm/fetch.js",
-      "require": "./dist/adapters/fetch.js"
+      "types": "./adapters/fetch.d.ts",
+      "import": "./adapters/esm/fetch.js",
+      "require": "./adapters/fetch.js"
     },
     "./adapters/axios": {
-      "types": "./dist/adapters/axios.d.ts",
-      "import": "./dist/adapters/esm/axios.js",
-      "require": "./dist/adapters/axios.js"
+      "types": "./adapters/axios.d.ts",
+      "import": "./adapters/esm/axios.js",
+      "require": "./adapters/axios.js"
     },
     "./package.json": "./package.json"
   },
