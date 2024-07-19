@@ -124,7 +124,7 @@ var ${className} = class extends BaseOpenapiClient {
   }
 
   getContentTypes(uri, method) {
-    return contentTypes${className}[uri + " " + method] || [void 0, void 0];
+    return contentTypes${className}[method + " " + uri] || [void 0, void 0];
   }
 };`;
 };
