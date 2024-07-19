@@ -3,12 +3,12 @@
 使用openapi文档生成请求服务
 
 [![npm peer typescript version](https://img.shields.io/npm/dependency-version/foca-openapi/peer/typescript?logo=typescript)](https://github.com/microsoft/TypeScript)
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/foca-js/foca-openapi/test.yml?branch=master&label=test&logo=vitest)](https://github.com/foca-js/foca-openapi/actions)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/foca-js/foca-openapi/test.yml?branch=main&label=test&logo=vitest)](https://github.com/foca-js/foca-openapi/actions)
 [![Codecov](https://img.shields.io/codecov/c/github/foca-js/foca-openapi?logo=codecov)](https://codecov.io/gh/foca-js/foca-openapi)
 [![npm](https://img.shields.io/npm/v/foca-openapi?logo=npm)](https://www.npmjs.com/package/foca-openapi)
 [![npm](https://img.shields.io/npm/dt/foca-openapi?logo=codeforces)](https://www.npmjs.com/package/foca-openapi)
 [![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/foca-openapi?label=bundle+size&cacheSeconds=3600&logo=esbuild)](https://bundlephobia.com/package/foca-openapi@latest)
-[![License](https://img.shields.io/github/license/foca-js/foca-openapi?logo=open-source-initiative)](https://github.com/foca-js/foca-openapi/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/foca-js/foca-openapi?logo=open-source-initiative)](https://github.com/foca-js/foca-openapi/blob/main/LICENSE)
 
 # 安装
 
