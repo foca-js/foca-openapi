@@ -2,6 +2,7 @@ node_modules/
 .idea/
 TODO
 dist/
+backup/
 .npmrc
 coverage/
 .DS_Store

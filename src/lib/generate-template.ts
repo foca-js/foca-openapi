@@ -2,26 +2,36 @@ import type { OpenAPIV3 } from 'openapi-types';
 import { upperFirst, camelCase } from 'lodash-es';
 import { documentToMeta, type Metas } from './document-to-meta';
 import { methods } from './adapter';
+import prettier from 'prettier';
 
-export const generateTemplate = (docs: OpenAPIV3.Document, projectName: string = '') => {
-  projectName = upperFirst(camelCase(projectName));
-  const className = `OpenapiClient${projectName}`;
+export const generateTemplate = async (
+  docs: OpenAPIV3.Document,
+  projectName: string = '',
+) => {
+  const className = `OpenapiClient${upperFirst(camelCase(projectName))}`;
   const metas = documentToMeta(docs);
-  const tpl = `
-    import { BaseOpenapiClient } from './base-openapi-client';
-
+  const dts = `
     ${generateNamespaceTpl(className, metas)}
-    ${generateClassTpl(className, metas)}
-    ${generateContentTypeTpl(metas)}
+    ${generateClassForDTS(className, metas)}
     ${generatePathRelationTpl(className, metas)}
 `;
 
-  return { [projectName]: tpl };
+  const js = `
+  ${generateClassForJS(className)}
+  ${generateContentTypeTpl(className, metas)}
+  `;
+
+  return {
+    [className]: {
+      dts: await prettier.format(dts, { parser: 'typescript' }),
+      js: await prettier.format(js, { parser: 'typescript' }),
+    },
+  };
 };
 
 export const generateNamespaceTpl = (className: string, metas: Metas) => {
   return `
-export namespace ${className} {
+declare namespace ${className} {
   ${methods
     .flatMap((method) => {
       let content = metas[method].flatMap((meta) => {
@@ -30,7 +40,7 @@ export namespace ${className} {
         (<const>['query', 'params']).forEach((key) => {
           const interfaceName = upperFirst(camelCase(meta.key + '_' + key));
           if (meta[key].types.length) {
-            opts.push(`export interface ${interfaceName} ${meta[key].types[0]}\n`);
+            opts.push(`interface ${interfaceName} ${meta[key].types[0]}\n`);
           }
         });
 
@@ -39,8 +49,8 @@ export namespace ${className} {
           if (meta[key].types.length) {
             opts.push(
               meta[key].types.length === 1
-                ? `export interface ${interfaceName} ${meta[key].types}\n`
-                : `export type ${interfaceName} =  ${meta[key].types.join(' | ')}\n`,
+                ? `interface ${interfaceName} ${meta[key].types}\n`
+                : `type ${interfaceName} =  ${meta[key].types.join(' | ')}\n`,
             );
           }
         });
@@ -53,9 +63,9 @@ export namespace ${className} {
 }`;
 };
 
-export const generateClassTpl = (className: string, metas: Metas) => {
+export const generateClassForDTS = (className: string, metas: Metas) => {
   return `
-export class ${className} extends BaseOpenapiClient {
+declare class ${className} extends BaseOpenapiClient {
   ${methods
     .map((method) => {
       if (!metas[method].length) return '';
@@ -78,22 +88,43 @@ export class ${className} extends BaseOpenapiClient {
 
       return `${method}<K extends keyof ${className}_${method}_paths>(
         uri: K, ...rest: ${opts}
-      ): Promise<${className}_${method}_paths[K]['response']> {
-          return this.request(uri, '${method}', rest[0] || {});
-      }`;
+      ): Promise<${className}_${method}_paths[K]['response']>`;
     })
     .join('\n')}
     
-    protected override getContentTypes(uri: string, method: string) {
-      return defaultContentTypes[uri + ' ' + method] || [void 0, void 0];
-    }
+    protected getContentTypes(uri: string, method: string) : [
+      BaseOpenapiClient.UserInputOpts['requestBodyType'],
+      BaseOpenapiClient.UserInputOpts['responseType'],
+    ];
 }
   `;
 };
 
-export const generateContentTypeTpl = (metas: Metas) => {
+export const generateClassForJS = (className: string) => {
   return `
-  const defaultContentTypes: Record<string, [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']]> = {
+var ${className} = class extends BaseOpenapiClient {
+  get(uri, ...rest) {
+    return this.request(uri, "get", rest[0] || {});
+  }
+  post(uri, ...rest) {
+    return this.request(uri, "post", rest[0] || {});
+  }
+  put(uri, ...rest) {
+    return this.request(uri, "put", rest[0] || {});
+  }
+  delete(uri, ...rest) {
+    return this.request(uri, "delete", rest[0] || {});
+  }
+  getContentTypes(uri, method) {
+    return contentTypes${className}[uri + " " + method] || [void 0, void 0];
+  }
+};
+  `;
+};
+
+export const generateContentTypeTpl = (className: string, metas: Metas) => {
+  return `
+  const contentTypes${className} = {
   ${methods
     .map((method) => {
       if (!metas[method].length) return '';

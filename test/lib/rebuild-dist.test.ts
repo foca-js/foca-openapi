@@ -1,31 +1,89 @@
-import { readFile, writeFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import path from 'path';
-import { afterEach, expect, test } from 'vitest';
+import { beforeAll, expect, test } from 'vitest';
 import { rebuildDist } from '../../src/lib/rebuild-dist';
-import { execSync } from 'child_process';
+import tsup from 'tsup';
 
-const dist = path.join(import.meta.dirname, '..', '..', 'dist');
-const src = path.join(import.meta.dirname, '..', '..', 'src');
-const runtime = path.join(src, 'openapi-runtime.ts');
-const sourceContent = 'export const foo = { bar: "baz" };';
-const buildContent = 'var foo = { bar: "baz" }';
+const root = path.resolve('test', 'fixtures');
+const dtsContent = 'declare const foo = { bar: "baz" };';
+const jsContent = 'var foo = { bar: "baz" }';
+const distDir = path.join(root, 'dist');
 
-afterEach(async () => {
-  await writeFile(runtime, 'export {};');
+beforeAll(async () => {
+  await tsup.build({
+    entry: ['test/fixtures/index.ts'],
+    outDir: 'test/fixtures/dist',
+    dts: true,
+    legacyOutput: true,
+  });
+  await tsup.build({
+    entry: ['test/fixtures/index.ts'],
+    outDir: 'test/fixtures/backup',
+    dts: true,
+    legacyOutput: true,
+  });
 });
 
 test('内容写入文件', async () => {
-  await rebuildDist(dist, sourceContent);
-  await expect(readFile(runtime, 'utf8')).resolves.toBe(sourceContent);
-});
+  await rebuildDist(root, jsContent, dtsContent, ['foo']);
+  await expect(readFile(path.join(distDir, 'index.js'), 'utf8')).resolves
+    .toMatchInlineSnapshot(`
+    ""use strict";
+    var __defProp = Object.defineProperty;
+    var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+    var __getOwnPropNames = Object.getOwnPropertyNames;
+    var __hasOwnProp = Object.prototype.hasOwnProperty;
+    var __export = (target, all) => {
+      for (var name in all)
+        __defProp(target, name, { get: all[name], enumerable: true });
+    };
+    var __copyProps = (to, from, except, desc) => {
+      if (from && typeof from === "object" || typeof from === "function") {
+        for (let key of __getOwnPropNames(from))
+          if (!__hasOwnProp.call(to, key) && key !== except)
+            __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+      }
+      return to;
+    };
+    var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-test('打包进dist/index.js文件', async () => {
-  execSync('npx tsup', { stdio: 'inherit', encoding: 'utf8' });
-  await expect(readFile(path.join(dist, 'index.js'), 'utf8')).resolves.not.toContain(
-    buildContent,
-  );
-  await rebuildDist(dist, sourceContent);
-  await expect(readFile(path.join(dist, 'index.js'), 'utf8')).resolves.toContain(
-    buildContent,
-  );
+    // test/fixtures/index.ts
+    var fixtures_exports = {};
+    __export(fixtures_exports, {
+    foo: () => foo,
+      aaaaa: () => aaaaa
+    });
+    module.exports = __toCommonJS(fixtures_exports);
+    var aaaaa = { bbbbb: "ccccc" };
+    // Annotate the CommonJS export names for ESM import in node:
+    var foo = { bar: "baz" }
+    0 && (module.exports = {
+    foo,
+      aaaaa
+    });
+    //# sourceMappingURL=index.js.map"
+  `);
+
+  await expect(readFile(path.join(distDir, 'index.d.ts'), 'utf8')).resolves
+    .toMatchInlineSnapshot(`
+    "declare const aaaaa: {
+        bbbbb: string;
+    };
+
+    declare const foo = { bar: "baz" };
+    export {foo, aaaaa };
+    "
+  `);
+
+  await expect(readFile(path.join(distDir, 'esm', 'index.js'), 'utf8')).resolves
+    .toMatchInlineSnapshot(`
+    "// test/fixtures/index.ts
+    var aaaaa = { bbbbb: "ccccc" };
+    var foo = { bar: "baz" }
+    export {
+    foo,
+      aaaaa
+    };
+    //# sourceMappingURL=index.js.map"
+  `);
 });

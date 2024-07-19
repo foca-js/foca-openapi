@@ -1,9 +1,11 @@
+import { readdirSync } from 'node:fs';
+import path from 'node:path';
 import { defineConfig } from 'tsup';
 
 export default defineConfig([
   {
     entry: ['src/bin.ts'],
-    splitting: true,
+    splitting: false,
     sourcemap: true,
     clean: true,
     format: ['esm'],
@@ -29,8 +31,24 @@ export default defineConfig([
     onSuccess: `echo '{"type":"module"}' > dist/esm/package.json`,
   },
   {
-    entry: ['src/adapters/fetch.ts', 'src/adapters/axios.ts'],
-    splitting: true,
+    entry: ['src/index.ts'],
+    outDir: './backup',
+    splitting: false,
+    sourcemap: false,
+    clean: false,
+    format: ['cjs', 'esm'],
+    platform: 'node',
+    tsconfig: './tsconfig.json',
+    target: 'es2020',
+    shims: false,
+    dts: true,
+    legacyOutput: true,
+  },
+  {
+    entry: readdirSync(path.resolve('src', 'adapters')).map(
+      (filename) => 'src/adapters/' + filename,
+    ),
+    splitting: false,
     sourcemap: true,
     clean: true,
     format: ['cjs', 'esm'],
