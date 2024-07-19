@@ -131,7 +131,7 @@ test('完整的类型提示', async () => {
       }
 
       getContentTypes(uri, method) {
-        return contentTypesOpenapiClient[uri + " " + method] || [void 0, void 0];
+        return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
       }
     };
 
@@ -376,7 +376,7 @@ describe('类', () => {
         }
 
         getContentTypes(uri, method) {
-          return contentTypesClient[uri + ' ' + method] || [void 0, void 0];
+          return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
         }
       };
       "
