@@ -1,5 +1,12 @@
 
 
+## [0.2.1](https://github.com/foca-js/foca-openapi/compare/0.2.0...0.2.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* taro适配器中requestOptions是可选的 ([90e1789](https://github.com/foca-js/foca-openapi/commit/90e1789db43ec44a69e8a0d03875f05f9a64cb86))
+
 # [0.2.0](https://github.com/foca-js/foca-openapi/compare/0.1.1...0.2.0) (2024-07-19)
 
 
