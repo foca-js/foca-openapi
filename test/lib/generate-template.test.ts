@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import { getBasicDocument } from '../mocks/get-basic-document';
 import {
-  generateClassTpl,
+  generateClassForDTS,
+  generateClassForJS,
   generateNamespaceTpl,
   generatePathRelationTpl,
   generateTemplate,
@@ -56,52 +57,43 @@ test('完整的类型提示', async () => {
       },
     },
   });
-  const result = generateTemplate(docs);
-
-  await expect(
-    formatDocs(Object.values(result)[0]!.replace('./base-openapi-client', '../../src')),
-  ).resolves.toMatchInlineSnapshot(`
-    "import { BaseOpenapiClient } from '../../src';
-
-    export namespace OpenapiClient {
-      export interface GetUsersQuery {
+  const result = await generateTemplate(docs);
+  expect(result).toMatchInlineSnapshot(`
+    {
+      "OpenapiClient": {
+        "dts": "declare namespace OpenapiClient {
+      interface GetUsersQuery {
         foo?: string;
         bar?: string;
       }
-      export interface GetUsersParams {
+      interface GetUsersParams {
         baz: number;
       }
-      export interface GetUsersBody {}
-      export interface GetUsersResponse {
+      interface GetUsersBody {}
+      interface GetUsersResponse {
         foo?: string;
       }
     }
 
-    export class OpenapiClient extends BaseOpenapiClient {
+    declare class OpenapiClient extends BaseOpenapiClient {
       get<K extends keyof OpenapiClient_get_paths>(
         uri: K,
-        ...rest: K extends '/users/{id}'
-          ? [opts?: OpenapiClient_get_paths[K]['request']]
-          : [opts: OpenapiClient_get_paths[K]['request']]
-      ): Promise<OpenapiClient_get_paths[K]['response']> {
-        return this.request(uri, 'get', rest[0] || {});
-      }
+        ...rest: K extends "/users/{id}"
+          ? [opts?: OpenapiClient_get_paths[K]["request"]]
+          : [opts: OpenapiClient_get_paths[K]["request"]]
+      ): Promise<OpenapiClient_get_paths[K]["response"]>;
 
-      protected override getContentTypes(uri: string, method: string) {
-        return defaultContentTypes[uri + ' ' + method] || [void 0, void 0];
-      }
+      protected getContentTypes(
+        uri: string,
+        method: string,
+      ): [
+        BaseOpenapiClient.UserInputOpts["requestBodyType"],
+        BaseOpenapiClient.UserInputOpts["responseType"],
+      ];
     }
 
-    const defaultContentTypes: Record<
-      string,
-      [
-        BaseOpenapiClient.UserInputOpts['requestBodyType'],
-        BaseOpenapiClient.UserInputOpts['responseType'],
-      ]
-    > = {};
-
     interface OpenapiClient_get_paths {
-      '/users': BaseOpenapiClient.Prettify<{
+      "/users": BaseOpenapiClient.Prettify<{
         request: {
           query?: OpenapiClient.GetUsersQuery;
           params: OpenapiClient.GetUsersParams;
@@ -109,22 +101,48 @@ test('完整的类型提示', async () => {
         } & BaseOpenapiClient.UserInputOpts;
         response: OpenapiClient.GetUsersResponse;
       }>;
-      '/users/{id}': BaseOpenapiClient.Prettify<{
+      "/users/{id}": BaseOpenapiClient.Prettify<{
         request: {
           query?: object;
         } & BaseOpenapiClient.UserInputOpts;
         response: unknown;
       }>;
     }
-    "
+    ",
+        "js": "var OpenapiClient = class extends BaseOpenapiClient {
+      get(uri, ...rest) {
+        return this.request(uri, "get", rest[0] || {});
+      }
+      post(uri, ...rest) {
+        return this.request(uri, "post", rest[0] || {});
+      }
+      put(uri, ...rest) {
+        return this.request(uri, "put", rest[0] || {});
+      }
+      delete(uri, ...rest) {
+        return this.request(uri, "delete", rest[0] || {});
+      }
+      getContentTypes(uri, method) {
+        return contentTypesOpenapiClient[uri + " " + method] || [void 0, void 0];
+      }
+    };
+
+    const contentTypesOpenapiClient = {};
+    ",
+      },
+    }
   `);
 });
 
 test('不同的项目名', async () => {
   const docs = getBasicDocument({});
-  const result = generateTemplate(docs, 'foo-bar');
+  const result = await generateTemplate(docs, 'foo-bar');
 
-  expect(Object.values(result)[0]).toContain('OpenapiClientFooBar');
+  expect(Object.keys(result)).toMatchInlineSnapshot(`
+    [
+      "OpenapiClientFooBar",
+    ]
+  `);
 });
 
 describe('命名空间', () => {
@@ -145,17 +163,17 @@ describe('命名空间', () => {
     });
     const result = generateNamespaceTpl('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
-      "export namespace Client {
-        export interface AUsersQuery {
+      "declare namespace Client {
+        interface AUsersQuery {
           foo: string;
         }
-        export interface AUsersParams {
+        interface AUsersParams {
           id: number;
         }
-        export interface AUsersBody {
+        interface AUsersBody {
           bar: string;
         }
-        export interface AUsersResponse {
+        interface AUsersResponse {
           id: number;
           name: string;
         }
@@ -181,9 +199,9 @@ describe('命名空间', () => {
     });
     const result = generateNamespaceTpl('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
-      "export namespace Client {
-        export type AUsersBody = { bar: string } | { bar?: number };
-        export type AUsersResponse = { id: number; name: string } | string;
+      "declare namespace Client {
+        type AUsersBody = { bar: string } | { bar?: number };
+        type AUsersResponse = { id: number; name: string } | string;
       }
       "
     `);
@@ -218,26 +236,26 @@ describe('类', () => {
         },
       ],
     });
-    const result = generateClassTpl('Client', metas);
+    const result = generateClassForDTS('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
-      "export class Client extends BaseOpenapiClient {
+      "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
           ...rest: [opts?: Client_get_paths[K]['request']]
-        ): Promise<Client_get_paths[K]['response']> {
-          return this.request(uri, 'get', rest[0] || {});
-        }
+        ): Promise<Client_get_paths[K]['response']>;
 
         patch<K extends keyof Client_patch_paths>(
           uri: K,
           ...rest: [opts?: Client_patch_paths[K]['request']]
-        ): Promise<Client_patch_paths[K]['response']> {
-          return this.request(uri, 'patch', rest[0] || {});
-        }
+        ): Promise<Client_patch_paths[K]['response']>;
 
-        protected override getContentTypes(uri: string, method: string) {
-          return defaultContentTypes[uri + ' ' + method] || [void 0, void 0];
-        }
+        protected getContentTypes(
+          uri: string,
+          method: string,
+        ): [
+          BaseOpenapiClient.UserInputOpts['requestBodyType'],
+          BaseOpenapiClient.UserInputOpts['responseType'],
+        ];
       }
       "
     `);
@@ -268,21 +286,23 @@ describe('类', () => {
         },
       ],
     });
-    const result = generateClassTpl('Client', metas);
+    const result = generateClassForDTS('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
-      "export class Client extends BaseOpenapiClient {
+      "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
           ...rest: K extends '/b'
             ? [opts?: Client_get_paths[K]['request']]
             : [opts: Client_get_paths[K]['request']]
-        ): Promise<Client_get_paths[K]['response']> {
-          return this.request(uri, 'get', rest[0] || {});
-        }
+        ): Promise<Client_get_paths[K]['response']>;
 
-        protected override getContentTypes(uri: string, method: string) {
-          return defaultContentTypes[uri + ' ' + method] || [void 0, void 0];
-        }
+        protected getContentTypes(
+          uri: string,
+          method: string,
+        ): [
+          BaseOpenapiClient.UserInputOpts['requestBodyType'],
+          BaseOpenapiClient.UserInputOpts['responseType'],
+        ];
       }
       "
     `);
@@ -303,20 +323,46 @@ describe('类', () => {
         },
       ],
     });
-    const result = generateClassTpl('Client', metas);
+    const result = generateClassForDTS('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
-      "export class Client extends BaseOpenapiClient {
+      "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
           ...rest: [opts: Client_get_paths[K]['request']]
-        ): Promise<Client_get_paths[K]['response']> {
+        ): Promise<Client_get_paths[K]['response']>;
+
+        protected getContentTypes(
+          uri: string,
+          method: string,
+        ): [
+          BaseOpenapiClient.UserInputOpts['requestBodyType'],
+          BaseOpenapiClient.UserInputOpts['responseType'],
+        ];
+      }
+      "
+    `);
+  });
+
+  test('生成JS内容', async () => {
+    const result = generateClassForJS('Client');
+    await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
+      "var Client = class extends BaseOpenapiClient {
+        get(uri, ...rest) {
           return this.request(uri, 'get', rest[0] || {});
         }
-
-        protected override getContentTypes(uri: string, method: string) {
-          return defaultContentTypes[uri + ' ' + method] || [void 0, void 0];
+        post(uri, ...rest) {
+          return this.request(uri, 'post', rest[0] || {});
         }
-      }
+        put(uri, ...rest) {
+          return this.request(uri, 'put', rest[0] || {});
+        }
+        delete(uri, ...rest) {
+          return this.request(uri, 'delete', rest[0] || {});
+        }
+        getContentTypes(uri, method) {
+          return contentTypesClient[uri + ' ' + method] || [void 0, void 0];
+        }
+      };
       "
     `);
   });

@@ -1,26 +1,43 @@
-import fs from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import * as tsup from 'tsup';
 
-export const rebuildDist = async (distDir: string, content: string) => {
-  const src = path.normalize(path.join(distDir, '..', 'src'));
-  const packageJson = await fs.readFile(path.join(distDir, '..', 'package.json'), 'utf8');
-  const deps = Object.keys(JSON.parse(packageJson).dependencies);
+export const rebuildDist = async (
+  root: string,
+  jsContent: string,
+  dtsContent: string,
+  classNames: string[],
+) => {
+  const distDir = path.join(root, 'dist');
+  const backupDir = path.join(root, 'backup');
 
-  await fs.writeFile(path.join(src, 'openapi-runtime.ts'), content);
-  await tsup.build({
-    entry: [path.join(src, 'index.ts')],
-    outDir: distDir,
-    splitting: true,
-    sourcemap: true,
-    clean: false,
-    format: ['cjs', 'esm'],
-    platform: 'node',
-    target: 'es2020',
-    shims: false,
-    dts: true,
-    legacyOutput: true,
-    silent: true,
-    external: deps,
-  });
+  {
+    let backupDTS = await readFile(path.join(backupDir, 'index.d.ts'), 'utf8');
+    backupDTS = backupDTS.replace(
+      `export {`,
+      `${dtsContent}\nexport {${classNames.join(',')},`,
+    );
+    await writeFile(path.join(distDir, 'index.d.ts'), backupDTS);
+  }
+
+  {
+    let backupCJS = await readFile(path.join(backupDir, 'index.js'), 'utf8');
+    backupCJS = backupCJS.replace(
+      '0 && (module.exports = {',
+      `${jsContent}\n0 && (module.exports = {\n${classNames.join(',')},`,
+    );
+    backupCJS = backupCJS.replace(
+      /(__export\(.+?_exports, {)/,
+      `$1\n${classNames.map((className) => `${className}: () => ${className},`)}`,
+    );
+    await writeFile(path.join(distDir, 'index.js'), backupCJS);
+  }
+
+  {
+    let backupESM = await readFile(path.join(backupDir, 'esm', 'index.js'), 'utf8');
+    backupESM = backupESM.replace(
+      'export {',
+      `${jsContent}\nexport {\n${classNames.join(',')},`,
+    );
+    await writeFile(path.join(distDir, 'esm', 'index.js'), backupESM);
+  }
 };

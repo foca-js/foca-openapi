@@ -17,7 +17,7 @@ const sleep = () => new Promise((resolve) => setTimeout(resolve, 300));
 const spinner = new Listr<{
   configs: OpenapiClientConfig[];
   docs: OpenAPIV3.Document[];
-  projects: Record<string, string>;
+  projects: Record<string, { dts: string; js: string }>;
 }>([]);
 
 spinner.add({
@@ -71,12 +71,15 @@ spinner.add({
   task: async (ctx) => {
     ctx.projects = {};
 
-    ctx.configs.forEach((config, i) => {
-      ctx.projects = {
-        ...ctx.projects,
-        ...generateTemplate(ctx.docs[i]!, config.projectName),
-      };
-    });
+    await Promise.all(
+      ctx.configs.map(async (config, i) => {
+        const result = await generateTemplate(ctx.docs[i]!, config.projectName);
+        ctx.projects = {
+          ...ctx.projects,
+          ...result,
+        };
+      }),
+    );
 
     await sleep();
   },
@@ -85,9 +88,14 @@ spinner.add({
 spinner.add({
   title: '写入@aomex/openapi-client',
   task: async (ctx) => {
-    const dist = path.dirname(fileURLToPath(import.meta.url));
-    const content = Object.values(ctx.projects).join('\n');
-    await rebuildDist(dist, content);
+    const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+    const jsContent = Object.values(ctx.projects)
+      .map(({ js }) => js)
+      .join('\n');
+    const dtsContent = Object.values(ctx.projects)
+      .map(({ dts }) => dts)
+      .join('\n');
+    await rebuildDist(root, jsContent, dtsContent, Object.keys(ctx.projects));
   },
 });
 
