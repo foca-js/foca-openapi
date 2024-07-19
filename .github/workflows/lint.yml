@@ -35,7 +35,7 @@ jobs:
       - name: Use Typescript@${{ matrix.ts }} & @types/node@${{ matrix.node-dts }}
         run: |
           pnpm install
-          pnpm install typescript@${{ matrix.ts }} -w
+          pnpm install typescript@${{ matrix.ts }}
       - run: pnpm exec tsc
   code-format:
     runs-on: ubuntu-latest
