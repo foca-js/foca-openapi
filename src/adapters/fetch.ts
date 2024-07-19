@@ -2,6 +2,13 @@ import type { OpenapiClientAdapter } from '../lib/adapter';
 
 /**
  * fetch适配器，也可以传入模拟的fetch
+ * ```typescript
+ * import { OpenapiClient } from 'foca-openapi';
+ * import { fetchAdapter } from 'foca-openapi/adapters/fetch';
+ *
+ * const adapter = fetchAdapter({ baseURL: 'http://api.com' });
+ * const client = new OpenapiClient(adapter);
+ * ```
  */
 export const fetchAdapter = (opts: {
   /**
@@ -15,9 +22,9 @@ export const fetchAdapter = (opts: {
   /**
    * fetch的默认参数，每次请求前都会合并对象
    */
-  fetchDefaultOptions?: RequestInit;
+  fetchOptions?: RequestInit;
 }): OpenapiClientAdapter => {
-  const { fetch: fetcher = fetch, baseURL, fetchDefaultOptions = {} } = opts;
+  const { fetch: fetcher = fetch, baseURL, fetchOptions = {} } = opts;
 
   return {
     async request(opts, utils) {
@@ -31,11 +38,11 @@ export const fetchAdapter = (opts: {
             : 'omit';
 
       const response = await fetcher(url, {
-        ...fetchDefaultOptions,
+        ...fetchOptions,
         method: opts.method,
         body,
         headers: {
-          ...((fetchDefaultOptions.headers as Record<string, any>) || {}),
+          ...((fetchOptions.headers as Record<string, any>) || {}),
           ...opts.headers,
         },
         credentials,
