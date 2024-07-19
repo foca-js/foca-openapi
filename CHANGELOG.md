@@ -1,5 +1,12 @@
 
 
+## [0.1.1](https://github.com/foca-js/foca-openapi/compare/0.1.0...0.1.1) (2024-07-19)
+
+
+### Bug Fixes
+
+* 重新打包时无法生成.d.ts ([f4174c8](https://github.com/foca-js/foca-openapi/commit/f4174c88f6142fa5406718ee3a340561d379b49d))
+
 # 0.1.0 (2024-07-18)
 
 
