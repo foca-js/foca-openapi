@@ -13,12 +13,14 @@ beforeAll(async () => {
   await tsup.build({
     entry: ['test/fixtures/index.ts'],
     outDir: 'test/fixtures/dist',
+    sourcemap: true,
     dts: true,
     legacyOutput: true,
   });
   await tsup.build({
     entry: ['test/fixtures/index.ts'],
     outDir: 'test/fixtures/backup',
+    sourcemap: true,
     dts: true,
     legacyOutput: true,
   });
