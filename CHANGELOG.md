@@ -1,5 +1,13 @@
 
 
+## [0.2.2](https://github.com/foca-js/foca-openapi/compare/0.2.1...0.2.2) (2024-07-19)
+
+
+### Bug Fixes
+
+* 缺失patch方法 ([8ee603e](https://github.com/foca-js/foca-openapi/commit/8ee603ea2c13dd5ee1d5445dbdfa2a644a528e17))
+* 获取contentType时key拼接错误 ([1531c99](https://github.com/foca-js/foca-openapi/commit/1531c99ff7d0c04d59801cd4ac8376958c7e8b5b))
+
 ## [0.2.1](https://github.com/foca-js/foca-openapi/compare/0.2.0...0.2.1) (2024-07-19)
 
 
