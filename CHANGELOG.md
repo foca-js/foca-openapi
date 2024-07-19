@@ -1,5 +1,17 @@
 
 
+# [0.2.0](https://github.com/foca-js/foca-openapi/compare/0.1.1...0.2.0) (2024-07-19)
+
+
+### Bug Fixes
+
+* exports指向了错误的路径 ([5004541](https://github.com/foca-js/foca-openapi/commit/5004541ad044db4cf6fec0a6689b19e4a882bf30))
+
+
+### Features
+
+* taro适配器 ([bea3e4c](https://github.com/foca-js/foca-openapi/commit/bea3e4c024e0d837760113de2b9c26e4b99e2b0e))
+
 ## [0.1.1](https://github.com/foca-js/foca-openapi/compare/0.1.0...0.1.1) (2024-07-19)
 
 
