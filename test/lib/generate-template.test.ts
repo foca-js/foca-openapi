@@ -113,15 +113,23 @@ test('完整的类型提示', async () => {
       get(uri, ...rest) {
         return this.request(uri, "get", rest[0] || {});
       }
+
       post(uri, ...rest) {
         return this.request(uri, "post", rest[0] || {});
       }
+
       put(uri, ...rest) {
         return this.request(uri, "put", rest[0] || {});
       }
+
+      patch(uri, ...rest) {
+        return this.request(uri, "patch", rest[0] || {});
+      }
+
       delete(uri, ...rest) {
         return this.request(uri, "delete", rest[0] || {});
       }
+
       getContentTypes(uri, method) {
         return contentTypesOpenapiClient[uri + " " + method] || [void 0, void 0];
       }
@@ -350,15 +358,23 @@ describe('类', () => {
         get(uri, ...rest) {
           return this.request(uri, 'get', rest[0] || {});
         }
+
         post(uri, ...rest) {
           return this.request(uri, 'post', rest[0] || {});
         }
+
         put(uri, ...rest) {
           return this.request(uri, 'put', rest[0] || {});
         }
+
+        patch(uri, ...rest) {
+          return this.request(uri, 'patch', rest[0] || {});
+        }
+
         delete(uri, ...rest) {
           return this.request(uri, 'delete', rest[0] || {});
         }
+
         getContentTypes(uri, method) {
           return contentTypesClient[uri + ' ' + method] || [void 0, void 0];
         }
