@@ -215,7 +215,7 @@ var ${className} = class extends BaseOpenapiClient {
           return metas[method]
             .filter((meta) => meta.tags.includes(ns))
             .map((meta) => {
-              return `${camelCase(meta.key)}(opts) {
+              return `${camelCase(meta.key)}: (opts) => {
                 return this.request('${meta.uri}', '${method}', opts);
               },`;
             });
