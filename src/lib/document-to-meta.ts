@@ -16,6 +16,8 @@ export type Metas = Record<
     body: { optional: boolean; types: string[] };
     response: { types: string[] };
     responseTypes: string[];
+    description?: string;
+    deprecated?: boolean;
   }[]
 >;
 
@@ -40,6 +42,8 @@ export const documentToMeta = (docs: OpenAPIV3.Document) => {
         params: parseParameters(docs, pathItem, methodItem, 'path'),
         ...parseRequestBody(docs, methodItem),
         ...parseResponse(docs, methodItem),
+        deprecated: methodItem.deprecated || false,
+        description: methodItem.description || '',
       });
     });
   });

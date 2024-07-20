@@ -1,11 +1,13 @@
 import { describe, expect, test } from 'vitest';
 import { getBasicDocument } from '../mocks/get-basic-document';
 import {
-  generateClassForDTS,
-  generateClassForJS,
+  generateMethodModeClassForDTS,
+  generateMethodModeClassForJS,
   generateNamespaceTpl,
   generatePathRelationTpl,
   generateTemplate,
+  generateUriModeClassForJS,
+  generateUriModelClassForDTS,
 } from '../../src/lib/generate-template';
 import prettier from 'prettier';
 import { getBasicMetas } from '../mocks/get-basic-matea';
@@ -57,8 +59,8 @@ test('完整的类型提示', async () => {
       },
     },
   });
-  const result = await generateTemplate(docs);
-  expect(result).toMatchInlineSnapshot(`
+  await expect(generateTemplate(docs, undefined, 'method')).resolves
+    .toMatchInlineSnapshot(`
     {
       "OpenapiClient": {
         "dts": "declare namespace OpenapiClient {
@@ -110,24 +112,88 @@ test('完整的类型提示', async () => {
     }
     ",
         "js": "var OpenapiClient = class extends BaseOpenapiClient {
-      get(uri, ...rest) {
-        return this.request(uri, "get", rest[0] || {});
+      get(uri, opts) {
+        return this.request(uri, "get", opts);
       }
 
-      post(uri, ...rest) {
-        return this.request(uri, "post", rest[0] || {});
+      post(uri, opts) {
+        return this.request(uri, "post", opts);
       }
 
-      put(uri, ...rest) {
-        return this.request(uri, "put", rest[0] || {});
+      put(uri, opts) {
+        return this.request(uri, "put", opts);
       }
 
-      patch(uri, ...rest) {
-        return this.request(uri, "patch", rest[0] || {});
+      patch(uri, opts) {
+        return this.request(uri, "patch", opts);
       }
 
-      delete(uri, ...rest) {
-        return this.request(uri, "delete", rest[0] || {});
+      delete(uri, opts) {
+        return this.request(uri, "delete", opts);
+      }
+
+      getContentTypes(uri, method) {
+        return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
+      }
+    };
+
+    const contentTypesOpenapiClient = {};
+    ",
+      },
+    }
+  `);
+
+  await expect(generateTemplate(docs, undefined, 'uri')).resolves.toMatchInlineSnapshot(`
+    {
+      "OpenapiClient": {
+        "dts": "declare namespace OpenapiClient {
+      interface GetUsersQuery {
+        foo?: string;
+        bar?: string;
+      }
+      interface GetUsersParams {
+        baz: number;
+      }
+      interface GetUsersBody {}
+      interface GetUsersResponse {
+        foo?: string;
+      }
+    }
+
+    declare class OpenapiClient extends BaseOpenapiClient {
+      getUsers(
+        opts: OpenapiClient_get_paths["/users"]["request"],
+      ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
+
+      getUsersId(
+        opts?: OpenapiClient_get_paths["/users/{id}"]["request"],
+      ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
+    }
+
+    interface OpenapiClient_get_paths {
+      "/users": BaseOpenapiClient.Prettify<{
+        request: {
+          query?: OpenapiClient.GetUsersQuery;
+          params: OpenapiClient.GetUsersParams;
+          body: OpenapiClient.GetUsersBody;
+        } & BaseOpenapiClient.UserInputOpts;
+        response: OpenapiClient.GetUsersResponse;
+      }>;
+      "/users/{id}": BaseOpenapiClient.Prettify<{
+        request: {
+          query?: object;
+        } & BaseOpenapiClient.UserInputOpts;
+        response: unknown;
+      }>;
+    }
+    ",
+        "js": "var OpenapiClient = class extends BaseOpenapiClient {
+      getUsers(opts) {
+        return this.request("/users", "get", opts);
+      }
+
+      getUsersId(opts) {
+        return this.request("/users/{id}", "get", opts);
       }
 
       getContentTypes(uri, method) {
@@ -144,7 +210,7 @@ test('完整的类型提示', async () => {
 
 test('不同的项目名', async () => {
   const docs = getBasicDocument({});
-  const result = await generateTemplate(docs, 'foo-bar');
+  const result = await generateTemplate(docs, 'foo-bar', 'method');
 
   expect(Object.keys(result)).toMatchInlineSnapshot(`
     [
@@ -222,7 +288,7 @@ describe('类', () => {
       get: [
         {
           uri: '/',
-          key: '',
+          key: 'get-users',
           query: { optional: true, types: [] },
           params: { optional: true, types: [] },
           body: { optional: true, types: [] },
@@ -234,7 +300,7 @@ describe('类', () => {
       patch: [
         {
           uri: '/',
-          key: '',
+          key: 'patch_users',
           query: { optional: true, types: [] },
           params: { optional: true, types: [] },
           body: { optional: true, types: [] },
@@ -244,8 +310,8 @@ describe('类', () => {
         },
       ],
     });
-    const result = generateClassForDTS('Client', metas);
-    await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
+    await expect(formatDocs(generateMethodModeClassForDTS('Client', metas))).resolves
+      .toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
@@ -267,9 +333,23 @@ describe('类', () => {
       }
       "
     `);
+
+    await expect(formatDocs(generateUriModelClassForDTS('Client', metas))).resolves
+      .toMatchInlineSnapshot(`
+      "declare class Client extends BaseOpenapiClient {
+        getUsers(
+          opts?: Client_get_paths['/']['request'],
+        ): Promise<Client_get_paths['/']['response']>;
+
+        patchUsers(
+          opts?: Client_patch_paths['/']['request'],
+        ): Promise<Client_patch_paths['/']['response']>;
+      }
+      "
+    `);
   });
 
-  test('包含可选和必填的参数', async () => {
+  test('[method] 包含可选和必填的参数', async () => {
     const metas = getBasicMetas({
       get: [
         {
@@ -294,7 +374,7 @@ describe('类', () => {
         },
       ],
     });
-    const result = generateClassForDTS('Client', metas);
+    const result = generateMethodModeClassForDTS('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
@@ -316,7 +396,7 @@ describe('类', () => {
     `);
   });
 
-  test('都是必填的参数', async () => {
+  test('[method] 都是必填的参数', async () => {
     const metas = getBasicMetas({
       get: [
         {
@@ -331,7 +411,7 @@ describe('类', () => {
         },
       ],
     });
-    const result = generateClassForDTS('Client', metas);
+    const result = generateMethodModeClassForDTS('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
@@ -352,27 +432,56 @@ describe('类', () => {
   });
 
   test('生成JS内容', async () => {
-    const result = generateClassForJS('Client');
-    await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
+    const metas = getBasicMetas({
+      get: [
+        {
+          uri: '/users',
+          key: 'get_users',
+          query: { optional: true, types: [] },
+          params: { optional: false, types: [] },
+          body: { optional: true, types: [] },
+          response: { types: [] },
+          contentTypes: [],
+          responseTypes: [],
+        },
+      ],
+    });
+
+    await expect(formatDocs(generateMethodModeClassForJS('Client'))).resolves
+      .toMatchInlineSnapshot(`
       "var Client = class extends BaseOpenapiClient {
-        get(uri, ...rest) {
-          return this.request(uri, 'get', rest[0] || {});
+        get(uri, opts) {
+          return this.request(uri, 'get', opts);
         }
 
-        post(uri, ...rest) {
-          return this.request(uri, 'post', rest[0] || {});
+        post(uri, opts) {
+          return this.request(uri, 'post', opts);
         }
 
-        put(uri, ...rest) {
-          return this.request(uri, 'put', rest[0] || {});
+        put(uri, opts) {
+          return this.request(uri, 'put', opts);
         }
 
-        patch(uri, ...rest) {
-          return this.request(uri, 'patch', rest[0] || {});
+        patch(uri, opts) {
+          return this.request(uri, 'patch', opts);
         }
 
-        delete(uri, ...rest) {
-          return this.request(uri, 'delete', rest[0] || {});
+        delete(uri, opts) {
+          return this.request(uri, 'delete', opts);
+        }
+
+        getContentTypes(uri, method) {
+          return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
+        }
+      };
+      "
+    `);
+
+    await expect(formatDocs(generateUriModeClassForJS('Client', metas))).resolves
+      .toMatchInlineSnapshot(`
+      "var Client = class extends BaseOpenapiClient {
+        getUsers(opts) {
+          return this.request('/users', 'get', opts);
         }
 
         getContentTypes(uri, method) {

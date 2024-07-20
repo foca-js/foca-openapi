@@ -3,21 +3,23 @@ import { upperFirst, camelCase } from 'lodash-es';
 import { documentToMeta, type Metas } from './document-to-meta';
 import { methods } from './adapter';
 import prettier from 'prettier';
+import { generateComments } from './generate-comments';
 
 export const generateTemplate = async (
   docs: OpenAPIV3.Document,
   projectName: string = '',
+  classMode: 'method' | 'uri',
 ) => {
   const className = `OpenapiClient${upperFirst(camelCase(projectName))}`;
   const metas = documentToMeta(docs);
   const dts = `
     ${generateNamespaceTpl(className, metas)}
-    ${generateClassForDTS(className, metas)}
+    ${classMode === 'method' ? generateMethodModeClassForDTS(className, metas) : generateUriModelClassForDTS(className, metas)}
     ${generatePathRelationTpl(className, metas)}
 `;
 
   const js = `
-  ${generateClassForJS(className)}
+  ${classMode === 'method' ? generateMethodModeClassForJS(className) : generateUriModeClassForJS(className, metas)}
   ${generateContentTypeTpl(className, metas)}
   `;
 
@@ -63,7 +65,7 @@ declare namespace ${className} {
 }`;
 };
 
-export const generateClassForDTS = (className: string, metas: Metas) => {
+export const generateMethodModeClassForDTS = (className: string, metas: Metas) => {
   return `
 declare class ${className} extends BaseOpenapiClient {
   ${methods
@@ -96,32 +98,69 @@ declare class ${className} extends BaseOpenapiClient {
       BaseOpenapiClient.UserInputOpts['requestBodyType'],
       BaseOpenapiClient.UserInputOpts['responseType'],
     ];
-}
-  `;
+}`;
 };
 
-export const generateClassForJS = (className: string) => {
+export const generateUriModelClassForDTS = (className: string, metas: Metas) => {
+  return `
+declare class ${className} extends BaseOpenapiClient {
+  ${methods
+    .flatMap((method) => {
+      return metas[method].map((meta) => {
+        const optional =
+          meta.query.optional && meta.params.optional && meta.body.optional;
+
+        return `
+        ${generateComments(meta)}
+        ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request']): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
+      });
+    })
+    .join('\n')}
+}`;
+};
+
+export const generateMethodModeClassForJS = (className: string) => {
   return `
 var ${className} = class extends BaseOpenapiClient {
-  get(uri, ...rest) {
-    return this.request(uri, "get", rest[0] || {});
+  get(uri, opts) {
+    return this.request(uri, "get", opts);
   }
 
-  post(uri, ...rest) {
-    return this.request(uri, "post", rest[0] || {});
+  post(uri, opts) {
+    return this.request(uri, "post", opts);
   }
 
-  put(uri, ...rest) {
-    return this.request(uri, "put", rest[0] || {});
+  put(uri, opts) {
+    return this.request(uri, "put", opts);
   }
 
-  patch(uri, ...rest) {
-    return this.request(uri, "patch", rest[0] || {});
+  patch(uri, opts) {
+    return this.request(uri, "patch", opts);
   }
 
-  delete(uri, ...rest) {
-    return this.request(uri, "delete", rest[0] || {});
+  delete(uri, opts) {
+    return this.request(uri, "delete", opts);
   }
+
+  getContentTypes(uri, method) {
+    return contentTypes${className}[method + " " + uri] || [void 0, void 0];
+  }
+};`;
+};
+
+export const generateUriModeClassForJS = (className: string, metas: Metas) => {
+  return `
+var ${className} = class extends BaseOpenapiClient {
+  ${methods
+    .flatMap((method) => {
+      return metas[method].map((meta) => {
+        return `
+        ${camelCase(meta.key)}(opts) {
+          return this.request('${meta.uri}', "${method}", opts);
+        }`;
+      });
+    })
+    .join('\n')}
 
   getContentTypes(uri, method) {
     return contentTypes${className}[method + " " + uri] || [void 0, void 0];

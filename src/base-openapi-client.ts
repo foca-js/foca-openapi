@@ -44,7 +44,7 @@ export abstract class BaseOpenapiClient {
     return uri;
   }
 
-  protected request(uri: string, method: Methods, opts: BaseOpenapiClient.FullOpts) {
+  protected request(uri: string, method: Methods, opts: BaseOpenapiClient.FullOpts = {}) {
     const contentTypes = this.getContentTypes(uri, method);
     const requestBodyType = opts.requestBodyType || contentTypes[0] || 'application/json';
     const responseType = opts.responseType || contentTypes[1] || 'json';
