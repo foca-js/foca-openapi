@@ -2,6 +2,7 @@ import { expect, test, vitest } from 'vitest';
 import { pathToOpenapi } from '../../src/lib/path-to-openapi';
 import path from 'node:path';
 import { readFileSync } from 'node:fs';
+import type { OpenAPIV3 } from 'openapi-types';
 
 test('从本地获取json', async () => {
   const result = await pathToOpenapi('./openapi/openapi.json');
@@ -30,6 +31,17 @@ test('从远程获取', async () => {
   const result = await pathToOpenapi('http://example.com');
   expect(result).toMatchFileSnapshot(path.resolve('openapi', 'openapi.json'));
   globalThis.fetch = originalFetch;
+});
+
+test('支持加载事件', async () => {
+  let eventDocs: OpenAPIV3.Document | undefined;
+  const result = await pathToOpenapi('./openapi/openapi.json', (docs) => {
+    eventDocs = docs;
+  });
+  expect(result).toBe(eventDocs);
+  expect(JSON.stringify(result)).toMatchFileSnapshot(
+    path.resolve('openapi', 'openapi.json'),
+  );
 });
 
 test('解析失败则直接报错', async () => {
