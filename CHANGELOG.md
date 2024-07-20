@@ -1,5 +1,13 @@
 
 
+## [0.4.1](https://github.com/foca-js/foca-openapi/compare/0.4.0...0.4.1) (2024-07-20)
+
+
+### Bug Fixes
+
+* 唯一值使用路由转换才符合直觉 ([f5d6537](https://github.com/foca-js/foca-openapi/commit/f5d65374f5097724ca0352cd8eba6b96fc1e1fef))
+* 执行请求时this上下文指向错误 ([49c9196](https://github.com/foca-js/foca-openapi/commit/49c9196e63a56c5cc3d92ea85bc4df7fada3aa36))
+
 # [0.4.0](https://github.com/foca-js/foca-openapi/compare/0.3.0...0.4.0) (2024-07-20)
 
 
