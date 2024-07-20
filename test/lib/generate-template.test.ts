@@ -58,7 +58,7 @@ test('完整的类型提示', async () => {
       },
     },
   });
-  await expect(generateTemplate(docs, { classMode: 'method' })).resolves
+  await expect(generateTemplate(docs, { classMode: 'rest' })).resolves
     .toMatchInlineSnapshot(`
     {
       "OpenapiClient": {
@@ -126,7 +126,7 @@ test('完整的类型提示', async () => {
     }
   `);
 
-  await expect(generateTemplate(docs, { classMode: 'uri' })).resolves
+  await expect(generateTemplate(docs, { classMode: 'rpc' })).resolves
     .toMatchInlineSnapshot(`
     {
       "OpenapiClient": {

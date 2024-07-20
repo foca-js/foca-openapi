@@ -121,19 +121,40 @@ openapi本地或者远程文件，支持格式：`yaml | json`
 
 ### classMode
 
-类型：`'method' | 'uri'`<br>
-默认值：`'method'`
+类型：`'rest' | 'rpc'`<br>
+默认值：`'rest'`
 
 类的生成方式。
 
-- `method`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入
-- `uri`，把 method+uri 拼接成一个方法，比如 **POST /users/{id}** 会变成 **postUsersById()**
+- `rest`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入
+- `rpc`，把 method+uri 拼接成一个新方法。
+
+```typescript
+const client = new OpenapiClient();
+
+// 有一个接口 -> GET /users/{id}
+
+// rest模式
+await client.get('/users/{id}', { params: { id: 1 } });
+// rpc模式
+await client.getUsersById({ params: { id: 1 } });
+```
+
+rest模式的优点：
+
+- 运行时代码少且相对固定，几乎不受接口数量影响
+- 不会暴露接口名称，安全性较高
+
+rpc模式的优点：
+
+- 可以生成独立的注释文档
+- 可以利用tag生成生成分组，接口越多越方便
 
 ### tagToGroup
 
 类型：`boolean`<br>
 默认值：`true`
 
-根据Tag生成不同的分组，以类似 **client.user.getUsers()** 这种方式调用。仅在 `classMode=uri` 场景下生效。
+根据Tag生成不同的分组，以类似 **client.user.getUsers()** 这种方式调用。仅在 `classMode=rpc` 场景下生效。
 
 如果没有提供tags，则默认合并到`default`分组
