@@ -158,3 +158,9 @@ rpc模式的优点：
 根据Tag生成不同的分组，以类似 **client.user.getUsers()** 这种方式调用。仅在 `classMode=rpc` 场景下生效。
 
 如果没有提供tags，则默认合并到`default`分组
+
+### onDocumentLoaded
+
+类型：`(docs: Document) => Document | void`
+
+加载完openapi文档后的事件，允许直接对文档进行修改

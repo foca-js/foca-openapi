@@ -1,3 +1,5 @@
+import type { OpenAPIV3 } from 'openapi-types';
+
 export interface OpenapiClientConfig {
   /**
    * openapi本地或者远程文件，支持格式：`yaml | json`
@@ -35,6 +37,10 @@ export interface OpenapiClientConfig {
    * 如果没有提供tags，则默认合并到`default`分组
    */
   tagToGroup?: boolean;
+  /**
+   * 加载完openapi文档后的事件，允许直接对文档进行修改
+   */
+  onDocumentLoaded?: (doc: OpenAPIV3.Document) => OpenAPIV3.Document | void;
 }
 
 export const defineConfig = (options: OpenapiClientConfig | OpenapiClientConfig[]) => {

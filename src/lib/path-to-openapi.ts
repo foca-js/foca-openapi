@@ -2,8 +2,12 @@ import { readFile } from 'fs/promises';
 import path from 'node:path';
 import type { OpenAPIV3 } from 'openapi-types';
 import YAML from 'yaml';
+import type { OpenapiClientConfig } from '../define-config';
 
-export const pathToOpenapi = async (uri: string): Promise<OpenAPIV3.Document> => {
+export const pathToOpenapi = async (
+  uri: string,
+  onLoaded?: OpenapiClientConfig['onDocumentLoaded'],
+): Promise<OpenAPIV3.Document> => {
   let originContent: string;
   if (uri.startsWith('http:') || uri.startsWith('https:')) {
     const response = await fetch(uri, { method: 'get' });
@@ -12,9 +16,12 @@ export const pathToOpenapi = async (uri: string): Promise<OpenAPIV3.Document> =>
     originContent = await readFile(path.resolve(uri), 'utf8');
   }
 
+  let document: OpenAPIV3.Document;
   if (originContent.startsWith('{')) {
-    return JSON.parse(originContent);
+    document = JSON.parse(originContent);
   } else {
-    return YAML.parse(originContent);
+    document = YAML.parse(originContent);
   }
+
+  return onLoaded?.(document) || document;
 };
