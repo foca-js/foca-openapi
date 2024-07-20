@@ -14,6 +14,7 @@ import { getBasicMetas } from '../mocks/get-basic-matea';
 const prettierOptions: prettier.Options = {
   ...(await prettier.resolveConfig((await prettier.resolveConfigFile())!)!),
   parser: 'typescript',
+  printWidth: 120,
 };
 
 const formatDocs = (content: string) => prettier.format(content, prettierOptions);
@@ -76,21 +77,18 @@ test('完整的类型提示', async () => {
       }
     }
 
-    declare class OpenapiClient extends BaseOpenapiClient {
+    declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
       get<K extends keyof OpenapiClient_get_paths>(
         uri: K,
         ...rest: K extends "/users/{id}"
-          ? [opts?: OpenapiClient_get_paths[K]["request"]]
-          : [opts: OpenapiClient_get_paths[K]["request"]]
+          ? [opts?: OpenapiClient_get_paths[K]["request"] & BaseOpenapiClient.UserInputOpts<T>]
+          : [opts: OpenapiClient_get_paths[K]["request"] & BaseOpenapiClient.UserInputOpts<T>]
       ): Promise<OpenapiClient_get_paths[K]["response"]>;
 
       protected getContentTypes(
         uri: string,
         method: string,
-      ): [
-        BaseOpenapiClient.UserInputOpts["requestBodyType"],
-        BaseOpenapiClient.UserInputOpts["responseType"],
-      ];
+      ): [BaseOpenapiClient.UserInputOpts["requestBodyType"], BaseOpenapiClient.UserInputOpts["responseType"]];
     }
 
     interface OpenapiClient_get_paths {
@@ -99,13 +97,13 @@ test('完整的类型提示', async () => {
           query?: OpenapiClient.GetUsersQuery;
           params: OpenapiClient.GetUsersParams;
           body: OpenapiClient.GetUsersBody;
-        } & BaseOpenapiClient.UserInputOpts;
+        };
         response: OpenapiClient.GetUsersResponse;
       }>;
       "/users/{id}": BaseOpenapiClient.Prettify<{
         request: {
           query?: object;
-        } & BaseOpenapiClient.UserInputOpts;
+        };
         response: unknown;
       }>;
     }
@@ -144,24 +142,21 @@ test('完整的类型提示', async () => {
       }
     }
 
-    declare class OpenapiClient extends BaseOpenapiClient {
+    declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
       readonly default: {
         getUsers(
-          opts: OpenapiClient_get_paths["/users"]["request"],
+          opts: OpenapiClient_get_paths["/users"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
 
         getUsersById(
-          opts?: OpenapiClient_get_paths["/users/{id}"]["request"],
+          opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
       };
 
       protected getContentTypes(
         uri: string,
         method: string,
-      ): [
-        BaseOpenapiClient.UserInputOpts["requestBodyType"],
-        BaseOpenapiClient.UserInputOpts["responseType"],
-      ];
+      ): [BaseOpenapiClient.UserInputOpts["requestBodyType"], BaseOpenapiClient.UserInputOpts["responseType"]];
     }
 
     interface OpenapiClient_get_paths {
@@ -170,13 +165,13 @@ test('完整的类型提示', async () => {
           query?: OpenapiClient.GetUsersQuery;
           params: OpenapiClient.GetUsersParams;
           body: OpenapiClient.GetUsersBody;
-        } & BaseOpenapiClient.UserInputOpts;
+        };
         response: OpenapiClient.GetUsersResponse;
       }>;
       "/users/{id}": BaseOpenapiClient.Prettify<{
         request: {
           query?: object;
-        } & BaseOpenapiClient.UserInputOpts;
+        };
         response: unknown;
       }>;
     }
@@ -312,24 +307,21 @@ describe('类', () => {
   test('[method] 只生成接口对应的方法', async () => {
     const { dts, js } = generateMethodModeClass('Client', metas);
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
-      "declare class Client extends BaseOpenapiClient {
+      "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
         get<K extends keyof Client_get_paths>(
           uri: K,
-          ...rest: [opts?: Client_get_paths[K]['request']]
+          ...rest: [opts?: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_get_paths[K]['response']>;
 
         patch<K extends keyof Client_patch_paths>(
           uri: K,
-          ...rest: [opts?: Client_patch_paths[K]['request']]
+          ...rest: [opts?: Client_patch_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_patch_paths[K]['response']>;
 
         protected getContentTypes(
           uri: string,
           method: string,
-        ): [
-          BaseOpenapiClient.UserInputOpts['requestBodyType'],
-          BaseOpenapiClient.UserInputOpts['responseType'],
-        ];
+        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -354,22 +346,19 @@ describe('类', () => {
   test('[uri] 只生成接口对应的方法', async () => {
     const { dts, js } = generateUriModelClass('Client', metas);
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
-      "declare class Client extends BaseOpenapiClient {
+      "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
         getUsers(
-          opts?: Client_get_paths['/']['request'],
+          opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<Client_get_paths['/']['response']>;
 
         patchUsers(
-          opts?: Client_patch_paths['/']['request'],
+          opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<Client_patch_paths['/']['response']>;
 
         protected getContentTypes(
           uri: string,
           method: string,
-        ): [
-          BaseOpenapiClient.UserInputOpts['requestBodyType'],
-          BaseOpenapiClient.UserInputOpts['responseType'],
-        ];
+        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -420,21 +409,18 @@ describe('类', () => {
     });
     const { dts } = generateMethodModeClass('Client', metas);
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
-      "declare class Client extends BaseOpenapiClient {
+      "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
         get<K extends keyof Client_get_paths>(
           uri: K,
           ...rest: K extends '/b'
-            ? [opts?: Client_get_paths[K]['request']]
-            : [opts: Client_get_paths[K]['request']]
+            ? [opts?: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
+            : [opts: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_get_paths[K]['response']>;
 
         protected getContentTypes(
           uri: string,
           method: string,
-        ): [
-          BaseOpenapiClient.UserInputOpts['requestBodyType'],
-          BaseOpenapiClient.UserInputOpts['responseType'],
-        ];
+        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -458,19 +444,16 @@ describe('类', () => {
     });
     const { dts } = generateMethodModeClass('Client', metas);
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
-      "declare class Client extends BaseOpenapiClient {
+      "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
         get<K extends keyof Client_get_paths>(
           uri: K,
-          ...rest: [opts: Client_get_paths[K]['request']]
+          ...rest: [opts: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_get_paths[K]['response']>;
 
         protected getContentTypes(
           uri: string,
           method: string,
-        ): [
-          BaseOpenapiClient.UserInputOpts['requestBodyType'],
-          BaseOpenapiClient.UserInputOpts['responseType'],
-        ];
+        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -480,29 +463,26 @@ describe('类', () => {
     const { dts, js } = generateUriModelClassWithNamespace('Client', metas);
 
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
-      "declare class Client extends BaseOpenapiClient {
+      "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
         readonly user: {
           getUsers(
-            opts?: Client_get_paths['/']['request'],
+            opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_get_paths['/']['response']>;
 
           patchUsers(
-            opts?: Client_patch_paths['/']['request'],
+            opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_patch_paths['/']['response']>;
         };
         readonly public: {
           getUsers(
-            opts?: Client_get_paths['/']['request'],
+            opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_get_paths['/']['response']>;
         };
 
         protected getContentTypes(
           uri: string,
           method: string,
-        ): [
-          BaseOpenapiClient.UserInputOpts['requestBodyType'],
-          BaseOpenapiClient.UserInputOpts['responseType'],
-        ];
+        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -555,7 +535,7 @@ describe('接口映射', () => {
         '/a': BaseOpenapiClient.Prettify<{
           request: {
             query?: object;
-          } & BaseOpenapiClient.UserInputOpts;
+          };
           response: unknown;
         }>;
       }
@@ -587,7 +567,7 @@ describe('接口映射', () => {
             query?: Client.AaQuery;
             params?: Client.AaParams;
             body?: Client.AaBody;
-          } & BaseOpenapiClient.UserInputOpts;
+          };
           response: Client.AaResponse;
         }>;
       }
@@ -619,7 +599,7 @@ describe('接口映射', () => {
             query: Client.AaQuery;
             params: Client.AaParams;
             body: Client.AaBody;
-          } & BaseOpenapiClient.UserInputOpts;
+          };
           response: Client.AaResponse;
         }>;
       }

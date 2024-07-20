@@ -36,12 +36,12 @@ export const taroAdapter = (opts: {
   /**
    * 返回最终数据。默认值：`(res) => res.data`
    */
-  returningData?: (response: Taro.request.SuccessCallbackResult) => any;
+  returningData?: (result: Taro.request.SuccessCallbackResult) => any;
   /**
    * Taro.request()的默认参数，每次请求前都会合并对象
    */
   requestOptions?: Taro.request.Option;
-}): OpenapiClientAdapter => {
+}): OpenapiClientAdapter<Taro.request.Option> => {
   const {
     returningData = (result) => result.data,
     getStatusCode = (result) => result.statusCode,
@@ -62,8 +62,7 @@ export const taroAdapter = (opts: {
           : opts.credentials === true
             ? 'same-origin'
             : 'omit';
-
-      const result = await request({
+      const config: Taro.request.Option = {
         ...requestOptions,
         url: baseURL + utils.uriConcatQuery(opts.uri, opts.query),
         method: opts.method.toUpperCase() as `${Uppercase<Methods>}`,
@@ -72,7 +71,8 @@ export const taroAdapter = (opts: {
         timeout: opts.timeout,
         credentials,
         responseType: opts.responseType === 'text' ? 'text' : undefined,
-      });
+      };
+      const result = await request(opts.onBeforeRequest?.(config) || config);
 
       const statusCode = getStatusCode(result);
       if (statusCode >= 400) {

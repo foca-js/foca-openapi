@@ -19,7 +19,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 export const axiosAdapter = (
   axios: { request: (config: AxiosRequestConfig) => Promise<AxiosResponse> },
   returningData: (response: AxiosResponse) => any = (response) => response.data,
-): OpenapiClientAdapter => {
+): OpenapiClientAdapter<AxiosRequestConfig> => {
   return {
     async request(opts, utils) {
       const body = utils.formatBody(opts.requestBodyType, opts.body);
@@ -29,8 +29,7 @@ export const axiosAdapter = (
           : typeof opts.credentials === 'string' || opts.credentials === true
             ? true
             : undefined;
-
-      const result = await axios.request({
+      const config: AxiosRequestConfig = {
         url: opts.uri,
         method: opts.method,
         params: opts.query,
@@ -39,7 +38,9 @@ export const axiosAdapter = (
         timeout: opts.timeout,
         withCredentials: credentials,
         responseType: opts.responseType,
-      });
+      };
+
+      const result = await axios.request(opts.onBeforeRequest?.(config) || config);
 
       return returningData(result);
     },
