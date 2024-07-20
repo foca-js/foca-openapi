@@ -169,3 +169,38 @@ test('所有结构都不是必填时，optional=true', () => {
     }
   `);
 });
+
+test('包含描述', () => {
+  const docs = getBasicDocument({
+    '/': {
+      get: {
+        parameters: [
+          {
+            name: 'foo',
+            in: 'query',
+            required: false,
+            description: 'foo-bar',
+            deprecated: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {},
+      },
+    },
+  });
+  const result = parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'query');
+  expect(result).toMatchInlineSnapshot(`
+    {
+      "optional": true,
+      "types": [
+        "{ 
+    /**
+    * foo-bar
+    * @deprecated 
+    */
+    foo?: string
+           }",
+      ],
+    }
+  `);
+});

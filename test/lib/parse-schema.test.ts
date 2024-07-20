@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { parseSchemaType } from '../../src/lib/parse-schema-type';
+import { parseSchemaType } from '../../src/lib/parse-schema';
 import { getBasicDocument } from '../mocks/get-basic-document';
 
 const docs = getBasicDocument();
@@ -38,6 +38,20 @@ test('对象', () => {
     properties: { foo: { type: 'string' } },
   });
   expect(type).toMatchInlineSnapshot(`"{ foo?: string }"`);
+});
+
+test('对象属性包含描述', () => {
+  const type = parseSchemaType(docs, {
+    type: 'object',
+    properties: { foo: { type: 'string', description: 'foo=bar' } },
+  });
+  expect(type).toMatchInlineSnapshot(`
+    "{ 
+    /**
+    * foo=bar 
+    */
+    foo?: string }"
+  `);
 });
 
 test('空对象', () => {

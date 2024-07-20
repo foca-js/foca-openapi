@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types';
-import { parseSchemaType } from './parse-schema-type';
+import { parseSchemaType } from './parse-schema';
 import { refToObject } from './ref-to-object';
 
 export const parseRequestBody = (

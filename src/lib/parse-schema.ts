@@ -1,5 +1,6 @@
 import type { OpenAPIV3 } from 'openapi-types';
 import { refToObject } from './ref-to-object';
+import { generateComments } from './generate-comments';
 
 export const parseSchemaType = (
   docs: OpenAPIV3.Document,
@@ -18,7 +19,8 @@ export const parseSchemaType = (
     case 'object':
       const requiredProperties = parsed.required || [];
       const properties = Object.entries(parsed.properties || {}).map(([key, schema]) => {
-        return `${key}${requiredProperties.includes(key) ? '' : '?'}: ${parseSchemaType(docs, schema)}`;
+        const schemaObj = refToObject(docs, schema);
+        return `${generateComments(schemaObj)}${key}${requiredProperties.includes(key) ? '' : '?'}: ${parseSchemaType(docs, schemaObj)}`;
       });
       return `{ ${properties.join(';')} }`;
     case 'string':
