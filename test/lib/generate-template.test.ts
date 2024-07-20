@@ -1,13 +1,12 @@
 import { describe, expect, test } from 'vitest';
 import { getBasicDocument } from '../mocks/get-basic-document';
 import {
-  generateMethodModeClassForDTS,
-  generateMethodModeClassForJS,
+  generateMethodModeClass,
   generateNamespaceTpl,
   generatePathRelationTpl,
   generateTemplate,
-  generateUriModeClassForJS,
-  generateUriModelClassForDTS,
+  generateUriModelClass,
+  generateUriModelClassWithNamespace,
 } from '../../src/lib/generate-template';
 import prettier from 'prettier';
 import { getBasicMetas } from '../mocks/get-basic-matea';
@@ -59,7 +58,7 @@ test('完整的类型提示', async () => {
       },
     },
   });
-  await expect(generateTemplate(docs, undefined, 'method')).resolves
+  await expect(generateTemplate(docs, { classMode: 'method' })).resolves
     .toMatchInlineSnapshot(`
     {
       "OpenapiClient": {
@@ -116,22 +115,6 @@ test('完整的类型提示', async () => {
         return this.request(uri, "get", opts);
       }
 
-      post(uri, opts) {
-        return this.request(uri, "post", opts);
-      }
-
-      put(uri, opts) {
-        return this.request(uri, "put", opts);
-      }
-
-      patch(uri, opts) {
-        return this.request(uri, "patch", opts);
-      }
-
-      delete(uri, opts) {
-        return this.request(uri, "delete", opts);
-      }
-
       getContentTypes(uri, method) {
         return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
       }
@@ -143,7 +126,8 @@ test('完整的类型提示', async () => {
     }
   `);
 
-  await expect(generateTemplate(docs, undefined, 'uri')).resolves.toMatchInlineSnapshot(`
+  await expect(generateTemplate(docs, { classMode: 'uri' })).resolves
+    .toMatchInlineSnapshot(`
     {
       "OpenapiClient": {
         "dts": "declare namespace OpenapiClient {
@@ -161,13 +145,23 @@ test('完整的类型提示', async () => {
     }
 
     declare class OpenapiClient extends BaseOpenapiClient {
-      getUsers(
-        opts: OpenapiClient_get_paths["/users"]["request"],
-      ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
+      readonly default: {
+        getUsers(
+          opts: OpenapiClient_get_paths["/users"]["request"],
+        ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
 
-      getUsersId(
-        opts?: OpenapiClient_get_paths["/users/{id}"]["request"],
-      ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
+        getUsersId(
+          opts?: OpenapiClient_get_paths["/users/{id}"]["request"],
+        ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
+      };
+
+      protected getContentTypes(
+        uri: string,
+        method: string,
+      ): [
+        BaseOpenapiClient.UserInputOpts["requestBodyType"],
+        BaseOpenapiClient.UserInputOpts["responseType"],
+      ];
     }
 
     interface OpenapiClient_get_paths {
@@ -188,13 +182,14 @@ test('完整的类型提示', async () => {
     }
     ",
         "js": "var OpenapiClient = class extends BaseOpenapiClient {
-      getUsers(opts) {
-        return this.request("/users", "get", opts);
-      }
-
-      getUsersId(opts) {
-        return this.request("/users/{id}", "get", opts);
-      }
+      default = {
+        getUsers(opts) {
+          return this.request("/users", "get", opts);
+        },
+        getUsersId(opts) {
+          return this.request("/users/{id}", "get", opts);
+        },
+      };
 
       getContentTypes(uri, method) {
         return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
@@ -210,7 +205,7 @@ test('完整的类型提示', async () => {
 
 test('不同的项目名', async () => {
   const docs = getBasicDocument({});
-  const result = await generateTemplate(docs, 'foo-bar', 'method');
+  const result = await generateTemplate(docs, { projectName: 'foo-bar' });
 
   expect(Object.keys(result)).toMatchInlineSnapshot(`
     [
@@ -232,6 +227,7 @@ describe('命名空间', () => {
           params: { optional: false, types: ['{ id: number; }'] },
           body: { optional: false, types: ['{ bar: string; }'] },
           response: { types: ['{id: number; name: string}'] },
+          tags: [],
         },
       ],
     });
@@ -268,6 +264,7 @@ describe('命名空间', () => {
           params: { optional: true, types: [] },
           body: { optional: false, types: ['{ bar: string; }', '{bar?: number}'] },
           response: { types: ['{id: number; name: string}', 'string'] },
+          tags: [],
         },
       ],
     });
@@ -283,35 +280,38 @@ describe('命名空间', () => {
 });
 
 describe('类', () => {
-  test('只生成接口对应的方法', async () => {
-    const metas = getBasicMetas({
-      get: [
-        {
-          uri: '/',
-          key: 'get-users',
-          query: { optional: true, types: [] },
-          params: { optional: true, types: [] },
-          body: { optional: true, types: [] },
-          response: { types: [] },
-          contentTypes: [],
-          responseTypes: [],
-        },
-      ],
-      patch: [
-        {
-          uri: '/',
-          key: 'patch_users',
-          query: { optional: true, types: [] },
-          params: { optional: true, types: [] },
-          body: { optional: true, types: [] },
-          response: { types: [] },
-          contentTypes: [],
-          responseTypes: [],
-        },
-      ],
-    });
-    await expect(formatDocs(generateMethodModeClassForDTS('Client', metas))).resolves
-      .toMatchInlineSnapshot(`
+  const metas = getBasicMetas({
+    get: [
+      {
+        uri: '/',
+        key: 'get-users',
+        query: { optional: true, types: [] },
+        params: { optional: true, types: [] },
+        body: { optional: true, types: [] },
+        response: { types: [] },
+        contentTypes: [],
+        responseTypes: [],
+        tags: ['user', 'public'],
+      },
+    ],
+    patch: [
+      {
+        uri: '/',
+        key: 'patch_users',
+        query: { optional: true, types: [] },
+        params: { optional: true, types: [] },
+        body: { optional: true, types: [] },
+        response: { types: [] },
+        contentTypes: [],
+        responseTypes: [],
+        tags: ['user'],
+      },
+    ],
+  });
+
+  test('[method] 只生成接口对应的方法', async () => {
+    const { dts, js } = generateMethodModeClass('Client', metas);
+    await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
@@ -333,9 +333,27 @@ describe('类', () => {
       }
       "
     `);
+    await expect(formatDocs(js)).resolves.toMatchInlineSnapshot(`
+      "var Client = class extends BaseOpenapiClient {
+        get(uri, opts) {
+          return this.request(uri, 'get', opts);
+        }
 
-    await expect(formatDocs(generateUriModelClassForDTS('Client', metas))).resolves
-      .toMatchInlineSnapshot(`
+        patch(uri, opts) {
+          return this.request(uri, 'get', opts);
+        }
+
+        getContentTypes(uri, method) {
+          return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
+        }
+      };
+      "
+    `);
+  });
+
+  test('[uri] 只生成接口对应的方法', async () => {
+    const { dts, js } = generateUriModelClass('Client', metas);
+    await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         getUsers(
           opts?: Client_get_paths['/']['request'],
@@ -344,7 +362,31 @@ describe('类', () => {
         patchUsers(
           opts?: Client_patch_paths['/']['request'],
         ): Promise<Client_patch_paths['/']['response']>;
+
+        protected getContentTypes(
+          uri: string,
+          method: string,
+        ): [
+          BaseOpenapiClient.UserInputOpts['requestBodyType'],
+          BaseOpenapiClient.UserInputOpts['responseType'],
+        ];
       }
+      "
+    `);
+    await expect(formatDocs(js)).resolves.toMatchInlineSnapshot(`
+      "var Client = class extends BaseOpenapiClient {
+        getUsers(opts) {
+          return this.request('/', 'get', opts);
+        }
+
+        patchUsers(opts) {
+          return this.request('/', 'patch', opts);
+        }
+
+        getContentTypes(uri, method) {
+          return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
+        }
+      };
       "
     `);
   });
@@ -361,6 +403,7 @@ describe('类', () => {
           response: { types: [] },
           contentTypes: [],
           responseTypes: [],
+          tags: [],
         },
         {
           uri: '/b',
@@ -371,11 +414,12 @@ describe('类', () => {
           response: { types: [] },
           contentTypes: [],
           responseTypes: [],
+          tags: [],
         },
       ],
     });
-    const result = generateMethodModeClassForDTS('Client', metas);
-    await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
+    const { dts } = generateMethodModeClass('Client', metas);
+    await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
@@ -408,11 +452,12 @@ describe('类', () => {
           response: { types: [] },
           contentTypes: [],
           responseTypes: [],
+          tags: [],
         },
       ],
     });
-    const result = generateMethodModeClassForDTS('Client', metas);
-    await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
+    const { dts } = generateMethodModeClass('Client', metas);
+    await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client extends BaseOpenapiClient {
         get<K extends keyof Client_get_paths>(
           uri: K,
@@ -431,58 +476,52 @@ describe('类', () => {
     `);
   });
 
-  test('生成JS内容', async () => {
-    const metas = getBasicMetas({
-      get: [
-        {
-          uri: '/users',
-          key: 'get_users',
-          query: { optional: true, types: [] },
-          params: { optional: false, types: [] },
-          body: { optional: true, types: [] },
-          response: { types: [] },
-          contentTypes: [],
-          responseTypes: [],
-        },
-      ],
-    });
+  test('命名空间', async () => {
+    const { dts, js } = generateUriModelClassWithNamespace('Client', metas);
 
-    await expect(formatDocs(generateMethodModeClassForJS('Client'))).resolves
-      .toMatchInlineSnapshot(`
-      "var Client = class extends BaseOpenapiClient {
-        get(uri, opts) {
-          return this.request(uri, 'get', opts);
-        }
+    await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
+      "declare class Client extends BaseOpenapiClient {
+        readonly user: {
+          getUsers(
+            opts?: Client_get_paths['/']['request'],
+          ): Promise<Client_get_paths['/']['response']>;
 
-        post(uri, opts) {
-          return this.request(uri, 'post', opts);
-        }
+          patchUsers(
+            opts?: Client_patch_paths['/']['request'],
+          ): Promise<Client_patch_paths['/']['response']>;
+        };
+        readonly public: {
+          getUsers(
+            opts?: Client_get_paths['/']['request'],
+          ): Promise<Client_get_paths['/']['response']>;
+        };
 
-        put(uri, opts) {
-          return this.request(uri, 'put', opts);
-        }
-
-        patch(uri, opts) {
-          return this.request(uri, 'patch', opts);
-        }
-
-        delete(uri, opts) {
-          return this.request(uri, 'delete', opts);
-        }
-
-        getContentTypes(uri, method) {
-          return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
-        }
-      };
+        protected getContentTypes(
+          uri: string,
+          method: string,
+        ): [
+          BaseOpenapiClient.UserInputOpts['requestBodyType'],
+          BaseOpenapiClient.UserInputOpts['responseType'],
+        ];
+      }
       "
     `);
 
-    await expect(formatDocs(generateUriModeClassForJS('Client', metas))).resolves
-      .toMatchInlineSnapshot(`
+    await expect(formatDocs(js)).resolves.toMatchInlineSnapshot(`
       "var Client = class extends BaseOpenapiClient {
-        getUsers(opts) {
-          return this.request('/users', 'get', opts);
-        }
+        user = {
+          getUsers(opts) {
+            return this.request('/', 'get', opts);
+          },
+          patchUsers(opts) {
+            return this.request('/', 'patch', opts);
+          },
+        };
+        public = {
+          getUsers(opts) {
+            return this.request('/', 'get', opts);
+          },
+        };
 
         getContentTypes(uri, method) {
           return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
@@ -506,6 +545,7 @@ describe('接口映射', () => {
           response: { types: [] },
           contentTypes: [],
           responseTypes: [],
+          tags: [],
         },
       ],
     });
@@ -535,6 +575,7 @@ describe('接口映射', () => {
           response: { types: ['boolean'] },
           contentTypes: [],
           responseTypes: [],
+          tags: [],
         },
       ],
     });
@@ -566,6 +607,7 @@ describe('接口映射', () => {
           response: { types: ['boolean'] },
           contentTypes: [],
           responseTypes: [],
+          tags: [],
         },
       ],
     });
