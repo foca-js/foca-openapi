@@ -37,8 +37,7 @@ export const documentToMeta = (docs: OpenAPIV3.Document) => {
       const methodItem = pathItem[method]!;
       metas[method].push({
         uri,
-        key:
-          methodItem.operationId || snakeCase(`${method}_${uri.replaceAll(':', '_by_')}`),
+        key: snakeCase(`${method}_${uri.replaceAll(/{(.+?)}/g, '_by_$1')}`),
         query: parseParameters(docs, pathItem, methodItem, 'query'),
         params: parseParameters(docs, pathItem, methodItem, 'path'),
         ...parseRequestBody(docs, methodItem),

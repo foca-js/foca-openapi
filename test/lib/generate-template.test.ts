@@ -150,7 +150,7 @@ test('完整的类型提示', async () => {
           opts: OpenapiClient_get_paths["/users"]["request"],
         ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
 
-        getUsersId(
+        getUsersById(
           opts?: OpenapiClient_get_paths["/users/{id}"]["request"],
         ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
       };
@@ -183,10 +183,10 @@ test('完整的类型提示', async () => {
     ",
         "js": "var OpenapiClient = class extends BaseOpenapiClient {
       default = {
-        getUsers(opts) {
+        getUsers: (opts) => {
           return this.request("/users", "get", opts);
         },
-        getUsersId(opts) {
+        getUsersById: (opts) => {
           return this.request("/users/{id}", "get", opts);
         },
       };
@@ -510,15 +510,15 @@ describe('类', () => {
     await expect(formatDocs(js)).resolves.toMatchInlineSnapshot(`
       "var Client = class extends BaseOpenapiClient {
         user = {
-          getUsers(opts) {
+          getUsers: (opts) => {
             return this.request('/', 'get', opts);
           },
-          patchUsers(opts) {
+          patchUsers: (opts) => {
             return this.request('/', 'patch', opts);
           },
         };
         public = {
-          getUsers(opts) {
+          getUsers: (opts) => {
             return this.request('/', 'get', opts);
           },
         };
