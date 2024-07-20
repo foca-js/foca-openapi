@@ -1,4 +1,4 @@
-import qs from 'qs';
+import qs from 'query-string';
 import objectToFormData from 'object-to-formdata';
 
 export const utils = {
@@ -8,7 +8,7 @@ export const utils = {
   uriConcatQuery(uri: string, query: Record<string, any> | undefined) {
     if (!query) return uri;
 
-    const querystring = qs.stringify(query);
+    const querystring = qs.stringify(query, { arrayFormat: 'bracket' });
     if (!querystring) return uri;
 
     if (uri.includes('?')) {
