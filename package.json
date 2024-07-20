@@ -33,6 +33,11 @@
       "import": "./adapters/esm/taro.js",
       "require": "./adapters/taro.js"
     },
+    "./adapters/uniapp": {
+      "types": "./adapters/uniapp.d.ts",
+      "import": "./adapters/esm/uniapp.js",
+      "require": "./adapters/uniapp.js"
+    },
     "./package.json": "./package.json"
   },
   "bin": "dist/bin.mjs",
@@ -88,6 +93,7 @@
     "@aomex/web": "^1.7.0",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
+    "@dcloudio/types": "^3.4.12",
     "@release-it/conventional-changelog": "^8.0.1",
     "@tarojs/taro": "^3.6.34",
     "@types/lodash-es": "^4.17.12",
