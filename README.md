@@ -1,6 +1,6 @@
 # foca-openapi
 
-使用openapi文档生成请求服务
+使用openapi文档生成请求服务。支持 **Openapi 3.0**
 
 [![npm peer typescript version](https://img.shields.io/npm/dependency-version/foca-openapi/peer/typescript?logo=typescript)](https://github.com/microsoft/TypeScript)
 [![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/foca-js/foca-openapi/test.yml?branch=main&label=test&logo=vitest)](https://github.com/foca-js/foca-openapi/actions)
