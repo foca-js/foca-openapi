@@ -40,7 +40,7 @@ export const uniappAdapter = (opts: {
    * uni.request()的默认参数，每次请求前都会合并对象
    */
   requestOptions?: UniApp.RequestOptions;
-}): OpenapiClientAdapter => {
+}): OpenapiClientAdapter<UniApp.RequestOptions> => {
   const {
     returningData = (result) => result.data,
     getStatusCode = (result) => result.statusCode,
@@ -61,8 +61,7 @@ export const uniappAdapter = (opts: {
           : typeof opts.credentials === 'string' || opts.credentials === true
             ? true
             : undefined;
-
-      const result = await request({
+      const config: UniApp.RequestOptions = {
         ...requestOptions,
         url: baseURL + utils.uriConcatQuery(opts.uri, opts.query),
         method: opts.method.toUpperCase() as any,
@@ -72,7 +71,8 @@ export const uniappAdapter = (opts: {
         withCredentials: credentials,
         dataType: opts.responseType === 'json' ? 'json' : undefined,
         responseType: opts.responseType === 'text' ? 'text' : undefined,
-      });
+      };
+      const result = await request(opts.onBeforeRequest?.(config) || config);
 
       const statusCode = getStatusCode(result);
       if (statusCode >= 400) {

@@ -4,7 +4,7 @@ export const methods = <const>['get', 'post', 'put', 'patch', 'delete'];
 
 export type Methods = (typeof methods)[number];
 
-export interface OpenapiClientAdapter {
+export interface OpenapiClientAdapter<T extends object = object> {
   request(
     opts: {
       /**
@@ -47,6 +47,10 @@ export interface OpenapiClientAdapter {
        * 请求报文
        */
       headers: Record<string, any>;
+      /**
+       * 请求之前动态修改配置
+       */
+      onBeforeRequest?: (options: T) => T | void;
     },
     helper: typeof utils,
   ): Promise<any>;

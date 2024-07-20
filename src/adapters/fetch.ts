@@ -23,7 +23,7 @@ export const fetchAdapter = (opts: {
    * fetch的默认参数，每次请求前都会合并对象
    */
   fetchOptions?: RequestInit;
-}): OpenapiClientAdapter => {
+}): OpenapiClientAdapter<RequestInit> => {
   const { fetch: fetcher = fetch, baseURL, fetchOptions = {} } = opts;
 
   return {
@@ -36,8 +36,7 @@ export const fetchAdapter = (opts: {
           : opts.credentials === true
             ? 'same-origin'
             : 'omit';
-
-      const response = await fetcher(url, {
+      const config: RequestInit = {
         ...fetchOptions,
         method: opts.method,
         body,
@@ -46,7 +45,9 @@ export const fetchAdapter = (opts: {
           ...opts.headers,
         },
         credentials,
-      });
+      };
+
+      const response = await fetcher(url, opts.onBeforeRequest?.(config) || config);
 
       return opts.responseType === 'json' ? response.json() : response.text();
     },

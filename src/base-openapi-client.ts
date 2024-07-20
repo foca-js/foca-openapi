@@ -2,7 +2,7 @@ import type { OpenapiClientAdapter, Methods } from './lib/adapter';
 import { utils } from './utils';
 
 export namespace BaseOpenapiClient {
-  export interface UserInputOpts {
+  export interface UserInputOpts<T extends object = object> {
     headers?: Record<string, unknown>;
     /**
      * 超时时间。单位：`ms`
@@ -20,9 +20,13 @@ export namespace BaseOpenapiClient {
      * 响应类型
      */
     responseType?: 'json' | 'text';
+    /**
+     * 请求之前动态修改配置
+     */
+    onBeforeRequest?: (options: T) => T | void;
   }
 
-  export interface FullOpts extends UserInputOpts {
+  export interface FullOpts<T extends object = object> extends UserInputOpts<T> {
     params?: Record<string, any>;
     query?: Record<string, any>;
     body?: Record<string, any> | FormData;
@@ -33,8 +37,8 @@ export namespace BaseOpenapiClient {
   } & {};
 }
 
-export abstract class BaseOpenapiClient {
-  constructor(private readonly adapter: OpenapiClientAdapter) {}
+export abstract class BaseOpenapiClient<T extends object = object> {
+  constructor(private readonly adapter: OpenapiClientAdapter<T>) {}
 
   protected replaceURI(uri: string, params?: Record<string, any>) {
     if (!params) return uri;
@@ -44,7 +48,11 @@ export abstract class BaseOpenapiClient {
     return uri;
   }
 
-  protected request(uri: string, method: Methods, opts: BaseOpenapiClient.FullOpts = {}) {
+  protected request(
+    uri: string,
+    method: Methods,
+    opts: BaseOpenapiClient.FullOpts<T> = {},
+  ) {
     const contentTypes = this.getContentTypes(uri, method);
     const requestBodyType = opts.requestBodyType || contentTypes[0] || 'application/json';
     const responseType = opts.responseType || contentTypes[1] || 'json';

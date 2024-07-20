@@ -34,8 +34,8 @@ export const generateTemplate = async (
 
   return {
     [className]: {
-      dts: await prettier.format(dts, { parser: 'typescript' }),
-      js: await prettier.format(js, { parser: 'typescript' }),
+      dts: await prettier.format(dts, { parser: 'typescript', printWidth: 120 }),
+      js: await prettier.format(js, { parser: 'typescript', printWidth: 120 }),
     },
   };
 };
@@ -77,7 +77,7 @@ declare namespace ${className} {
 export const generateMethodModeClass = (className: string, metas: Metas) => {
   return {
     dts: `
-declare class ${className} extends BaseOpenapiClient {
+declare class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${methods
     .map((method) => {
       if (!metas[method].length) return '';
@@ -90,12 +90,13 @@ declare class ${className} extends BaseOpenapiClient {
         .map((meta) => meta.uri);
 
       let opts: string;
+      const optType = `${className}_${method}_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>`;
       if (optionalUris.length === uris.length) {
-        opts = `[opts?: ${className}_${method}_paths[K]['request']]`;
+        opts = `[opts?: ${optType}]`;
       } else if (optionalUris.length === 0) {
-        opts = `[opts: ${className}_${method}_paths[K]['request']]`;
+        opts = `[opts: ${optType}]`;
       } else {
-        opts = `K extends '${optionalUris.join(' | ')}' ? [opts?: ${className}_${method}_paths[K]['request']] : [opts: ${className}_${method}_paths[K]['request']]`;
+        opts = `K extends '${optionalUris.join(' | ')}' ? [opts?: ${optType}] : [opts: ${optType}]`;
       }
 
       return `${method}<K extends keyof ${className}_${method}_paths>(
@@ -130,7 +131,7 @@ var ${className} = class extends BaseOpenapiClient {
 export const generateUriModelClass = (className: string, metas: Metas) => {
   return {
     dts: `
-declare class ${className} extends BaseOpenapiClient {
+declare class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${methods
     .flatMap((method) => {
       return metas[method].map((meta) => {
@@ -139,7 +140,7 @@ declare class ${className} extends BaseOpenapiClient {
 
         return `
         ${generateComments(meta)}
-        ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request']): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
+        ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
       });
     })
     .join('\n')}
@@ -178,7 +179,7 @@ export const generateUriModelClassWithNamespace = (className: string, metas: Met
 
   return {
     dts: `
-declare class ${className} extends BaseOpenapiClient {
+declare class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${namespaces
     .map((ns) => {
       return `readonly ${snakeCase(ns)}: {
@@ -192,7 +193,7 @@ declare class ${className} extends BaseOpenapiClient {
 
               return `
               ${generateComments(meta)}
-              ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request']): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
+              ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
             });
         })
         .join('\n')}
@@ -277,7 +278,7 @@ interface ${className}_${method}_paths {
         ${meta.query.types.length ? `query${meta.query.optional ? '?' : ''}: ${className}.${upperFirst(camelCase(meta.key + '_query'))};` : 'query?: object;'}
         ${meta.params.types.length ? `params${meta.params.optional ? '?' : ''}: ${className}.${upperFirst(camelCase(meta.key + '_params'))};` : ''}
         ${meta.body.types.length ? `body${meta.body.optional ? '?' : ''}: ${className}.${upperFirst(camelCase(meta.key + '_body'))};` : ''}
-      } & BaseOpenapiClient.UserInputOpts;
+      };
       response: ${meta.response.types.length ? `${className}.${upperFirst(camelCase(meta.key + '_response'))}` : 'unknown'}
    }>`;
     })
