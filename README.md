@@ -62,6 +62,7 @@ export const client = new OpenapiClient(adapter);
 - axios
 - fetch
 - taro
+- uniapp
 
 # 多配置场景
 
