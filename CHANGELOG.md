@@ -1,5 +1,13 @@
 
 
+# [0.4.0](https://github.com/foca-js/foca-openapi/compare/0.3.0...0.4.0) (2024-07-20)
+
+
+### Features
+
+* uniapp请求适配器 ([505dbfc](https://github.com/foca-js/foca-openapi/commit/505dbfcafc632011cfe6d9ae3a36286f6296f089))
+* 新增文档加载事件 ([fea1c80](https://github.com/foca-js/foca-openapi/commit/fea1c8080f77fe9ba114f36c0783a20453822132))
+
 # [0.3.0](https://github.com/foca-js/foca-openapi/compare/0.2.2...0.3.0) (2024-07-20)
 
 
