@@ -1,5 +1,18 @@
 
 
+# [0.3.0](https://github.com/foca-js/foca-openapi/compare/0.2.2...0.3.0) (2024-07-20)
+
+
+### Bug Fixes
+
+* 对象属性未生成注释 ([8c958d3](https://github.com/foca-js/foca-openapi/commit/8c958d3428820242aa6d5a330dfe36235c6e59e1))
+
+
+### Features
+
+* uri模式下支持分组 ([78a55b4](https://github.com/foca-js/foca-openapi/commit/78a55b46d7945e7930b08bfc1e9a3f617335d51f))
+* 新增method+uri生成方法 ([15677f6](https://github.com/foca-js/foca-openapi/commit/15677f6caa30c0edb721ed44a549e298e7bc79ed))
+
 ## [0.2.2](https://github.com/foca-js/foca-openapi/compare/0.2.1...0.2.2) (2024-07-19)
 
 
