@@ -1,5 +1,13 @@
 
 
+# [0.5.0](https://github.com/foca-js/foca-openapi/compare/0.4.1...0.5.0) (2024-07-20)
+
+
+### Features
+
+* 增加onBeforeRequest回调函数 ([4818999](https://github.com/foca-js/foca-openapi/commit/481899901c2d51d5f3eeb4678372cd8b584b9df2))
+* 处理taro和uniapp的异常场景 ([9aedd7d](https://github.com/foca-js/foca-openapi/commit/9aedd7d16c021840303c4a7396a824c8ab39be2f))
+
 ## [0.4.1](https://github.com/foca-js/foca-openapi/compare/0.4.0...0.4.1) (2024-07-20)
 
 
