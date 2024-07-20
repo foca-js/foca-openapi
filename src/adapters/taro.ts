@@ -19,16 +19,35 @@ export const taroAdapter = (opts: {
    */
   baseURL?: string;
   /**
+   * 获取状态码。默认值：`(result) => result.statusCode`
+   */
+  getStatusCode?: (result: Taro.request.SuccessCallbackResult) => number;
+  /**
+   * 请求失败回调函数，需要返回异常
+   */
+  onFail?: (
+    result: Taro.request.SuccessCallbackResult,
+    config: {
+      uri: string;
+      method: string;
+      statusCode: number;
+    },
+  ) => Error;
+  /**
    * 返回最终数据。默认值：`(res) => res.data`
    */
-  returningData?: (response: Awaited<ReturnType<typeof Taro.request>>) => any;
+  returningData?: (response: Taro.request.SuccessCallbackResult) => any;
   /**
    * Taro.request()的默认参数，每次请求前都会合并对象
    */
   requestOptions?: Taro.request.Option;
 }): OpenapiClientAdapter => {
   const {
-    returningData = (response) => response.data,
+    returningData = (result) => result.data,
+    getStatusCode = (result) => result.statusCode,
+    onFail = (_, config) => {
+      throw new Error(`请求接口"${config.uri}"失败，状态码：${config.statusCode}`);
+    },
     request,
     baseURL = '',
     requestOptions,
@@ -55,7 +74,14 @@ export const taroAdapter = (opts: {
         responseType: opts.responseType === 'text' ? 'text' : undefined,
       });
 
-      return returningData(result);
+      const statusCode = getStatusCode(result);
+      if (statusCode >= 400) {
+        return Promise.reject(
+          onFail(result, { uri: opts.uri, method: opts.method, statusCode }),
+        );
+      } else {
+        return returningData(result);
+      }
     },
   };
 };
