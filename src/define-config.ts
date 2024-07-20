@@ -26,9 +26,13 @@ export interface OpenapiClientConfig {
   /**
    * 类的生成方式。默认值：`method`
    * - `method`，仅生成 `get|post|put|patch|delete` 几个方法，uri作为第一个参数传入
-   * - `uri`，所有的 method+uri 都会重新拼接成一个方法，比如`postUsersById()`
+   * - `uri`，把 method+uri 拼接成一个方法，比如 `POST /users/{id}` 会变成 `postUsersById()`
    */
   classMode?: 'method' | 'uri';
+  /**
+   * 根据Tag生成不同的分组，以类似`client.user.getUsers()`这种方式调用。仅在 `classMode=uri` 场景下生效。默认值：`true`
+   */
+  tagToGroup?: boolean;
 }
 
 export const defineConfig = (options: OpenapiClientConfig | OpenapiClientConfig[]) => {
