@@ -26,12 +26,8 @@ pnpm add foca-openapi
 import { defineConfig } from 'foca-openapi';
 
 export default defineConfig({
-  // 可以是本地路径，也可以是远程地址。格式为json或者yaml
+  // 可以是本地路径，也可以是远程地址
   path: 'http://domain.com/openapi.json',
-  // 只包含指定的路由，支持字符串或者正则表达式
-  // includeUriPrefix: ['/admin'],
-  // 只包含指定的标签
-  // includeTag: ['admin', 'public'],
 });
 ```
 
@@ -96,3 +92,48 @@ import { OpenapiClientFoo, OpenapiClientBar } from 'foca-openapi';
 export const fooClient = new OpenapiClientFoo(adapter1);
 export const barClient = new OpenapiClientBar(adapter2);
 ```
+
+# 参数
+
+### path
+
+类型：`string`<br>
+
+openapi本地或者远程文件，支持格式：`yaml | json`
+
+### includeUriPrefix
+
+类型：`string | string[] | RegExp | RegExp[]`
+
+过滤指定路由前缀的接口
+
+### includeTag
+
+类型：`string | string[]`
+
+过滤指定标签
+
+### projectName
+
+类型：`string`
+
+项目名称，提供多个openapi路径时必须填写。比如项目名为`demo`，则导出的类为`OpenapiClientDemo`
+
+### classMode
+
+类型：`'method' | 'uri'`<br>
+默认值：`'method'`
+
+类的生成方式。
+
+- `method`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入
+- `uri`，把 method+uri 拼接成一个方法，比如 **POST /users/{id}** 会变成 **postUsersById()**
+
+### tagToGroup
+
+类型：`boolean`<br>
+默认值：`true`
+
+根据Tag生成不同的分组，以类似 **client.user.getUsers()** 这种方式调用。仅在 `classMode=uri` 场景下生效。
+
+如果没有提供tags，则默认合并到`default`分组
