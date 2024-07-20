@@ -11,6 +11,8 @@
     "deploy:main": "sh scripts/develop-deploy-main.sh",
     "sync:main": "sh scripts/develop-sync-main.sh"
   },
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
