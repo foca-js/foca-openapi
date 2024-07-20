@@ -10,12 +10,12 @@ export const generateTemplate = async (
   docs: OpenAPIV3.Document,
   config: Pick<OpenapiClientConfig, 'projectName' | 'classMode' | 'tagToGroup'>,
 ) => {
-  const { projectName, classMode = 'method', tagToGroup = true } = config;
+  const { projectName, classMode = 'rest', tagToGroup = true } = config;
   const className = `OpenapiClient${upperFirst(camelCase(projectName))}`;
   const metas = documentToMeta(docs);
 
   const classTpl =
-    classMode === 'method'
+    classMode === 'rest'
       ? generateMethodModeClass(className, metas)
       : tagToGroup
         ? generateUriModelClassWithNamespace(className, metas)
