@@ -53,7 +53,7 @@ export abstract class BaseOpenapiClient<T extends object = object> {
     method: Methods,
     opts: BaseOpenapiClient.FullOpts<T> = {},
   ) {
-    const contentTypes = this.getContentTypes(uri, method);
+    const contentTypes = this.pickContentTypes(uri, method);
     const requestBodyType = opts.requestBodyType || contentTypes[0] || 'application/json';
     const responseType = opts.responseType || contentTypes[1] || 'json';
     const headers = opts.headers || {};
@@ -79,11 +79,13 @@ export abstract class BaseOpenapiClient<T extends object = object> {
     );
   }
 
-  protected abstract getContentTypes(
-    uri: string,
-    method: string,
+  protected pickContentTypes(
+    _uri: string,
+    _method: string,
   ): [
     BaseOpenapiClient.UserInputOpts['requestBodyType'],
     BaseOpenapiClient.UserInputOpts['responseType'],
-  ];
+  ] {
+    return [void 0, void 0];
+  }
 }
