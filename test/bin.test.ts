@@ -7,8 +7,9 @@ import { beforeAll, expect, test } from 'vitest';
 beforeAll(async () => {
   try {
     await rm('dist', { recursive: true });
+    await rm('backup', { recursive: true });
   } catch {}
-  execSync('npx tsup', { encoding: 'utf8', stdio: 'inherit' });
+  execSync('pnpm build', { encoding: 'utf8', stdio: 'inherit' });
 }, 15_000);
 
 test('生成 bin.mjs', async () => {
