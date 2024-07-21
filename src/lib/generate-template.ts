@@ -104,11 +104,6 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
       ): Promise<${className}_${method}_paths[K]['response']>`;
     })
     .join('\n')}
-    
-    protected getContentTypes(uri: string, method: string) : [
-      BaseOpenapiClient.UserInputOpts['requestBodyType'],
-      BaseOpenapiClient.UserInputOpts['responseType'],
-    ];
 }`,
     js: `
 var ${className} = class extends BaseOpenapiClient {
@@ -121,7 +116,7 @@ var ${className} = class extends BaseOpenapiClient {
     })
     .join('\n')}
 
-  getContentTypes(uri, method) {
+  pickContentTypes(uri, method) {
     return contentTypes${className}[method + " " + uri] || [void 0, void 0];
   }
 };`,
@@ -144,11 +139,6 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
       });
     })
     .join('\n')}
-
-  protected getContentTypes(uri: string, method: string) : [
-    BaseOpenapiClient.UserInputOpts['requestBodyType'],
-    BaseOpenapiClient.UserInputOpts['responseType'],
-  ];
 }`,
     js: `
 var ${className} = class extends BaseOpenapiClient {
@@ -163,7 +153,7 @@ var ${className} = class extends BaseOpenapiClient {
     })
     .join('\n')}
 
-  getContentTypes(uri, method) {
+  pickContentTypes(uri, method) {
     return contentTypes${className}[method + " " + uri] || [void 0, void 0];
   }
 };`,
@@ -200,11 +190,6 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
     }`;
     })
     .join('\n')}
-
-  protected getContentTypes(uri: string, method: string) : [
-    BaseOpenapiClient.UserInputOpts['requestBodyType'],
-    BaseOpenapiClient.UserInputOpts['responseType'],
-  ];
 }`,
     js: `
 var ${className} = class extends BaseOpenapiClient {
@@ -226,7 +211,7 @@ var ${className} = class extends BaseOpenapiClient {
     })
     .join('\n')}
 
-  getContentTypes(uri, method) {
+  pickContentTypes(uri, method) {
     return contentTypes${className}[method + ' ' + uri] || [void 0, void 0];
   }
 };`,

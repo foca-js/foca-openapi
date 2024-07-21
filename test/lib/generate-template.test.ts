@@ -84,11 +84,6 @@ test('完整的类型提示', async () => {
           ? [opts?: OpenapiClient_get_paths[K]["request"] & BaseOpenapiClient.UserInputOpts<T>]
           : [opts: OpenapiClient_get_paths[K]["request"] & BaseOpenapiClient.UserInputOpts<T>]
       ): Promise<OpenapiClient_get_paths[K]["response"]>;
-
-      protected getContentTypes(
-        uri: string,
-        method: string,
-      ): [BaseOpenapiClient.UserInputOpts["requestBodyType"], BaseOpenapiClient.UserInputOpts["responseType"]];
     }
 
     interface OpenapiClient_get_paths {
@@ -113,7 +108,7 @@ test('完整的类型提示', async () => {
         return this.request(uri, "get", opts);
       }
 
-      getContentTypes(uri, method) {
+      pickContentTypes(uri, method) {
         return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
       }
     };
@@ -152,11 +147,6 @@ test('完整的类型提示', async () => {
           opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
       };
-
-      protected getContentTypes(
-        uri: string,
-        method: string,
-      ): [BaseOpenapiClient.UserInputOpts["requestBodyType"], BaseOpenapiClient.UserInputOpts["responseType"]];
     }
 
     interface OpenapiClient_get_paths {
@@ -186,7 +176,7 @@ test('完整的类型提示', async () => {
         },
       };
 
-      getContentTypes(uri, method) {
+      pickContentTypes(uri, method) {
         return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
       }
     };
@@ -317,11 +307,6 @@ describe('类', () => {
           uri: K,
           ...rest: [opts?: Client_patch_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_patch_paths[K]['response']>;
-
-        protected getContentTypes(
-          uri: string,
-          method: string,
-        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -335,7 +320,7 @@ describe('类', () => {
           return this.request(uri, 'get', opts);
         }
 
-        getContentTypes(uri, method) {
+        pickContentTypes(uri, method) {
           return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
         }
       };
@@ -354,11 +339,6 @@ describe('类', () => {
         patchUsers(
           opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<Client_patch_paths['/']['response']>;
-
-        protected getContentTypes(
-          uri: string,
-          method: string,
-        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -372,7 +352,7 @@ describe('类', () => {
           return this.request('/', 'patch', opts);
         }
 
-        getContentTypes(uri, method) {
+        pickContentTypes(uri, method) {
           return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
         }
       };
@@ -416,11 +396,6 @@ describe('类', () => {
             ? [opts?: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
             : [opts: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_get_paths[K]['response']>;
-
-        protected getContentTypes(
-          uri: string,
-          method: string,
-        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -449,11 +424,6 @@ describe('类', () => {
           uri: K,
           ...rest: [opts: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_get_paths[K]['response']>;
-
-        protected getContentTypes(
-          uri: string,
-          method: string,
-        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -478,11 +448,6 @@ describe('类', () => {
             opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_get_paths['/']['response']>;
         };
-
-        protected getContentTypes(
-          uri: string,
-          method: string,
-        ): [BaseOpenapiClient.UserInputOpts['requestBodyType'], BaseOpenapiClient.UserInputOpts['responseType']];
       }
       "
     `);
@@ -503,7 +468,7 @@ describe('类', () => {
           },
         };
 
-        getContentTypes(uri, method) {
+        pickContentTypes(uri, method) {
           return contentTypesClient[method + ' ' + uri] || [void 0, void 0];
         }
       };

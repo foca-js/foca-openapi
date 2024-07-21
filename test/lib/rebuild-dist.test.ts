@@ -72,20 +72,21 @@ test('内容写入文件', async () => {
         bbbbb: string;
     };
 
+    export { aaaaa };
+
     declare const foo = { bar: "baz" };
-    export {foo, aaaaa };
-    "
+    export { foo };"
   `);
 
   await expect(readFile(path.join(distDir, 'esm', 'index.js'), 'utf8')).resolves
     .toMatchInlineSnapshot(`
     "// test/fixtures/index.ts
     var aaaaa = { bbbbb: "ccccc" };
-    var foo = { bar: "baz" }
     export {
-    foo,
       aaaaa
     };
-    //# sourceMappingURL=index.js.map"
+    //# sourceMappingURL=index.js.map
+    var foo = { bar: "baz" }
+    export { foo };"
   `);
 });
