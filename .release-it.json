@@ -12,8 +12,22 @@
   },
   "plugins": {
     "@release-it/conventional-changelog": {
-      "preset": "angular",
-      "infile": "CHANGELOG.md"
+      "infile": "CHANGELOG.md",
+      "preset": {
+        "name": "angular",
+        "types": [
+          { "type": "feat", "section": "New Features" },
+          { "type": "perf", "section": "Performance" },
+          { "type": "fix", "section": "Bug Fixes" },
+          { "type": "refactor", "section": "Code Refactors" },
+          { "type": "build", "hidden": true },
+          { "type": "style", "hidden": true },
+          { "type": "docs", "hidden": true },
+          { "type": "ci", "hidden": true },
+          { "type": "chore", "hidden": true },
+          { "type": "test", "hidden": true }
+        ]
+      }
     }
   }
 }
