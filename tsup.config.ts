@@ -28,21 +28,6 @@ export default defineConfig([
     shims: false,
     dts: true,
     legacyOutput: true,
-    onSuccess: `echo '{"type":"module"}' > dist/esm/package.json`,
-  },
-  {
-    entry: ['src/index.ts'],
-    outDir: './backup',
-    splitting: false,
-    sourcemap: false,
-    clean: false,
-    format: ['cjs', 'esm'],
-    platform: 'node',
-    tsconfig: './tsconfig.json',
-    target: 'es2020',
-    shims: false,
-    dts: true,
-    legacyOutput: true,
   },
   {
     entry: readdirSync(path.resolve('src', 'adapters')).map(

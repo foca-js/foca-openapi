@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest",
     "generate": "aomex openapi-yaml && aomex openapi-json",
-    "build": "tsup",
+    "build": "tsup && sh scripts/build-success.sh",
     "prepare": "husky",
     "prepublishOnly": "pnpm build",
     "deploy:main": "sh scripts/develop-deploy-main.sh",
