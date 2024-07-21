@@ -1,5 +1,12 @@
 
 
+## [0.5.1](https://github.com/foca-js/foca-openapi/compare/0.5.0...0.5.1) (2024-07-21)
+
+
+### Performance Improvements
+
+* 优化文档保存方案 ([c9735c6](https://github.com/foca-js/foca-openapi/commit/c9735c6d5a5c123764b9ef8c30625a50d86180b3))
+
 # [0.5.0](https://github.com/foca-js/foca-openapi/compare/0.4.1...0.5.0) (2024-07-20)
 
 
