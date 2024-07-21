@@ -12,10 +12,7 @@ export const rebuildDist = async (
 
   {
     let backupDTS = await readFile(path.join(backupDir, 'index.d.ts'), 'utf8');
-    backupDTS = backupDTS.replace(
-      `export {`,
-      `${dtsContent}\nexport {${classNames.join(',')},`,
-    );
+    backupDTS += `\n${dtsContent}\nexport { ${classNames.join(', ')} };`;
     await writeFile(path.join(distDir, 'index.d.ts'), backupDTS);
   }
 
@@ -34,10 +31,7 @@ export const rebuildDist = async (
 
   {
     let backupESM = await readFile(path.join(backupDir, 'esm', 'index.js'), 'utf8');
-    backupESM = backupESM.replace(
-      'export {',
-      `${jsContent}\nexport {\n${classNames.join(',')},`,
-    );
+    backupESM += `\n${jsContent}\nexport { ${classNames.join(', ')} };`;
     await writeFile(path.join(distDir, 'esm', 'index.js'), backupESM);
   }
 };
