@@ -134,8 +134,7 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
           meta.query.optional && meta.params.optional && meta.body.optional;
 
         return `
-        ${generateComments(meta)}
-        ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
+        ${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
       });
     })
     .join('\n')}
@@ -146,7 +145,7 @@ var ${className} = class extends BaseOpenapiClient {
     .flatMap((method) => {
       return metas[method].map((meta) => {
         return `
-        ${camelCase(meta.key)}(opts) {
+        ${generateComments(meta)}${camelCase(meta.key)}(opts) {
           return this.request('${meta.uri}', "${method}", opts);
         }`;
       });
@@ -181,9 +180,7 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
               const optional =
                 meta.query.optional && meta.params.optional && meta.body.optional;
 
-              return `
-              ${generateComments(meta)}
-              ${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
+              return `${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
             });
         })
         .join('\n')}
@@ -201,7 +198,7 @@ var ${className} = class extends BaseOpenapiClient {
           return metas[method]
             .filter((meta) => meta.tags.includes(ns))
             .map((meta) => {
-              return `${camelCase(meta.key)}: (opts) => {
+              return `${generateComments(meta)}${camelCase(meta.key)}: (opts) => {
                 return this.request('${meta.uri}', '${method}', opts);
               },`;
             });

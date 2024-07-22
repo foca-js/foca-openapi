@@ -3,12 +3,19 @@ var OpenapiClient = class extends BaseOpenapiClient {
     getUsers: (opts) => {
       return this.request('/users', 'get', opts);
     },
+    /**
+     * 获取单个用户信息
+     */
     getUsersById: (opts) => {
       return this.request('/users/{id}', 'get', opts);
     },
     postUsers: (opts) => {
       return this.request('/users', 'post', opts);
     },
+    /**
+     * 接口已弃用，请使用 /users
+     * @deprecated
+     */
     postUsersV1: (opts) => {
       return this.request('/users/v1', 'post', opts);
     },
