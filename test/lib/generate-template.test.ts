@@ -142,7 +142,6 @@ test('完整的类型提示', async () => {
         getUsers(
           opts: OpenapiClient_get_paths["/users"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
-
         getUsersById(
           opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
@@ -355,6 +354,7 @@ describe('类', () => {
         contentTypes: [],
         responseTypes: [],
         tags: ['user'],
+        description: '这里有一个注释',
       },
     ],
   });
@@ -401,6 +401,9 @@ describe('类', () => {
           opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<Client_get_paths['/']['response']>;
 
+        /**
+         * 这里有一个注释
+         */
         patchUsers(
           opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<Client_patch_paths['/']['response']>;
@@ -413,6 +416,9 @@ describe('类', () => {
           return this.request('/', 'get', opts);
         }
 
+        /**
+         * 这里有一个注释
+         */
         patchUsers(opts) {
           return this.request('/', 'patch', opts);
         }
@@ -504,6 +510,9 @@ describe('类', () => {
             opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_get_paths['/']['response']>;
 
+          /**
+           * 这里有一个注释
+           */
           patchUsers(
             opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_patch_paths['/']['response']>;
@@ -523,6 +532,10 @@ describe('类', () => {
           getUsers: (opts) => {
             return this.request('/', 'get', opts);
           },
+
+          /**
+           * 这里有一个注释
+           */
           patchUsers: (opts) => {
             return this.request('/', 'patch', opts);
           },
