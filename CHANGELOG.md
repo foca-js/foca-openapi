@@ -1,5 +1,13 @@
 
 
+# [0.6.0](https://github.com/foca-js/foca-openapi/compare/0.5.1...0.6.0) (2024-07-22)
+
+
+### Features
+
+* classMode增加rpc-group模式 ([0c4301a](https://github.com/foca-js/foca-openapi/commit/0c4301a47d9b2498c4bd878fc59fc6e1d0825c85))
+* 文档js内容也增加注释 ([664c26f](https://github.com/foca-js/foca-openapi/commit/664c26febbe8b5fc8daaad38f8cfc71d602ecb5b))
+
 ## [0.5.1](https://github.com/foca-js/foca-openapi/compare/0.5.0...0.5.1) (2024-07-21)
 
 
