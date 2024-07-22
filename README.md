@@ -122,43 +122,29 @@ openapi本地或者远程文件，支持格式：`yaml | json`
 
 ### classMode
 
-类型：`'rest' | 'rpc'`<br>
+类型：`'rest' | 'rpc' | 'rpc-group'`<br>
 默认值：`'rest'`
 
 类的生成方式。
 
-- `rest`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入。参考：[rest-mode.js](./openapi/rest-mode.js)
-- `rpc`，把 method+uri 拼接成一个新方法。参考：[rpc-mode.js](./openapi/rpc-mode.js)
+| 模式      | 描述                                                                                                    | 优点                                             |
+| --------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| rest      | 仅生成统一的 **get,post,put,patch,delete** 几个方法<br>参考：[rest-mode.js](./openapi/rest-mode.js)     | 1. 运行时代码少<br>2. 不暴露接口，安全性高       |
+| rpc       | 把 method+uri 拼接成一个新方法<br>参考：[rpc-mode.js](./openapi/rpc-mode.js)                            | 1. 拥有独立的注释文档                            |
+| rpc-group | 基于rpc模式，根据tags把方法归类到不同的分组中<br>参考：[rpc-group-mode.js](./openapi/rpc-group-mode.js) | 1. 拥有独立的注释文档<br>2. 能更快地找到目标接口 |
 
 ```typescript
 const client = new OpenapiClient();
 
-// 有一个接口 -> GET /users/{id}
-
 // rest模式
-await client.get('/users/{id}', { params: { id: 1 } });
+await client.get('/users/{id}', opts);
 // rpc模式
-await client.getUsersById({ params: { id: 1 } });
+await client.getUsersById(opts);
+// rpc-group模式
+await client.user.getUsersById(opts);
 ```
 
-rest模式的优点：
-
-- 运行时代码少且相对固定，几乎不受接口数量影响
-- 不会暴露接口名称，安全性较高
-
-rpc模式的优点：
-
-- 可以生成独立的注释文档
-- 可以利用tag生成分组，接口越多越方便
-
-### tagToGroup
-
-类型：`boolean`<br>
-默认值：`true`
-
-根据Tag生成不同的分组，以类似 **client.user.getUsers()** 这种方式调用。仅在 `classMode=rpc` 场景下生效。
-
-如果没有提供tags，则默认合并到`default`分组
+**注意**：rpc-group模式下，如果没有提供tags，则默认合并到`default`分组
 
 ### onDocumentLoaded
 
