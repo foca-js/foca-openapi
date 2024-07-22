@@ -127,8 +127,8 @@ openapi本地或者远程文件，支持格式：`yaml | json`
 
 类的生成方式。
 
-- `rest`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入
-- `rpc`，把 method+uri 拼接成一个新方法。
+- `rest`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入。参考：[rest-mode.js](./openapi/rest-mode.js)
+- `rpc`，把 method+uri 拼接成一个新方法。参考：[rpc-mode.js](./openapi/rpc-mode.js)
 
 ```typescript
 const client = new OpenapiClient();
