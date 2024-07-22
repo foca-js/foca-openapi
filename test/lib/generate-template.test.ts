@@ -6,7 +6,7 @@ import {
   generatePathRelationTpl,
   generateTemplate,
   generateUriModelClass,
-  generateUriModelClassWithNamespace,
+  generateUriModelClassWithGroup,
 } from '../../src/lib/generate-template';
 import prettier from 'prettier';
 import { getBasicMetas } from '../mocks/get-basic-matea';
@@ -119,7 +119,7 @@ test('完整的类型提示', async () => {
     }
   `);
 
-  await expect(generateTemplate(docs, { classMode: 'rpc' })).resolves
+  await expect(generateTemplate(docs, { classMode: 'rpc-group' })).resolves
     .toMatchInlineSnapshot(`
     {
       "OpenapiClient": {
@@ -175,6 +175,71 @@ test('完整的类型提示', async () => {
           return this.request("/users/{id}", "get", opts);
         },
       };
+
+      pickContentTypes(uri, method) {
+        return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
+      }
+    };
+
+    const contentTypesOpenapiClient = {};
+    ",
+      },
+    }
+  `);
+
+  await expect(generateTemplate(docs, { classMode: 'rpc' })).resolves
+    .toMatchInlineSnapshot(`
+    {
+      "OpenapiClient": {
+        "dts": "declare namespace OpenapiClient {
+      interface GetUsersQuery {
+        foo?: string;
+        bar?: string;
+      }
+      interface GetUsersParams {
+        baz: number;
+      }
+      interface GetUsersBody {}
+      interface GetUsersResponse {
+        foo?: string;
+      }
+    }
+
+    declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
+      getUsers(
+        opts: OpenapiClient_get_paths["/users"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
+      ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
+
+      getUsersById(
+        opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
+      ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
+    }
+
+    interface OpenapiClient_get_paths {
+      "/users": BaseOpenapiClient.Prettify<{
+        request: {
+          query?: OpenapiClient.GetUsersQuery;
+          params: OpenapiClient.GetUsersParams;
+          body: OpenapiClient.GetUsersBody;
+        };
+        response: OpenapiClient.GetUsersResponse;
+      }>;
+      "/users/{id}": BaseOpenapiClient.Prettify<{
+        request: {
+          query?: object;
+        };
+        response: unknown;
+      }>;
+    }
+    ",
+        "js": "var OpenapiClient = class extends BaseOpenapiClient {
+      getUsers(opts) {
+        return this.request("/users", "get", opts);
+      }
+
+      getUsersById(opts) {
+        return this.request("/users/{id}", "get", opts);
+      }
 
       pickContentTypes(uri, method) {
         return contentTypesOpenapiClient[method + " " + uri] || [void 0, void 0];
@@ -430,7 +495,7 @@ describe('类', () => {
   });
 
   test('命名空间', async () => {
-    const { dts, js } = generateUriModelClassWithNamespace('Client', metas);
+    const { dts, js } = generateUriModelClassWithGroup('Client', metas);
 
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {

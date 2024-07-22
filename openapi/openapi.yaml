@@ -123,6 +123,7 @@ paths:
       x-codegen-request-body-name: body
   /users/{id}:
     get:
+      description: 获取单个用户信息
       responses:
         "200":
           description: ""

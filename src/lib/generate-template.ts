@@ -8,17 +8,17 @@ import type { OpenapiClientConfig } from '../define-config';
 
 export const generateTemplate = async (
   docs: OpenAPIV3.Document,
-  config: Pick<OpenapiClientConfig, 'projectName' | 'classMode' | 'tagToGroup'>,
+  config: Pick<OpenapiClientConfig, 'projectName' | 'classMode'>,
 ) => {
-  const { projectName, classMode = 'rest', tagToGroup = true } = config;
+  const { projectName, classMode = 'rest' } = config;
   const className = `OpenapiClient${upperFirst(camelCase(projectName))}`;
   const metas = documentToMeta(docs);
 
   const classTpl =
     classMode === 'rest'
       ? generateMethodModeClass(className, metas)
-      : tagToGroup
-        ? generateUriModelClassWithNamespace(className, metas)
+      : classMode === 'rpc-group'
+        ? generateUriModelClassWithGroup(className, metas)
         : generateUriModelClass(className, metas);
 
   const dts = `
@@ -160,7 +160,7 @@ var ${className} = class extends BaseOpenapiClient {
   };
 };
 
-export const generateUriModelClassWithNamespace = (className: string, metas: Metas) => {
+export const generateUriModelClassWithGroup = (className: string, metas: Metas) => {
   const namespaces = [
     ...new Set(
       methods.flatMap((method) => metas[method].flatMap((meta) => meta.tags || [])),

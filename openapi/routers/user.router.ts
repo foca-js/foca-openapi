@@ -32,6 +32,9 @@ router.get('/users', {
 });
 
 router.get('/users/:id', {
+  docs: {
+    description: '获取单个用户信息',
+  },
   mount: [
     params({
       id: rule.int().min(1),

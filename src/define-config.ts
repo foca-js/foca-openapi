@@ -27,16 +27,22 @@ export interface OpenapiClientConfig {
   projectName?: string;
   /**
    * 类的生成方式。默认值：`rest`
-   * - `rest`，仅生成 **get|post|put|patch|delete** 几个方法，uri作为第一个参数传入
-   * - `rpc`，把 method+uri 拼接成一个方法，比如 **POST /users/{id}** 会变成 **postUsersById()**
-   */
-  classMode?: 'rest' | 'rpc';
-  /**
-   * 根据Tag生成不同的分组，以类似 **client.user.getUsers()** 这种方式调用。仅在 `classMode=rpc` 场景下生效。默认值：`true`
+   * - `rest`       仅生成 **get|post|put|patch|delete** 几个固定方法，uri作为第一个参数传入。
+   * - `rpc`        把 method+uri 拼接成一个方法。
+   * - `rpc-group`  在rpc模式的基础上，根据tags把方法归类到不同的分组中。如果没有提供tags，则默认合并到`default`分组
    *
-   * 如果没有提供tags，则默认合并到`default`分组
+   * ```typescript
+   * const client = new OpenapiClient();
+   *
+   * // rest模式
+   * await client.get('/users/{id}', opts);
+   * // rpc模式
+   * await client.getUsersById(opts);
+   * // rpc-group模式
+   * await client.user.getUsersById(opts);
+   * ```
    */
-  tagToGroup?: boolean;
+  classMode?: 'rest' | 'rpc' | 'rpc-group';
   /**
    * 加载完openapi文档后的事件，允许直接对文档进行修改
    */
