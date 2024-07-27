@@ -75,6 +75,12 @@ describe('常规', () => {
     });
     expect(type).toMatchInlineSnapshot(`"string | boolean | number"`);
   });
+
+  test('枚举', () => {
+    expect(
+      parseSchema(docs, { enum: ['foo', 'bar', 'baz', 1, 2] }),
+    ).toMatchInlineSnapshot(`""foo" | "bar" | "baz" | 1 | 2"`);
+  });
 });
 
 describe('nullable', () => {
@@ -127,6 +133,12 @@ describe('nullable', () => {
     expect(
       parseSchema(docs, { type: 'string', format: 'binary', nullable: true }),
     ).toMatchInlineSnapshot(`"Blob | null"`);
+  });
+
+  test('枚举', () => {
+    expect(
+      parseSchema(docs, { enum: ['foo', 'bar', 'baz'], nullable: true }),
+    ).toMatchInlineSnapshot(`""foo" | "bar" | "baz" | null"`);
   });
 });
 

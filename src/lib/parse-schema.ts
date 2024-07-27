@@ -9,6 +9,14 @@ export const parseSchema = (
   const parsed = refToObject(docs, schema);
   const nullable = parsed.nullable ? ' | null' : '';
 
+  if (parsed.enum?.length) {
+    return `${parsed.enum.map((item) => (typeof item === 'number' ? item : `"${item}"`)).join(' | ')}${nullable}`;
+  }
+
+  if (parsed.oneOf) {
+    return parsed.oneOf.map((schema) => parseSchema(docs, schema)).join(' | ');
+  }
+
   switch (parsed.type) {
     case 'array':
       return `(${parseSchema(docs, parsed.items)})[]${nullable}`;
@@ -27,10 +35,6 @@ export const parseSchema = (
     case 'string':
       if (parsed.format === 'binary') return `Blob${nullable}`;
       return `string${nullable}`;
-  }
-
-  if (parsed.oneOf) {
-    return parsed.oneOf.map((schema) => parseSchema(docs, schema)).join(' | ');
   }
 
   return 'unknown';
