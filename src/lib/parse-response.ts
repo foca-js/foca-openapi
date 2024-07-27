@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types';
-import { parseSchemaType } from './parse-schema';
+import { parseSchema } from './parse-schema';
 import { refToObject } from './ref-to-object';
 
 export const parseResponse = (
@@ -18,7 +18,7 @@ export const parseResponse = (
     .flatMap((item) => Object.values(item.content || {}))
     .map((item) => item.schema && refToObject(docs, item.schema))
     .filter(Boolean)
-    .map((schema) => parseSchemaType(docs, schema || {}));
+    .map((schema) => parseSchema(docs, schema || {}));
 
   return {
     responseTypes: [...new Set(contentTypes)],

@@ -1,5 +1,5 @@
 import type { OpenAPIV3 } from 'openapi-types';
-import { parseSchemaType } from './parse-schema';
+import { parseSchema } from './parse-schema';
 import { refToObject } from './ref-to-object';
 
 export const parseRequestBody = (
@@ -15,7 +15,7 @@ export const parseRequestBody = (
   );
   const types = contentTypes.map((contentType) => {
     const { schema } = requestBody.content[contentType]!;
-    return parseSchemaType(docs, schema!);
+    return parseSchema(docs, schema!);
   });
   return {
     contentTypes: contentTypes.filter((item) => item !== '*/*'),
