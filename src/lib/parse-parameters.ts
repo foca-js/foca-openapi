@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from 'openapi-types';
 import { refToObject } from './ref-to-object';
 import { generateComments } from './generate-comments';
-import { parseSchemaType } from './parse-schema';
+import { parseSchema } from './parse-schema';
 
 export const parseParameters = (
   docs: OpenAPIV3.Document,
@@ -17,7 +17,7 @@ export const parseParameters = (
   const types = parameters
     .map((parameter) => {
       if (!parameter.schema) return '';
-      return `${generateComments(parameter)}${parameter.name}${parameter.required ? '' : '?'}: ${parseSchemaType(docs, parameter.schema)}
+      return `${generateComments(parameter)}${parameter.name}${parameter.required ? '' : '?'}: ${parseSchema(docs, parameter.schema)}
       `;
     })
     .filter(Boolean);
