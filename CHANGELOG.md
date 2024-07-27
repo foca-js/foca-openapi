@@ -1,5 +1,13 @@
 
 
+# [0.7.0](https://github.com/foca-js/foca-openapi/compare/0.6.0...0.7.0) (2024-07-27)
+
+
+### Features
+
+* 解析nullable属性 ([7440ed0](https://github.com/foca-js/foca-openapi/commit/7440ed01d694d5836b8c904dca1628001b4c0938))
+* 解析枚举值 ([39643b7](https://github.com/foca-js/foca-openapi/commit/39643b7c3bf373c3a819b930bb9084b47df1d412))
+
 # [0.6.0](https://github.com/foca-js/foca-openapi/compare/0.5.1...0.6.0) (2024-07-22)
 
 
