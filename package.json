@@ -88,11 +88,10 @@
     "yaml": "^2.4.5"
   },
   "devDependencies": {
-    "@aomex/console": "^1.7.0",
-    "@aomex/core": "^1.7.0",
-    "@aomex/openapi": "^1.7.0",
-    "@aomex/router": "^1.7.0",
-    "@aomex/web": "^1.7.0",
+    "@aomex/console": "^2.0.2",
+    "@aomex/core": "^2.0.2",
+    "@aomex/openapi": "^2.0.2",
+    "@aomex/web": "^2.0.2",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@dcloudio/types": "^3.4.12",
