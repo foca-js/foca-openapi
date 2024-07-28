@@ -24,7 +24,7 @@ test('从requestBody字段获取', () => {
       "body": {
         "optional": false,
         "types": [
-          "({ foo?: (string) })",
+          "({ "foo"?: (string) })",
         ],
       },
       "contentTypes": [
@@ -57,7 +57,7 @@ test('多个返回类型', () => {
       "body": {
         "optional": false,
         "types": [
-          "({ foo?: (string) })",
+          "({ "foo"?: (string) })",
           "(string)",
         ],
       },
@@ -138,7 +138,7 @@ test('*/* 类型被忽略', () => {
       "body": {
         "optional": false,
         "types": [
-          "({ foo?: (string) })",
+          "({ "foo"?: (string) })",
         ],
       },
       "contentTypes": [],
