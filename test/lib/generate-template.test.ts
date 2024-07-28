@@ -64,17 +64,10 @@ test('完整的类型提示', async () => {
     {
       "OpenapiClient": {
         "dts": "declare namespace OpenapiClient {
-      interface GetUsersQuery {
-        foo?: string;
-        bar?: string;
-      }
-      interface GetUsersParams {
-        baz: number;
-      }
-      interface GetUsersBody {}
-      interface GetUsersResponse {
-        foo?: string;
-      }
+      type GetUsersQuery = { foo?: string; bar?: string };
+      type GetUsersParams = { baz: number };
+      type GetUsersBody = {};
+      type GetUsersResponse = { foo?: string };
     }
 
     declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
@@ -124,17 +117,10 @@ test('完整的类型提示', async () => {
     {
       "OpenapiClient": {
         "dts": "declare namespace OpenapiClient {
-      interface GetUsersQuery {
-        foo?: string;
-        bar?: string;
-      }
-      interface GetUsersParams {
-        baz: number;
-      }
-      interface GetUsersBody {}
-      interface GetUsersResponse {
-        foo?: string;
-      }
+      type GetUsersQuery = { foo?: string; bar?: string };
+      type GetUsersParams = { baz: number };
+      type GetUsersBody = {};
+      type GetUsersResponse = { foo?: string };
     }
 
     declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
@@ -191,17 +177,10 @@ test('完整的类型提示', async () => {
     {
       "OpenapiClient": {
         "dts": "declare namespace OpenapiClient {
-      interface GetUsersQuery {
-        foo?: string;
-        bar?: string;
-      }
-      interface GetUsersParams {
-        baz: number;
-      }
-      interface GetUsersBody {}
-      interface GetUsersResponse {
-        foo?: string;
-      }
+      type GetUsersQuery = { foo?: string; bar?: string };
+      type GetUsersParams = { baz: number };
+      type GetUsersBody = {};
+      type GetUsersResponse = { foo?: string };
     }
 
     declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
@@ -283,19 +262,10 @@ describe('命名空间', () => {
     const result = generateNamespaceTpl('Client', metas);
     await expect(formatDocs(result)).resolves.toMatchInlineSnapshot(`
       "declare namespace Client {
-        interface AUsersQuery {
-          foo: string;
-        }
-        interface AUsersParams {
-          id: number;
-        }
-        interface AUsersBody {
-          bar: string;
-        }
-        interface AUsersResponse {
-          id: number;
-          name: string;
-        }
+        type AUsersQuery = { foo: string };
+        type AUsersParams = { id: number };
+        type AUsersBody = { bar: string };
+        type AUsersResponse = { id: number; name: string };
       }
       "
     `);

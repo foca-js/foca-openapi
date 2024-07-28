@@ -48,21 +48,10 @@ declare namespace ${className} {
       let content = metas[method].flatMap((meta) => {
         let opts: string[] = [];
 
-        (<const>['query', 'params']).forEach((key) => {
+        (<const>['query', 'params', 'body', 'response']).forEach((key) => {
           const interfaceName = upperFirst(camelCase(meta.key + '_' + key));
           if (meta[key].types.length) {
-            opts.push(`interface ${interfaceName} ${meta[key].types[0]}\n`);
-          }
-        });
-
-        (<const>['body', 'response']).forEach((key) => {
-          const interfaceName = upperFirst(camelCase(meta.key + '_' + key));
-          if (meta[key].types.length) {
-            opts.push(
-              meta[key].types.length === 1
-                ? `interface ${interfaceName} ${meta[key].types}\n`
-                : `type ${interfaceName} =  ${meta[key].types.join(' | ')}\n`,
-            );
+            opts.push(`type ${interfaceName} = ${meta[key].types.join(' | ')}\n`);
           }
         });
 
