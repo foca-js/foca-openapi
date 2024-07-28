@@ -1,5 +1,12 @@
 
 
+## [0.7.2](https://github.com/foca-js/foca-openapi/compare/0.7.1...0.7.2) (2024-07-28)
+
+
+### Bug Fixes
+
+* 对象结构中可能包含特殊字符，需要使用引号包裹 ([db14ff4](https://github.com/foca-js/foca-openapi/commit/db14ff4e379ece4315abc8e40a7d41e494bdaa5f))
+
 ## [0.7.1](https://github.com/foca-js/foca-openapi/compare/0.7.0...0.7.1) (2024-07-28)
 
 
