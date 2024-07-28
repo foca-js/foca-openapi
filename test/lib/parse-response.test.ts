@@ -24,7 +24,7 @@ test('从response字段获取', () => {
     {
       "response": {
         "types": [
-          "({ foo?: (string) })",
+          "({ "foo"?: (string) })",
         ],
       },
       "responseTypes": [
@@ -72,8 +72,8 @@ test('只保留2xx状态', () => {
     {
       "response": {
         "types": [
-          "({ foo?: (string) })",
-          "({ foo1?: (string) })",
+          "({ "foo"?: (string) })",
+          "({ "foo1"?: (string) })",
         ],
       },
       "responseTypes": [
@@ -105,7 +105,7 @@ test('*/* 类型被忽略', () => {
     {
       "response": {
         "types": [
-          "({ foo?: (string) })",
+          "({ "foo"?: (string) })",
         ],
       },
       "responseTypes": [],

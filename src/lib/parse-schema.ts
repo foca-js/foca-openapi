@@ -30,7 +30,7 @@ export const parseSchema = (
       const requiredProperties = parsed.required || [];
       const properties = Object.entries(parsed.properties || {}).map(([key, schema]) => {
         const schemaObj = refToObject(docs, schema);
-        return `${generateComments(schemaObj)}${key}${requiredProperties.includes(key) ? '' : '?'}: ${parseSchema(docs, schemaObj)}`;
+        return `${generateComments(schemaObj)}"${key}"${requiredProperties.includes(key) ? '' : '?'}: ${parseSchema(docs, schemaObj)}`;
       });
       return `({ ${properties.join(';')} }${nullable})`;
     }

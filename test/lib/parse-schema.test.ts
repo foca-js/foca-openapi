@@ -34,7 +34,7 @@ describe('常规', () => {
         required: ['foo'],
       },
     });
-    expect(type).toMatchInlineSnapshot(`"((({ foo: (string) }))[])"`);
+    expect(type).toMatchInlineSnapshot(`"((({ "foo": (string) }))[])"`);
   });
 
   test('对象', () => {
@@ -42,7 +42,7 @@ describe('常规', () => {
       type: 'object',
       properties: { foo: { type: 'string' } },
     });
-    expect(type).toMatchInlineSnapshot(`"({ foo?: (string) })"`);
+    expect(type).toMatchInlineSnapshot(`"({ "foo"?: (string) })"`);
   });
 
   test('对象属性包含描述', () => {
@@ -55,8 +55,16 @@ describe('常规', () => {
       /**
       * foo=bar 
       */
-      foo?: (string) })"
+      "foo"?: (string) })"
     `);
+  });
+
+  test('对象属性包含特殊字符', () => {
+    const type = parseSchema(docs, {
+      type: 'object',
+      properties: { '123foo': { type: 'string' } },
+    });
+    expect(type).toMatchInlineSnapshot(`"({ "123foo"?: (string) })"`);
   });
 
   test('空对象', () => {
@@ -98,7 +106,7 @@ describe('oneOf', () => {
       ],
     });
     expect(type).toMatchInlineSnapshot(
-      `"((((({ foo?: (string) }) | ({ bar: (string) })))))"`,
+      `"((((({ "foo"?: (string) }) | ({ "bar": (string) })))))"`,
     );
   });
 
@@ -132,7 +140,7 @@ describe('anyOf', () => {
       ],
     });
     expect(type).toMatchInlineSnapshot(
-      `"((((({ foo?: (string) }) | ({ bar: (string) })))))"`,
+      `"((((({ "foo"?: (string) }) | ({ "bar": (string) })))))"`,
     );
   });
 
@@ -166,7 +174,7 @@ describe('allOf', () => {
       ],
     });
     expect(type).toMatchInlineSnapshot(
-      `"(((({ foo?: (string) }) & ({ bar: (string) }))))"`,
+      `"(((({ "foo"?: (string) }) & ({ "bar": (string) }))))"`,
     );
   });
 
@@ -196,7 +204,7 @@ describe('allOf + anyOf + oneOf', () => {
       ],
     });
     expect(type).toMatchInlineSnapshot(
-      `"((((({ foo2?: (string) }) | ({ bar2?: (string) })) | (({ foo1?: (string) }) | ({ bar1?: (string) }))) & (({ foo: (string) }) & ({ bar?: (string) }))))"`,
+      `"((((({ "foo2"?: (string) }) | ({ "bar2"?: (string) })) | (({ "foo1"?: (string) }) | ({ "bar1"?: (string) }))) & (({ "foo": (string) }) & ({ "bar"?: (string) }))))"`,
     );
   });
 
@@ -208,7 +216,7 @@ describe('allOf + anyOf + oneOf', () => {
       oneOf: [{ properties: { foo: { type: 'string' } }, required: ['foo'] }],
     });
     expect(type).toMatchInlineSnapshot(
-      `"((((({ foo: (string) }))) & (({ foo2?: (string) }))))"`,
+      `"((((({ "foo": (string) }))) & (({ "foo2"?: (string) }))))"`,
     );
   });
 
@@ -219,7 +227,7 @@ describe('allOf + anyOf + oneOf', () => {
       anyOf: [{ properties: { foo2: { type: 'string' } }, required: ['foo'] }],
       oneOf: [{ properties: { foo: { type: 'string' } }, required: ['foo'] }],
     });
-    expect(type).toMatchInlineSnapshot(`"((((({ foo: (string) })))))"`);
+    expect(type).toMatchInlineSnapshot(`"((((({ "foo": (string) })))))"`);
   });
 
   test('anyOf = allOf', () => {
@@ -229,7 +237,7 @@ describe('allOf + anyOf + oneOf', () => {
       anyOf: [{ properties: { foo: { type: 'string' } }, required: ['foo'] }],
       oneOf: [{ properties: { foo2: { type: 'string' } }, required: ['foo'] }],
     });
-    expect(type).toMatchInlineSnapshot(`"((((({ foo: (string) })))))"`);
+    expect(type).toMatchInlineSnapshot(`"((((({ "foo": (string) })))))"`);
   });
 
   test('oneOf = anyOf = allOf', () => {
@@ -239,7 +247,7 @@ describe('allOf + anyOf + oneOf', () => {
       anyOf: [{ properties: { foo: { type: 'string' } }, required: ['foo'] }],
       oneOf: [{ properties: { foo: { type: 'string' } }, required: ['foo'] }],
     });
-    expect(type).toMatchInlineSnapshot(`"((((({ foo: (string) })))))"`);
+    expect(type).toMatchInlineSnapshot(`"((((({ "foo": (string) })))))"`);
   });
 });
 
@@ -286,7 +294,7 @@ describe('nullable', () => {
         type: 'object',
         properties: { foo: { type: 'string', nullable: true } },
       }),
-    ).toMatchInlineSnapshot(`"({ foo?: (string | null) })"`);
+    ).toMatchInlineSnapshot(`"({ "foo"?: (string | null) })"`);
   });
 
   test('二进制', () => {
