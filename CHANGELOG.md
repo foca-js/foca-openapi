@@ -1,5 +1,12 @@
 
 
+## [0.7.1](https://github.com/foca-js/foca-openapi/compare/0.7.0...0.7.1) (2024-07-28)
+
+
+### Bug Fixes
+
+* xxxOf可能与任意结构组合 ([0e5533a](https://github.com/foca-js/foca-openapi/commit/0e5533ae898c992218c82c091c3af8017fbb4aa9))
+
 # [0.7.0](https://github.com/foca-js/foca-openapi/compare/0.6.0...0.7.0) (2024-07-27)
 
 
