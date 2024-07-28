@@ -63,13 +63,13 @@ test('解析查询字符串', () => {
     {
       "optional": false,
       "types": [
-        "{ foo: number
+        "{ foo: (number)
           ;
-    bar?: number
+    bar?: (number)
           ;
-    ref_a?: number
+    ref_a?: (number)
           ;
-    bazz: string
+    bazz: (string)
            }",
       ],
     }
@@ -82,9 +82,9 @@ test('解析路径参数', () => {
     {
       "optional": false,
       "types": [
-        "{ id: number
+        "{ id: (number)
           ;
-    ref_b: number
+    ref_b: (number)
            }",
       ],
     }
@@ -127,7 +127,7 @@ test('允许参数内没有schema结构', () => {
     {
       "optional": false,
       "types": [
-        "{ bar: string
+        "{ bar: (string)
            }",
       ],
     }
@@ -161,9 +161,9 @@ test('所有结构都不是必填时，optional=true', () => {
     {
       "optional": true,
       "types": [
-        "{ foo?: string
+        "{ foo?: (string)
           ;
-    bar?: string
+    bar?: (string)
            }",
       ],
     }
@@ -198,7 +198,7 @@ test('包含描述', () => {
     * foo-bar
     * @deprecated 
     */
-    foo?: string
+    foo?: (string)
            }",
       ],
     }
