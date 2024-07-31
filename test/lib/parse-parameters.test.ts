@@ -196,7 +196,7 @@ test('包含描述', () => {
         "{ 
     /**
     * foo-bar
-    * @deprecated 
+    * @deprecated
     */
     foo?: (string)
            }",

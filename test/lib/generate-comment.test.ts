@@ -13,7 +13,7 @@ test('废弃', () => {
   expect(generateComments({ deprecated: true })).toMatchInlineSnapshot(`
     "
     /**
-    * @deprecated 
+    * @deprecated
     */
     "
   `);
@@ -27,7 +27,7 @@ test('描述', () => {
   expect(generateComments({ description: 'foo === bar' })).toMatchInlineSnapshot(`
     "
     /**
-    * foo === bar 
+    * foo === bar
     */
     "
   `);
@@ -36,10 +36,30 @@ test('描述', () => {
 test('废弃+描述', () => {
   expect(generateComments({ description: 'foo === bar', deprecated: true }))
     .toMatchInlineSnapshot(`
+      "
+      /**
+      * foo === bar
+      * @deprecated
+      */
+      "
+    `);
+});
+
+test('uri', () => {
+  expect(generateComments({ uri: '/foo/bar' })).toMatchInlineSnapshot(`
     "
     /**
-    * foo === bar
-    * @deprecated 
+     * @uri /foo/bar
+    */
+    "
+  `);
+});
+
+test('method', () => {
+  expect(generateComments({ method: 'post' })).toMatchInlineSnapshot(`
+    "
+    /**
+     * @method POST
     */
     "
   `);

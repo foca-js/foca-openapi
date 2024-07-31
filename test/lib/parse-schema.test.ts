@@ -53,7 +53,7 @@ describe('常规', () => {
     expect(type).toMatchInlineSnapshot(`
       "({ 
       /**
-      * foo=bar 
+      * foo=bar
       */
       "foo"?: (string) })"
     `);

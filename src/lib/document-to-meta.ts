@@ -10,6 +10,7 @@ export type Metas = Record<
   {
     key: string;
     uri: string;
+    method: Methods;
     contentTypes: string[];
     query: { optional: boolean; types: [string] | [] };
     params: { optional: boolean; types: [string] | [] };
@@ -37,6 +38,7 @@ export const documentToMeta = (docs: OpenAPIV3.Document) => {
       const methodItem = pathItem[method]!;
       metas[method].push({
         uri,
+        method,
         key: snakeCase(`${method}_${uri.replaceAll(/{(.+?)}/g, '_by_$1')}`),
         query: parseParameters(docs, pathItem, methodItem, 'query'),
         params: parseParameters(docs, pathItem, methodItem, 'path'),
