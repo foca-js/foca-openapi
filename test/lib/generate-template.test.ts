@@ -125,9 +125,18 @@ test('完整的类型提示', async () => {
 
     declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
       readonly default: {
+        /**
+         * @uri /users
+         * @method GET
+         */
         getUsers(
           opts: OpenapiClient_get_paths["/users"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
+
+        /**
+         * @uri /users/{id}
+         * @method GET
+         */
         getUsersById(
           opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
@@ -153,9 +162,18 @@ test('完整的类型提示', async () => {
     ",
         "js": "var OpenapiClient = class extends BaseOpenapiClient {
       default = {
+        /**
+         * @uri /users
+         * @method GET
+         */
         getUsers: (opts) => {
           return this.request("/users", "get", opts);
         },
+
+        /**
+         * @uri /users/{id}
+         * @method GET
+         */
         getUsersById: (opts) => {
           return this.request("/users/{id}", "get", opts);
         },
@@ -184,10 +202,18 @@ test('完整的类型提示', async () => {
     }
 
     declare class OpenapiClient<T extends object = object> extends BaseOpenapiClient<T> {
+      /**
+       * @uri /users
+       * @method GET
+       */
       getUsers(
         opts: OpenapiClient_get_paths["/users"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
       ): Promise<OpenapiClient_get_paths["/users"]["response"]>;
 
+      /**
+       * @uri /users/{id}
+       * @method GET
+       */
       getUsersById(
         opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
       ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]>;
@@ -211,10 +237,18 @@ test('完整的类型提示', async () => {
     }
     ",
         "js": "var OpenapiClient = class extends BaseOpenapiClient {
+      /**
+       * @uri /users
+       * @method GET
+       */
       getUsers(opts) {
         return this.request("/users", "get", opts);
       }
 
+      /**
+       * @uri /users/{id}
+       * @method GET
+       */
       getUsersById(opts) {
         return this.request("/users/{id}", "get", opts);
       }
@@ -248,6 +282,7 @@ describe('命名空间', () => {
       get: [
         {
           uri: '/users',
+          method: 'get',
           key: 'a_users',
           contentTypes: ['application/json'],
           responseTypes: ['application/json'],
@@ -276,6 +311,7 @@ describe('命名空间', () => {
       get: [
         {
           uri: '/users',
+          method: 'get',
           key: 'a_users',
           contentTypes: ['application/json'],
           responseTypes: ['application/json'],
@@ -303,6 +339,7 @@ describe('类', () => {
     get: [
       {
         uri: '/',
+        method: 'get',
         key: 'get-users',
         query: { optional: true, types: [] },
         params: { optional: true, types: [] },
@@ -316,6 +353,7 @@ describe('类', () => {
     patch: [
       {
         uri: '/',
+        method: 'patch',
         key: 'patch_users',
         query: { optional: true, types: [] },
         params: { optional: true, types: [] },
@@ -367,12 +405,18 @@ describe('类', () => {
     const { dts, js } = generateUriModelClass('Client', metas);
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
+        /**
+         * @uri /
+         * @method GET
+         */
         getUsers(
           opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
         ): Promise<Client_get_paths['/']['response']>;
 
         /**
          * 这里有一个注释
+         * @uri /
+         * @method PATCH
          */
         patchUsers(
           opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
@@ -382,12 +426,18 @@ describe('类', () => {
     `);
     await expect(formatDocs(js)).resolves.toMatchInlineSnapshot(`
       "var Client = class extends BaseOpenapiClient {
+        /**
+         * @uri /
+         * @method GET
+         */
         getUsers(opts) {
           return this.request('/', 'get', opts);
         }
 
         /**
          * 这里有一个注释
+         * @uri /
+         * @method PATCH
          */
         patchUsers(opts) {
           return this.request('/', 'patch', opts);
@@ -406,6 +456,7 @@ describe('类', () => {
       get: [
         {
           uri: '/a',
+          method: 'get',
           key: 'aa',
           query: { optional: true, types: [] },
           params: { optional: false, types: [] },
@@ -417,6 +468,7 @@ describe('类', () => {
         },
         {
           uri: '/b',
+          method: 'get',
           key: 'bb',
           query: { optional: true, types: [] },
           params: { optional: true, types: [] },
@@ -447,6 +499,7 @@ describe('类', () => {
       get: [
         {
           uri: '/a',
+          method: 'get',
           key: 'aa',
           query: { optional: true, types: [] },
           params: { optional: false, types: [] },
@@ -476,18 +529,28 @@ describe('类', () => {
     await expect(formatDocs(dts)).resolves.toMatchInlineSnapshot(`
       "declare class Client<T extends object = object> extends BaseOpenapiClient<T> {
         readonly user: {
+          /**
+           * @uri /
+           * @method GET
+           */
           getUsers(
             opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_get_paths['/']['response']>;
 
           /**
            * 这里有一个注释
+           * @uri /
+           * @method PATCH
            */
           patchUsers(
             opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_patch_paths['/']['response']>;
         };
         readonly public: {
+          /**
+           * @uri /
+           * @method GET
+           */
           getUsers(
             opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
           ): Promise<Client_get_paths['/']['response']>;
@@ -499,18 +562,28 @@ describe('类', () => {
     await expect(formatDocs(js)).resolves.toMatchInlineSnapshot(`
       "var Client = class extends BaseOpenapiClient {
         user = {
+          /**
+           * @uri /
+           * @method GET
+           */
           getUsers: (opts) => {
             return this.request('/', 'get', opts);
           },
 
           /**
            * 这里有一个注释
+           * @uri /
+           * @method PATCH
            */
           patchUsers: (opts) => {
             return this.request('/', 'patch', opts);
           },
         };
         public = {
+          /**
+           * @uri /
+           * @method GET
+           */
           getUsers: (opts) => {
             return this.request('/', 'get', opts);
           },
@@ -531,6 +604,7 @@ describe('接口映射', () => {
       get: [
         {
           uri: '/a',
+          method: 'get',
           key: 'aa',
           query: { optional: true, types: [] },
           params: { optional: false, types: [] },
@@ -561,6 +635,7 @@ describe('接口映射', () => {
       get: [
         {
           uri: '/a',
+          method: 'get',
           key: 'aa',
           query: { optional: true, types: ['string'] },
           params: { optional: true, types: ['number'] },
@@ -593,6 +668,7 @@ describe('接口映射', () => {
       get: [
         {
           uri: '/a',
+          method: 'get',
           key: 'aa',
           query: { optional: false, types: ['string'] },
           params: { optional: false, types: ['number'] },
