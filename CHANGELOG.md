@@ -1,5 +1,12 @@
 
 
+# [0.8.0](https://github.com/foca-js/foca-openapi/compare/0.7.2...0.8.0) (2024-08-10)
+
+
+### Features
+
+* 文档注释增加uri和method ([615e787](https://github.com/foca-js/foca-openapi/commit/615e7873b9d053065bbe6632ff893db811197767))
+
 ## [0.7.2](https://github.com/foca-js/foca-openapi/compare/0.7.1...0.7.2) (2024-07-28)
 
 
