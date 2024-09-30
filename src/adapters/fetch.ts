@@ -39,7 +39,7 @@ export const fetchAdapter = (opts: {
       const config: RequestInit = {
         ...fetchOptions,
         method: opts.method,
-        body,
+        body: body instanceof FormData ? body : JSON.stringify(body),
         headers: {
           ...((fetchOptions.headers as Record<string, any>) || {}),
           ...opts.headers,

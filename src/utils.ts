@@ -25,10 +25,10 @@ export const utils = {
     contentType: string,
     body: object | undefined,
     formData?: FormData,
-  ): string | FormData | undefined {
+  ): object | FormData | undefined {
     if (!body) return;
     return contentType === 'multipart/form-data'
       ? objectToFormData.serialize(body, {}, formData)
-      : JSON.stringify(body);
+      : body;
   },
 };
