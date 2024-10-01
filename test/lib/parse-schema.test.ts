@@ -87,6 +87,24 @@ describe('常规', () => {
     const type = parseSchema(docs, { type: 'integer', format: 'int64' });
     expect(type).toMatchInlineSnapshot(`"(string)"`);
   });
+
+  test('动态对象属性', () => {
+    expect(
+      parseSchema(docs, { type: 'object', additionalProperties: { type: 'string' } }),
+    ).toMatchInlineSnapshot(`"({ [key: string]: (string) })"`);
+
+    expect(
+      parseSchema(docs, {
+        type: 'object',
+        additionalProperties: {
+          type: 'object',
+          properties: { foo: { type: 'string' }, bar: { type: 'number' } },
+        },
+      }),
+    ).toMatchInlineSnapshot(
+      `"({ [key: string]: ({ "foo"?: (string);"bar"?: (number) }) })"`,
+    );
+  });
 });
 
 describe('oneOf', () => {

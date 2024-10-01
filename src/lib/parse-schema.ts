@@ -36,6 +36,13 @@ export const parseSchema = (
         const schemaObj = refToObject(docs, schema);
         return `${generateComments(schemaObj)}"${key}"${requiredProperties.includes(key) ? '' : '?'}: ${parseSchema(docs, schemaObj)}`;
       });
+
+      if (typeof parsed.additionalProperties === 'object') {
+        properties.push(
+          `[key: string]: ${parseSchema(docs, refToObject(docs, parsed.additionalProperties))}`,
+        );
+      }
+
       return `({ ${properties.join(';')} }${nullable})`;
     }
     default:
