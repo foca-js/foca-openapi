@@ -1,5 +1,31 @@
 
 
+# [1.0.0](https://github.com/foca-js/foca-openapi/compare/0.8.0...1.0.0) (2024-10-01)
+
+
+### Bug Fixes
+
+* **adapter:** keep object type body ([e905a04](https://github.com/foca-js/foca-openapi/commit/e905a0481e8572c671b68731d50bea712e0b10cc))
+* bigint响应为字符串 ([d86eca6](https://github.com/foca-js/foca-openapi/commit/d86eca6d34333636a2414f2430c9e73425982ab0))
+
+
+### Code Refactoring
+
+* bin名称从foca-openapi改为openapi ([658b4e8](https://github.com/foca-js/foca-openapi/commit/658b4e8276619986dfdf19a32cef365e1aaf6da3))
+* 配置名path重命名为url ([cfa4232](https://github.com/foca-js/foca-openapi/commit/cfa4232299683f30c0cf073c677fdcee20d63896))
+
+
+### Features
+
+* 支持动态对象 ([bc0d0c2](https://github.com/foca-js/foca-openapi/commit/bc0d0c265aadfe196079af83a6b39ccd5b499cae))
+* 支持根据env动态配置 ([101fe88](https://github.com/foca-js/foca-openapi/commit/101fe88fb9e8a3c8541326254aa7b493b65ca0f4))
+
+
+### BREAKING CHANGES
+
+* bin名称从foca-openapi改为openapi
+* 配置名path改为url
+
 # [0.8.0](https://github.com/foca-js/foca-openapi/compare/0.7.2...0.8.0) (2024-08-10)
 
 
