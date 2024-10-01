@@ -32,7 +32,7 @@ spinner.add({
 
     if (typeof userConfig === 'function') {
       const args = minimist(process.argv.slice(2), { alias: { env: ['e'] } });
-      const env = args['env'] || 'development';
+      const env = args['env'] || process.env['NODE_ENV'] || 'development';
       task.title += ` [${colors.green(env)}]`;
       ctx.configs = toArray(await userConfig(env));
     } else {
