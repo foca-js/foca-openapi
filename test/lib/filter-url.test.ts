@@ -10,7 +10,7 @@ test('未指定过滤路由则不处理', () => {
     '/other': {},
   });
 
-  filterUrl(docs, { path: '' });
+  filterUrl(docs, { url: '' });
   expect(Object.keys(docs.paths)).toMatchInlineSnapshot(`
     [
       "/",
@@ -19,7 +19,7 @@ test('未指定过滤路由则不处理', () => {
       "/other",
     ]
   `);
-  filterUrl(docs, { path: '', includeUriPrefix: [] });
+  filterUrl(docs, { url: '', includeUriPrefix: [] });
   expect(Object.keys(docs.paths)).toMatchInlineSnapshot(`
     [
       "/",
@@ -38,7 +38,7 @@ test('不符合前缀的路由被删除', () => {
     '/other': {},
   });
 
-  filterUrl(docs, { path: '', includeUriPrefix: '/test' });
+  filterUrl(docs, { url: '', includeUriPrefix: '/test' });
   expect(Object.keys(docs.paths)).toMatchInlineSnapshot(`
     [
       "/test/a",
@@ -56,7 +56,7 @@ test('同时过滤多个路由', () => {
     '/foo/bar': {},
   });
 
-  filterUrl(docs, { path: '', includeUriPrefix: ['/test', '/foo'] });
+  filterUrl(docs, { url: '', includeUriPrefix: ['/test', '/foo'] });
   expect(Object.keys(docs.paths)).toMatchInlineSnapshot(`
     [
       "/test/a",
@@ -75,7 +75,7 @@ test('支持正则表达式', () => {
     '/foo/bar': {},
   });
 
-  filterUrl(docs, { path: '', includeUriPrefix: [/\/a/] });
+  filterUrl(docs, { url: '', includeUriPrefix: [/\/a/] });
   expect(Object.keys(docs.paths)).toMatchInlineSnapshot(`
     [
       "/test/a",

@@ -4,7 +4,7 @@ export interface OpenapiClientConfig {
   /**
    * openapi本地或者远程文件，支持格式：`yaml | json`
    */
-  path: string;
+  url: string;
   /**
    * 过滤指定路由前缀的接口
    */

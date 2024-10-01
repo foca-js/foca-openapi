@@ -27,7 +27,7 @@ import { defineConfig } from 'foca-openapi';
 
 export default defineConfig({
   // 可以是本地路径，也可以是远程地址
-  path: 'http://domain.com/openapi.json',
+  url: 'http://domain.com/openapi.json',
 });
 ```
 
@@ -73,12 +73,12 @@ import { defineConfig } from 'foca-openapi';
 
 export default defineConfig([
   {
-    path: 'http://domain.com/openapi_1.json',
+    url: 'http://domain.com/openapi_1.json',
     // 项目名称，必须是唯一的值
     projectName: 'foo',
   },
   {
-    path: 'http://domain.com/openapi_2.json',
+    url: 'http://domain.com/openapi_2.json',
     // 项目名称，必须是唯一的值
     projectName: 'bar',
   },
@@ -110,7 +110,7 @@ import { defineConfig } from 'foca-openapi';
 
 export default defineConfig((env) => {
   return {
-    path:
+    url:
       env === 'production'
         ? 'https://api.com/openapi.json'
         : 'http://localhost:3000/openapi.json',
@@ -120,7 +120,7 @@ export default defineConfig((env) => {
 
 # 参数
 
-### path
+### url
 
 类型：`string`<br>
 

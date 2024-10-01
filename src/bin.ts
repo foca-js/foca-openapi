@@ -47,7 +47,7 @@ spinner.add({
   title: '获取openapi文档',
   task: async (ctx) => {
     ctx.docs = await Promise.all(
-      ctx.configs.map((config) => pathToOpenapi(config.path, config.onDocumentLoaded)),
+      ctx.configs.map((config) => pathToOpenapi(config.url, config.onDocumentLoaded)),
     );
     await sleep();
   },

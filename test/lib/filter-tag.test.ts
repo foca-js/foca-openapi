@@ -11,7 +11,7 @@ test('未指定过滤标签则不处理', () => {
     },
   });
 
-  filterTag(docs, { path: '' });
+  filterTag(docs, { url: '' });
   expect(Object.keys(docs.paths['/'] || {})).toMatchInlineSnapshot(`
     [
       "get",
@@ -19,7 +19,7 @@ test('未指定过滤标签则不处理', () => {
       "put",
     ]
   `);
-  filterTag(docs, { path: '', includeTag: [] });
+  filterTag(docs, { url: '', includeTag: [] });
   expect(Object.keys(docs.paths['/'] || {})).toMatchInlineSnapshot(`
     [
       "get",
@@ -38,7 +38,7 @@ test('未提供标签的接口会被删除', () => {
     },
   });
 
-  filterTag(docs, { path: '', includeTag: 'abc' });
+  filterTag(docs, { url: '', includeTag: 'abc' });
   expect(Object.keys(docs.paths['/'] || {})).toMatchInlineSnapshot(`
     [
       "post",
@@ -57,7 +57,7 @@ test('不符合的标签被删除', () => {
     },
   });
 
-  filterTag(docs, { path: '', includeTag: 'def' });
+  filterTag(docs, { url: '', includeTag: 'def' });
   expect(Object.keys(docs.paths['/'] || {})).toMatchInlineSnapshot(`
     [
       "put",
@@ -77,7 +77,7 @@ test('同时过滤多个标签', () => {
     },
   });
 
-  filterTag(docs, { path: '', includeTag: ['mn', 'def'] });
+  filterTag(docs, { url: '', includeTag: ['mn', 'def'] });
   expect(Object.keys(docs.paths['/'] || {})).toMatchInlineSnapshot(`
     [
       "put",
