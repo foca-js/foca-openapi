@@ -1,5 +1,12 @@
 
 
+# [1.1.0](https://github.com/foca-js/foca-openapi/compare/1.0.0...1.1.0) (2024-10-01)
+
+
+### Features
+
+* **bin:** 未提供env参数时，优先使用NODE_ENV变量 ([491b793](https://github.com/foca-js/foca-openapi/commit/491b79333a93e764ff8ec730fe4afc24c2302a10))
+
 # [1.0.0](https://github.com/foca-js/foca-openapi/compare/0.8.0...1.0.0) (2024-10-01)
 
 
