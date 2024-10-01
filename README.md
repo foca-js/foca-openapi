@@ -94,6 +94,30 @@ export const fooClient = new OpenapiClientFoo(adapter1);
 export const barClient = new OpenapiClientBar(adapter2);
 ```
 
+# 环境变量
+
+不同运行环境下，可能需要使用不同的服务端，比如开发一套服务，生产一套服务。因此执行指令时可以传入`-env`参数
+
+```bash
+npx foca-openapi --env development
+npx foca-openapi --env production
+```
+
+配置文件使用回调函数的形式接收环境变量，并返回配置
+
+```typescript
+import { defineConfig } from 'foca-openapi';
+
+export default defineConfig((env) => {
+  return {
+    path:
+      env === 'production'
+        ? 'https://api.com/openapi.json'
+        : 'http://localhost:3000/openapi.json',
+  };
+});
+```
+
 # 参数
 
 ### path

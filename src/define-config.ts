@@ -49,6 +49,16 @@ export interface OpenapiClientConfig {
   onDocumentLoaded?: (doc: OpenAPIV3.Document) => OpenAPIV3.Document | void;
 }
 
-export const defineConfig = (options: OpenapiClientConfig | OpenapiClientConfig[]) => {
-  return Array.isArray(options) ? options : [options];
+export type DefineConfigOptions =
+  | OpenapiClientConfig
+  | OpenapiClientConfig[]
+  | ((
+      env: string,
+    ) =>
+      | OpenapiClientConfig
+      | OpenapiClientConfig[]
+      | Promise<OpenapiClientConfig | OpenapiClientConfig[]>);
+
+export const defineConfig = (options: DefineConfigOptions) => {
+  return options;
 };

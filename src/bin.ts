@@ -2,7 +2,10 @@
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import timers from 'node:timers/promises';
 import { Listr } from 'listr2';
+import minimist from 'minimist';
+import colors from 'yoctocolors';
 import { OpenAPIV3 } from 'openapi-types';
 import type { OpenapiClientConfig } from './define-config';
 import { pathToOpenapi } from './lib/path-to-openapi';
@@ -12,7 +15,9 @@ import { filterTag } from './lib/filter-tag';
 import { filterUrl } from './lib/filter-url';
 import { readConfig } from './lib/read-config';
 
-const sleep = () => new Promise((resolve) => setTimeout(resolve, 300));
+const sleep = () => timers.setTimeout(300);
+
+const toArray = (value: any) => (Array.isArray(value) ? value : [value]);
 
 const spinner = new Listr<{
   configs: OpenapiClientConfig[];
@@ -22,8 +27,18 @@ const spinner = new Listr<{
 
 spinner.add({
   title: '读取配置文件openapi.config.ts',
-  task: async (ctx) => {
-    ctx.configs = await readConfig();
+  task: async (ctx, task) => {
+    const userConfig = readConfig();
+
+    if (typeof userConfig === 'function') {
+      const args = minimist(process.argv.slice(2), { alias: { env: ['e'] } });
+      const env = args['env'] || 'development';
+      task.title += ` [${colors.green(env)}]`;
+      ctx.configs = toArray(await userConfig(env));
+    } else {
+      ctx.configs = toArray(userConfig);
+    }
+
     await sleep();
   },
 });
