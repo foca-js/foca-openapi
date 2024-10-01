@@ -36,7 +36,7 @@ export default defineConfig({
 指令的作用是把openapi文档转换为前端服务，代码会自动合并到库文件中
 
 ```bash
-npx foca-openapi
+npx openapi
 ```
 
 ## 3. 创建服务
@@ -99,8 +99,8 @@ export const barClient = new OpenapiClientBar(adapter2);
 不同运行环境下，可能需要使用不同的服务端，比如开发一套服务，生产一套服务。因此执行指令时可以传入`-env`参数
 
 ```bash
-npx foca-openapi --env development
-npx foca-openapi --env production
+npx openapi --env development
+npx openapi --env production
 ```
 
 配置文件使用回调函数的形式接收环境变量，并返回配置

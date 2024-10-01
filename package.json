@@ -42,7 +42,9 @@
     },
     "./package.json": "./package.json"
   },
-  "bin": "dist/bin.mjs",
+  "bin": {
+    "openapi": "dist/bin.mjs"
+  },
   "type": "module",
   "publishConfig": {
     "type": "commonjs",
