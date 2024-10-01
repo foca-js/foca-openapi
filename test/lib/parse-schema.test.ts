@@ -82,6 +82,11 @@ describe('常规', () => {
       parseSchema(docs, { enum: ['foo', 'bar', 'baz', 1, 2] }),
     ).toMatchInlineSnapshot(`"("foo" | "bar" | "baz" | 1 | 2)"`);
   });
+
+  test('bigint转为字符串', () => {
+    const type = parseSchema(docs, { type: 'integer', format: 'int64' });
+    expect(type).toMatchInlineSnapshot(`"(string)"`);
+  });
 });
 
 describe('oneOf', () => {

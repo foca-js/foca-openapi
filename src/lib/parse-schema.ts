@@ -20,6 +20,10 @@ export const parseSchema = (
       return `(boolean${nullable})`;
     case 'integer':
     case 'number':
+      if (parsed.format === 'int64') {
+        // bigint 在传输过程中会转为字符串
+        return `(string${nullable})`;
+      }
       return `(number${nullable})`;
     case 'string':
       if (parsed.format === 'binary') return `(Blob${nullable})`;
