@@ -104,7 +104,7 @@ spinner.add({
 spinner.add({
   title: '写入npm包',
   task: async (ctx, task) => {
-    task.title += ` import { ${Object.keys(ctx.projects).join(', ')} } from 'foca-openapi'`;
+    task.title += ` ${colors.gray(`import { ${Object.keys(ctx.projects).join(', ')} } from 'foca-openapi'`)}`;
     const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
     const jsContent = Object.values(ctx.projects)
       .map(({ js }) => js)
