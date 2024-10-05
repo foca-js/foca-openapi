@@ -1,5 +1,12 @@
 
 
+## [1.1.1](https://github.com/foca-js/foca-openapi/compare/1.1.0...1.1.1) (2024-10-05)
+
+
+### Bug Fixes
+
+* cli脚本文字错误 ([c2227d7](https://github.com/foca-js/foca-openapi/commit/c2227d7172c61d24748fb921237833332b2f5eb2))
+
 # [1.1.0](https://github.com/foca-js/foca-openapi/compare/1.0.0...1.1.0) (2024-10-01)
 
 
