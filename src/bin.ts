@@ -33,7 +33,7 @@ spinner.add({
     if (typeof userConfig === 'function') {
       const args = minimist(process.argv.slice(2), { alias: { env: ['e'] } });
       const env = args['env'] || process.env['NODE_ENV'] || 'development';
-      task.title += ` [${colors.green(env)}]`;
+      task.title += ` ${colors.gray(env)}`;
       ctx.configs = toArray(await userConfig(env));
     } else {
       ctx.configs = toArray(userConfig);
@@ -102,8 +102,9 @@ spinner.add({
 });
 
 spinner.add({
-  title: '写入@aomex/openapi-client',
-  task: async (ctx) => {
+  title: '写入npm包',
+  task: async (ctx, task) => {
+    task.title += ` import { ${Object.keys(ctx.projects).join(', ')} } from 'foca-openapi'`;
     const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
     const jsContent = Object.values(ctx.projects)
       .map(({ js }) => js)
