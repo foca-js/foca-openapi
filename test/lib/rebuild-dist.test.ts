@@ -3,6 +3,7 @@ import path from 'path';
 import { beforeAll, expect, test } from 'vitest';
 import { rebuildDist } from '../../src/lib/rebuild-dist';
 import tsup from 'tsup';
+import { execSync } from 'node:child_process';
 
 const root = path.resolve('test', 'fixtures');
 const dtsContent = 'declare const foo = { bar: "baz" };';
@@ -17,12 +18,9 @@ beforeAll(async () => {
     dts: true,
     legacyOutput: true,
   });
-  await tsup.build({
-    entry: ['test/fixtures/index.ts'],
-    outDir: 'test/fixtures/backup',
-    sourcemap: true,
-    dts: true,
-    legacyOutput: true,
+
+  execSync(`sh ${process.cwd()}/scripts/build-success.sh`, {
+    cwd: path.join(path.dirname(import.meta.dirname), 'fixtures'),
   });
 });
 

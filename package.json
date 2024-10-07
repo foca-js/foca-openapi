@@ -51,7 +51,6 @@
     "access": "public"
   },
   "files": [
-    "backup",
     "adapters",
     "dist",
     "LICENSE",

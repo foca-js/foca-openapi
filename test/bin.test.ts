@@ -7,7 +7,6 @@ import { beforeAll, expect, test } from 'vitest';
 beforeAll(async () => {
   try {
     await rm('dist', { recursive: true });
-    await rm('backup', { recursive: true });
   } catch {}
   execSync('pnpm build', { encoding: 'utf8', stdio: 'inherit' });
 }, 15_000);

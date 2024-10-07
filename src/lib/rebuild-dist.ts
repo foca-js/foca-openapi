@@ -8,16 +8,15 @@ export const rebuildDist = async (
   classNames: string[],
 ) => {
   const distDir = path.join(root, 'dist');
-  const backupDir = path.join(root, 'backup');
 
   {
-    let backupDTS = await readFile(path.join(backupDir, 'index.d.ts'), 'utf8');
+    let backupDTS = await readFile(path.join(distDir, 'backup-index.d.ts'), 'utf8');
     backupDTS += `\n${dtsContent}\nexport { ${classNames.join(', ')} };`;
     await writeFile(path.join(distDir, 'index.d.ts'), backupDTS);
   }
 
   {
-    let backupCJS = await readFile(path.join(backupDir, 'index.js'), 'utf8');
+    let backupCJS = await readFile(path.join(distDir, 'backup-index.js'), 'utf8');
     backupCJS = backupCJS.replace(
       '0 && (module.exports = {',
       `${jsContent}\n0 && (module.exports = {\n${classNames.join(',')},`,
@@ -30,7 +29,7 @@ export const rebuildDist = async (
   }
 
   {
-    let backupESM = await readFile(path.join(backupDir, 'esm', 'index.js'), 'utf8');
+    let backupESM = await readFile(path.join(distDir, 'esm', 'backup-index.js'), 'utf8');
     backupESM += `\n${jsContent}\nexport { ${classNames.join(', ')} };`;
     await writeFile(path.join(distDir, 'esm', 'index.js'), backupESM);
   }
