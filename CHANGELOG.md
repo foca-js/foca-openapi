@@ -1,5 +1,13 @@
 
 
+## [1.1.4](https://github.com/foca-js/foca-openapi/compare/1.1.3...1.1.4) (2024-10-07)
+
+
+### Bug Fixes
+
+* axios适配器不兼容foca-axios ([31642aa](https://github.com/foca-js/foca-openapi/commit/31642aa7509ace876fba85a6be96959926462bf6))
+* pnpm安装时，相同的文件会使用同一个inode变成硬链接 ([5fc3343](https://github.com/foca-js/foca-openapi/commit/5fc3343f013e64194d5a2cb100bfbd0ca9bc7fd5))
+
 ## [1.1.3](https://github.com/foca-js/foca-openapi/compare/1.1.2...1.1.3) (2024-10-07)
 
 ## [1.1.2](https://github.com/foca-js/foca-openapi/compare/1.1.1...1.1.2) (2024-10-05)
