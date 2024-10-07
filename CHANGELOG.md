@@ -1,5 +1,7 @@
 
 
+## [1.1.3](https://github.com/foca-js/foca-openapi/compare/1.1.2...1.1.3) (2024-10-07)
+
 ## [1.1.2](https://github.com/foca-js/foca-openapi/compare/1.1.1...1.1.2) (2024-10-05)
 
 ## [1.1.1](https://github.com/foca-js/foca-openapi/compare/1.1.0...1.1.1) (2024-10-05)
