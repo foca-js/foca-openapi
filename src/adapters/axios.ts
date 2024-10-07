@@ -17,7 +17,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
  *
  */
 export const axiosAdapter = (
-  axios: { request: (config: AxiosRequestConfig) => Promise<AxiosResponse> },
+  axios: { request: (config: object) => Promise<AxiosResponse> },
   returningData: (response: AxiosResponse) => any = (response) => response.data,
 ): OpenapiClientAdapter<AxiosRequestConfig> => {
   return {
