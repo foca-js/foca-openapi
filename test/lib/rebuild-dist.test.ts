@@ -61,7 +61,8 @@ test('内容写入文件', async () => {
     foo,
       aaaaa
     });
-    //# sourceMappingURL=index.js.map"
+    //# sourceMappingURL=index.js.map       
+    "
   `);
 
   await expect(readFile(path.join(distDir, 'index.d.ts'), 'utf8')).resolves
@@ -71,6 +72,7 @@ test('内容写入文件', async () => {
     };
 
     export { aaaaa };
+           
 
     declare const foo = { bar: "baz" };
     export { foo };"
@@ -83,7 +85,8 @@ test('内容写入文件', async () => {
     export {
       aaaaa
     };
-    //# sourceMappingURL=index.js.map
+    //# sourceMappingURL=index.js.map       
+
     var foo = { bar: "baz" }
     export { foo };"
   `);
