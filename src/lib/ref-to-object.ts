@@ -7,7 +7,7 @@ export const refToObject = <T extends object>(
   if ('$ref' in data) {
     const target = data.$ref.split('/').reduce<any>((carry, pathName) => {
       if (pathName === '#') return carry;
-      return carry[pathName];
+      return carry[pathName] || carry[decodeURIComponent(pathName)];
     }, docs);
     return target as T;
   }
