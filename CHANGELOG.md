@@ -1,5 +1,12 @@
 
 
+## [1.1.5](https://github.com/foca-js/foca-openapi/compare/1.1.4...1.1.5) (2024-10-14)
+
+
+### Bug Fixes
+
+* 转义后的中文无法正确寻找ref源 ([1dbf737](https://github.com/foca-js/foca-openapi/commit/1dbf7374d4e6629ade5c6c82532c70f99a6dccb1))
+
 ## [1.1.4](https://github.com/foca-js/foca-openapi/compare/1.1.3...1.1.4) (2024-10-07)
 
 
