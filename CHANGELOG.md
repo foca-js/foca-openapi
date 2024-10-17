@@ -1,5 +1,12 @@
 
 
+## [1.1.7](https://github.com/foca-js/foca-openapi/compare/1.1.6...1.1.7) (2024-10-17)
+
+
+### Bug Fixes
+
+* 多客户端场景下，cjs文件语法错误 ([9bf8846](https://github.com/foca-js/foca-openapi/commit/9bf884626d33efc278f9239cb49428c5cbd4ca6d))
+
 ## [1.1.6](https://github.com/foca-js/foca-openapi/compare/1.1.5...1.1.6) (2024-10-17)
 
 
