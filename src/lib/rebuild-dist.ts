@@ -23,7 +23,7 @@ export const rebuildDist = async (
     );
     backupCJS = backupCJS.replace(
       /(__export\(.+?_exports, {)/,
-      `$1\n${classNames.map((className) => `${className}: () => ${className},`)}`,
+      `$1\n${classNames.map((className) => `${className}: () => ${className},`).join('\n')}`,
     );
     await writeFile(path.join(distDir, 'index.js'), backupCJS);
   }
