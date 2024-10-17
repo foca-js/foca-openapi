@@ -1,5 +1,12 @@
 
 
+## [1.1.6](https://github.com/foca-js/foca-openapi/compare/1.1.5...1.1.6) (2024-10-17)
+
+
+### Bug Fixes
+
+* 数组配置只生成了最后一个客户端 ([9751a58](https://github.com/foca-js/foca-openapi/commit/9751a58c39aa033282e1c0235a8c27bdc4231bcc))
+
 ## [1.1.5](https://github.com/foca-js/foca-openapi/compare/1.1.4...1.1.5) (2024-10-14)
 
 
