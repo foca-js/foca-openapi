@@ -90,10 +90,8 @@ spinner.add({
 
     await Promise.all(
       ctx.configs.map(async (config, i) => {
-        ctx.projects = {
-          ...ctx.projects,
-          ...(await generateTemplate(ctx.docs[i]!, config)),
-        };
+        const project = await generateTemplate(ctx.docs[i]!, config);
+        ctx.projects = { ...ctx.projects, ...project };
       }),
     );
 
