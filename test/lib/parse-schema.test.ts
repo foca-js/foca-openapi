@@ -15,6 +15,16 @@ describe('常规', () => {
     expect(type).toMatchInlineSnapshot(`"(string)"`);
   });
 
+  test('邮箱', () => {
+    const type = parseSchema(docs, { type: 'string', format: 'email' });
+    expect(type).toMatchInlineSnapshot(`"(string.Email)"`);
+  });
+
+  test('超链接', () => {
+    const type = parseSchema(docs, { type: 'string', format: 'uri' });
+    expect(type).toMatchInlineSnapshot(`"(string.Uri)"`);
+  });
+
   test('布尔', () => {
     const type = parseSchema(docs, { type: 'boolean' });
     expect(type).toMatchInlineSnapshot(`"(boolean)"`);
@@ -85,7 +95,28 @@ describe('常规', () => {
 
   test('bigint转为字符串', () => {
     const type = parseSchema(docs, { type: 'integer', format: 'int64' });
-    expect(type).toMatchInlineSnapshot(`"(string)"`);
+    expect(type).toMatchInlineSnapshot(`"(string.BigInt)"`);
+  });
+
+  test('时间', () => {
+    expect(parseSchema(docs, { type: 'string', format: 'date' })).toMatchInlineSnapshot(
+      `"(string.Date)"`,
+    );
+    expect(
+      parseSchema(docs, { type: 'string', format: 'date-time' }),
+    ).toMatchInlineSnapshot(`"(string.DateTime)"`);
+    expect(parseSchema(docs, { type: 'string', format: 'time' })).toMatchInlineSnapshot(
+      `"(string.Time)"`,
+    );
+  });
+
+  test('ip', () => {
+    expect(parseSchema(docs, { type: 'string', format: 'ipv4' })).toMatchInlineSnapshot(
+      `"(string.IPv4)"`,
+    );
+    expect(parseSchema(docs, { type: 'string', format: 'ipv6' })).toMatchInlineSnapshot(
+      `"(string.IPv6)"`,
+    );
   });
 
   test('动态对象属性', () => {

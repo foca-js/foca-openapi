@@ -22,12 +22,31 @@ export const parseSchema = (
     case 'number':
       if (parsed.format === 'int64') {
         // bigint 在传输过程中会转为字符串
-        return `(string${nullable})`;
+        return `(string.BigInt${nullable})`;
       }
       return `(number${nullable})`;
     case 'string':
-      if (parsed.format === 'binary') return `(Blob${nullable})`;
-      return `(string${nullable})`;
+      switch (parsed.format) {
+        case 'binary':
+          return `(Blob${nullable})`;
+        case 'date':
+          return `(string.Date${nullable})`;
+        case 'date-time':
+          return `(string.DateTime${nullable})`;
+        case 'time':
+          return `(string.Time${nullable})`;
+        case 'email':
+          return `(string.Email${nullable})`;
+        case 'uri':
+          return `(string.Uri${nullable})`;
+        case 'ipv4':
+          return `(string.IPv4${nullable})`;
+        case 'ipv6':
+          return `(string.IPv6${nullable})`;
+        default:
+          return `(string${nullable})`;
+      }
+
     case 'array':
       return `((${parseSchema(docs, parsed.items)})[]${nullable})`;
     case 'object': {

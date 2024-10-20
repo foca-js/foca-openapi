@@ -1,6 +1,38 @@
 import type { OpenapiClientAdapter, Methods } from './lib/adapter';
 import { utils } from './utils';
 
+export namespace string {
+  export type BigInt = string;
+  /**
+   * 2020-02-12T07:20:50.52Z
+   */
+  export type DateTime = string;
+  /**
+   * 2020-02-12
+   */
+  export type Date = string;
+  /**
+   * 07:20:50.52Z
+   */
+  export type Time = string;
+  /**
+   * example@gmail.com
+   */
+  export type Email = string;
+  /**
+   * https://example.com/foo/bar
+   */
+  export type Uri = string;
+  /**
+   * 127.0.0.1
+   */
+  export type IPv4 = string;
+  /**
+   * 2001:0DB8:0000:0023:0008:0800:200C:417A
+   */
+  export type IPv6 = string;
+}
+
 export namespace BaseOpenapiClient {
   export interface UserInputOpts<T extends object = object> {
     headers?: Record<string, unknown>;
