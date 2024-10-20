@@ -1,5 +1,13 @@
 
 
+# [1.3.0](https://github.com/foca-js/foca-openapi/compare/1.2.0...1.3.0) (2024-10-20)
+
+
+### Features
+
+* 为特殊格式增加别名 ([431d551](https://github.com/foca-js/foca-openapi/commit/431d55196178f98cdbfa58d3b974658e8ea1ebbf))
+* 对象动态属性布尔值判断 ([0d4ccec](https://github.com/foca-js/foca-openapi/commit/0d4ccec49f284463c36086b3c4a50f6e62e8c601))
+
 # [1.2.0](https://github.com/foca-js/foca-openapi/compare/1.1.7...1.2.0) (2024-10-20)
 
 
