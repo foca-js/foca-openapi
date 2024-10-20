@@ -71,7 +71,7 @@
     "node": "^18.19 || ^20.6 || >=22"
   },
   "peerDependencies": {
-    "typescript": ">=5.4"
+    "typescript": ">=5.0"
   },
   "peerDependenciesMeta": {
     "typescript": {
