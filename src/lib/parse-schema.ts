@@ -37,13 +37,17 @@ export const parseSchema = (
         return `${generateComments(schemaObj)}"${key}"${requiredProperties.includes(key) ? '' : '?'}: ${parseSchema(docs, schemaObj)}`;
       });
 
-      if (typeof parsed.additionalProperties === 'object') {
-        properties.push(
-          `[key: string]: ${parseSchema(docs, refToObject(docs, parsed.additionalProperties))}`,
-        );
+      let additionalType: string = '';
+      if (parsed.additionalProperties === true) {
+        additionalType = `{ [key: string]: unknown; }`;
+      } else if (typeof parsed.additionalProperties === 'object') {
+        additionalType = `{ [key: string]: ${parseSchema(docs, refToObject(docs, parsed.additionalProperties))} }`;
+      }
+      if (additionalType) {
+        additionalType = ' & ' + additionalType;
       }
 
-      return `({ ${properties.join(';')} }${nullable})`;
+      return `({ ${properties.join(';')} }${additionalType}${nullable})`;
     }
     default:
       return 'unknown';

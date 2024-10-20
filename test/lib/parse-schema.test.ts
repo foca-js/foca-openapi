@@ -91,7 +91,17 @@ describe('常规', () => {
   test('动态对象属性', () => {
     expect(
       parseSchema(docs, { type: 'object', additionalProperties: { type: 'string' } }),
-    ).toMatchInlineSnapshot(`"({ [key: string]: (string) })"`);
+    ).toMatchInlineSnapshot(`"({  } & { [key: string]: (string) })"`);
+
+    expect(
+      parseSchema(docs, {
+        type: 'object',
+        properties: { foo: { type: 'string' }, bar: { type: 'boolean' } },
+        additionalProperties: { type: 'string' },
+      }),
+    ).toMatchInlineSnapshot(
+      `"({ "foo"?: (string);"bar"?: (boolean) } & { [key: string]: (string) })"`,
+    );
 
     expect(
       parseSchema(docs, {
@@ -100,10 +110,23 @@ describe('常规', () => {
           type: 'object',
           properties: { foo: { type: 'string' }, bar: { type: 'number' } },
         },
+        nullable: true,
       }),
     ).toMatchInlineSnapshot(
-      `"({ [key: string]: ({ "foo"?: (string);"bar"?: (number) }) })"`,
+      `"({  } & { [key: string]: ({ "foo"?: (string);"bar"?: (number) }) } | null)"`,
     );
+
+    expect(
+      parseSchema(docs, { type: 'object', additionalProperties: true }),
+    ).toMatchInlineSnapshot(`"({  } & { [key: string]: unknown; })"`);
+
+    expect(
+      parseSchema(docs, { type: 'object', additionalProperties: false }),
+    ).toMatchInlineSnapshot(`"({  })"`);
+
+    expect(
+      parseSchema(docs, { type: 'object', additionalProperties: undefined }),
+    ).toMatchInlineSnapshot(`"({  })"`);
   });
 });
 
