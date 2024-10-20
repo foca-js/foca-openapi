@@ -1,5 +1,12 @@
 
 
+# [1.2.0](https://github.com/foca-js/foca-openapi/compare/1.1.7...1.2.0) (2024-10-20)
+
+
+### Features
+
+* 增加静默模式 ([a2aab8e](https://github.com/foca-js/foca-openapi/commit/a2aab8e38ffa8bac1d756960b1db39d23c3d0a5d))
+
 ## [1.1.7](https://github.com/foca-js/foca-openapi/compare/1.1.6...1.1.7) (2024-10-17)
 
 
