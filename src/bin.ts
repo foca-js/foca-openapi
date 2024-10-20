@@ -14,25 +14,30 @@ import { generateTemplate } from './lib/generate-template';
 import { filterTag } from './lib/filter-tag';
 import { filterUrl } from './lib/filter-url';
 import { readConfig } from './lib/read-config';
+import { SilentSpinner } from './silent-spinner';
+
+const argv = minimist(process.argv.slice(2), {
+  alias: { config: ['c'], env: ['e'] },
+});
+const silent = Boolean(argv['silent']);
+const env = argv['env'] || process.env['NODE_ENV'] || 'development';
+const configFile = argv['config'];
 
 const sleep = () => timers.setTimeout(300);
-
 const toArray = (value: any) => (Array.isArray(value) ? value : [value]);
 
-const spinner = new Listr<{
+const spinner = (silent ? new SilentSpinner([]) : new Listr([])) as Listr<{
   configs: OpenapiClientConfig[];
   docs: OpenAPIV3.Document[];
   projects: Record<string, { dts: string; js: string }>;
-}>([]);
+}>;
 
 spinner.add({
   title: '读取配置文件openapi.config.ts',
   task: async (ctx, task) => {
-    const userConfig = readConfig();
+    const userConfig = readConfig(configFile);
 
     if (typeof userConfig === 'function') {
-      const args = minimist(process.argv.slice(2), { alias: { env: ['e'] } });
-      const env = args['env'] || process.env['NODE_ENV'] || 'development';
       task.title += ` ${colors.gray(env)}`;
       ctx.configs = toArray(await userConfig(env));
     } else {
@@ -114,4 +119,4 @@ spinner.add({
   },
 });
 
-spinner.run();
+await spinner.run();

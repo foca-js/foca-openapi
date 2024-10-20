@@ -94,7 +94,9 @@ export const fooClient = new OpenapiClientFoo(adapter1);
 export const barClient = new OpenapiClientBar(adapter2);
 ```
 
-# 环境变量
+# CLI选项
+
+## 环境变量
 
 不同运行环境下，可能需要使用不同的服务端，比如开发一套服务，生产一套服务。因此执行指令时可以传入`-env`参数
 
@@ -116,6 +118,22 @@ export default defineConfig((env) => {
         : 'http://localhost:3000/openapi.json',
   };
 });
+```
+
+## 静默模式
+
+如果不希望屏幕上有文字输出，则使用`--silent`参数
+
+```bash
+npx openapi --silent
+```
+
+## 指定文件
+
+默认配置文件：`openapi.config.ts`，可以使用`--config`指定新的文件
+
+```bash
+npx openapi --config my-custom.config.ts
 ```
 
 # 参数
