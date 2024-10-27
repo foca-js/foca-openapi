@@ -169,11 +169,11 @@ openapi本地或者远程文件，支持格式：`yaml | json`
 
 类的生成方式。
 
-| 模式      | 描述                                                                                                    | 优点                                             |
-| --------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| rest      | 仅生成统一的 **get,post,put,patch,delete** 几个方法<br>参考：[rest-mode.js](./openapi/rest-mode.js)     | 1. 运行时代码少<br>2. 不暴露接口，安全性高       |
-| rpc       | 把 method+uri 拼接成一个新方法<br>参考：[rpc-mode.js](./openapi/rpc-mode.js)                            | 1. 拥有独立的注释文档                            |
-| rpc-group | 基于rpc模式，根据tags把方法归类到不同的分组中<br>参考：[rpc-group-mode.js](./openapi/rpc-group-mode.js) | 1. 拥有独立的注释文档<br>2. 能更快地找到目标接口 |
+| 模式      | 描述                                                                                                    | 优点                                         |
+| --------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| rest      | 仅生成统一的 **get,post,put,patch,delete** 几个方法<br>参考：[rest-mode.js](./openapi/rest-mode.js)     | 1. 运行时代码少<br>2. 不暴露接口，安全性高   |
+| rpc       | 把 method+uri 拼接成一个新方法<br>参考：[rpc-mode.js](./openapi/rpc-mode.js)                            | 1. 拥有独立的注释文档<br>2. 接口平铺一目了然 |
+| rpc-group | 基于rpc模式，根据tags把方法归类到不同的分组中<br>参考：[rpc-group-mode.js](./openapi/rpc-group-mode.js) | 1. 拥有独立的注释文档<br>2. 排列类似在线文档 |
 
 ```typescript
 const client = new OpenapiClient();
@@ -192,4 +192,4 @@ await client.user.getUsersById(opts);
 
 类型：`(docs: Document) => Document | void`
 
-加载完openapi文档后的事件，允许直接对文档进行修改
+加载完openapi文档后的事件，允许直接对文档进行修改，或者返回新的文档
