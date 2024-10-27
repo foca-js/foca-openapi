@@ -58,9 +58,16 @@
     "README.md",
     "CHANGELOG.md"
   ],
-  "keywords": [],
+  "keywords": [
+    "openapi",
+    "openapi-client",
+    "openapi-typescript",
+    "openapi-fetch",
+    "openapi-axios",
+    "openapi-adapter"
+  ],
   "repository": "git@github.com:foca-js/foca-openapi.git",
-  "homepage": "https://foca.js.org",
+  "homepage": "https://github.com/foca-js/foca-openapi",
   "license": "MIT",
   "volta": {
     "node": "20.13.0",
