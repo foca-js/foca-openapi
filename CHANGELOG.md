@@ -1,5 +1,17 @@
 
 
+# [2.0.0](https://github.com/foca-js/foca-openapi/compare/1.3.0...2.0.0) (2025-01-01)
+
+
+### Features
+
+* 输出文件放到src目录 ([35863bc](https://github.com/foca-js/foca-openapi/commit/35863bc7b40478d93804edad97ee83a06dd3cae5))
+
+
+### BREAKING CHANGES
+
+* client服务改为从相对路径引用
+
 # [1.3.0](https://github.com/foca-js/foca-openapi/compare/1.2.0...1.3.0) (2024-10-20)
 
 
