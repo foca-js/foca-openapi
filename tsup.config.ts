@@ -28,6 +28,7 @@ export default defineConfig([
     shims: false,
     dts: true,
     legacyOutput: true,
+    onSuccess: `echo '{"type":"module"}' > dist/esm/package.json`,
   },
   {
     entry: readdirSync(path.resolve('src', 'adapters')).map(

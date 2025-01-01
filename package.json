@@ -45,7 +45,6 @@
   "bin": {
     "openapi": "dist/bin.mjs"
   },
-  "type": "module",
   "publishConfig": {
     "type": "commonjs",
     "access": "public"
