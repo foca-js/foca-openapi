@@ -1,5 +1,12 @@
 
 
+## [2.0.2](https://github.com/foca-js/foca-openapi/compare/2.0.1...2.0.2) (2025-01-01)
+
+
+### Bug Fixes
+
+* 未正确区分esm和cjs ([9e1356e](https://github.com/foca-js/foca-openapi/commit/9e1356e695ba4af495519722b43e3dc186978e6d))
+
 ## [2.0.1](https://github.com/foca-js/foca-openapi/compare/2.0.0...2.0.1) (2025-01-01)
 
 
