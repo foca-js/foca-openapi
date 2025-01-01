@@ -62,7 +62,11 @@ test('完整的类型提示', async () => {
   await expect(generateTemplate(docs, { classMode: 'rest' })).resolves
     .toMatchInlineSnapshot(`
     {
-      "": "import { BaseOpenapiClient } from "foca-openapi";
+      "": "/* eslint-disable */
+    /* @ts-nocheck */
+    /* 自动生成的文件，请勿手动修改 */
+
+    import { BaseOpenapiClient } from "foca-openapi";
 
     export namespace OpenapiClient {
       export type GetUsersQuery = { foo?: string; bar?: string };
@@ -114,7 +118,11 @@ test('完整的类型提示', async () => {
   await expect(generateTemplate(docs, { classMode: 'rpc-group' })).resolves
     .toMatchInlineSnapshot(`
     {
-      "": "import { BaseOpenapiClient } from "foca-openapi";
+      "": "/* eslint-disable */
+    /* @ts-nocheck */
+    /* 自动生成的文件，请勿手动修改 */
+
+    import { BaseOpenapiClient } from "foca-openapi";
 
     export namespace OpenapiClient {
       export type GetUsersQuery = { foo?: string; bar?: string };
@@ -179,7 +187,11 @@ test('完整的类型提示', async () => {
   await expect(generateTemplate(docs, { classMode: 'rpc' })).resolves
     .toMatchInlineSnapshot(`
     {
-      "": "import { BaseOpenapiClient } from "foca-openapi";
+      "": "/* eslint-disable */
+    /* @ts-nocheck */
+    /* 自动生成的文件，请勿手动修改 */
+
+    import { BaseOpenapiClient } from "foca-openapi";
 
     export namespace OpenapiClient {
       export type GetUsersQuery = { foo?: string; bar?: string };

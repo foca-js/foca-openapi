@@ -6,6 +6,7 @@ import { rmSync } from 'fs';
 
 test('内容写入文件', async () => {
   const outputFile = path.posix.join(
+    'build',
     Date.now().toString(),
     Math.random().toString(),
     'test.ts',

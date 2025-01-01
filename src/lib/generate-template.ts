@@ -5,6 +5,7 @@ import { methods } from './adapter';
 import prettier from 'prettier';
 import { generateComments } from './generate-comments';
 import type { OpenapiClientConfig } from '../define-config';
+import { pickContentTypes } from './template';
 
 export const generateTemplate = async (
   docs: OpenAPIV3.Document,
@@ -21,14 +22,20 @@ export const generateTemplate = async (
         ? generateUriModelClassWithGroup(className, metas)
         : generateUriModelClass(className, metas);
 
-  const content = `
-    import { BaseOpenapiClient } from 'foca-openapi';
-
+  let content = `
     ${generateNamespaceTpl(className, metas)}
     ${classTpl}
     ${generatePathRelationTpl(className, metas)}
     ${generateContentTypeTpl(metas)}
 `;
+
+  if (content.includes('string.')) {
+    content = `import { BaseOpenapiClient, type string } from 'foca-openapi';\n${content}`;
+  } else {
+    content = `import { BaseOpenapiClient } from 'foca-openapi';\n${content}`;
+  }
+
+  content = `/* eslint-disable */\n/* @ts-nocheck */\n/* 自动生成的文件，请勿手动修改 */\n\n${content}`;
 
   return {
     [projectName]: await prettier.format(content, {
@@ -95,9 +102,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
     })
     .join('\n')}
 
-  protected override pickContentTypes(uri: string, method: string) {
-    return contentTypes[method + " " + uri] || [void 0, void 0];
-  }
+    ${pickContentTypes}
 }`;
 };
 
@@ -119,9 +124,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
     })
     .join('\n')}
 
-    protected override pickContentTypes(uri: string, method: string) {
-      return contentTypes[method + " " + uri] || [void 0, void 0];
-    }
+    ${pickContentTypes}
 }`;
 };
 
@@ -155,9 +158,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
     })
     .join('\n')}
 
-    protected override pickContentTypes(uri: string, method: string) {
-      return contentTypes[method + " " + uri] || [void 0, void 0];
-    }
+    ${pickContentTypes}
 }`;
 };
 
