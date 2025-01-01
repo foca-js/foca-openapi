@@ -45,11 +45,13 @@ npx openapi
 
 ```typescript
 // ./src/openapi/index.ts
-import { OpenapiClient } from './openapi/openapi';
+import { OpenapiClient } from './openapi';
 import { fetchAdapter } from 'foca-openapi/adapters/fetch';
 
 const adapter = fetchAdapter({ baseURL: 'http://api.com' });
 export const client = new OpenapiClient(adapter);
+
+export { OpenapiClient };
 ```
 
 # 适配器
@@ -95,6 +97,8 @@ import { OpenapiClientBar } from './bar';
 
 export const fooClient = new OpenapiClientFoo(adapter1);
 export const barClient = new OpenapiClientBar(adapter2);
+
+export { OpenapiClientFoo, OpenapiClientBar };
 ```
 
 # CLI选项
