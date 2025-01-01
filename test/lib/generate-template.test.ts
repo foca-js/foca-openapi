@@ -129,9 +129,9 @@ test('完整的类型提示', async () => {
          * @uri /users
          * @method GET
          */
-        getUsers(
+        getUsers: (
           opts: OpenapiClient_get_paths["/users"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
-        ): Promise<OpenapiClient_get_paths["/users"]["response"]> {
+        ): Promise<OpenapiClient_get_paths["/users"]["response"]> => {
           return this.request("/users", "get", opts);
         },
 
@@ -139,9 +139,9 @@ test('完整的类型提示', async () => {
          * @uri /users/{id}
          * @method GET
          */
-        getUsersById(
+        getUsersById: (
           opts?: OpenapiClient_get_paths["/users/{id}"]["request"] & BaseOpenapiClient.UserInputOpts<T>,
-        ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]> {
+        ): Promise<OpenapiClient_get_paths["/users/{id}"]["response"]> => {
           return this.request("/users/{id}", "get", opts);
         },
       };
@@ -494,9 +494,9 @@ describe('类', () => {
            * @uri /
            * @method GET
            */
-          getUsers(
+          getUsers: (
             opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
-          ): Promise<Client_get_paths['/']['response']> {
+          ): Promise<Client_get_paths['/']['response']> => {
             return this.request('/', 'get', opts);
           },
 
@@ -505,9 +505,9 @@ describe('类', () => {
            * @uri /
            * @method PATCH
            */
-          patchUsers(
+          patchUsers: (
             opts?: Client_patch_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
-          ): Promise<Client_patch_paths['/']['response']> {
+          ): Promise<Client_patch_paths['/']['response']> => {
             return this.request('/', 'patch', opts);
           },
         };
@@ -516,9 +516,9 @@ describe('类', () => {
            * @uri /
            * @method GET
            */
-          getUsers(
+          getUsers: (
             opts?: Client_get_paths['/']['request'] & BaseOpenapiClient.UserInputOpts<T>,
-          ): Promise<Client_get_paths['/']['response']> {
+          ): Promise<Client_get_paths['/']['response']> => {
             return this.request('/', 'get', opts);
           },
         };

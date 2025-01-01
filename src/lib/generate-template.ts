@@ -145,7 +145,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
               const optional =
                 meta.query.optional && meta.params.optional && meta.body.optional;
 
-              return `${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']> {
+              return `${generateComments(meta)}${camelCase(meta.key)}: (opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']> => {
                 return this.request('${meta.uri}', '${method}', opts);
               }`;
             });
