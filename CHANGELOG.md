@@ -1,5 +1,13 @@
 
 
+## [2.0.1](https://github.com/foca-js/foca-openapi/compare/2.0.0...2.0.1) (2025-01-01)
+
+
+### Bug Fixes
+
+* rpc-group模式下方法丢失context ([c6bf3ae](https://github.com/foca-js/foca-openapi/commit/c6bf3aeb6278a660d98d3edc7f420053bb576e78))
+* 未导入string命名空间 ([b98a31e](https://github.com/foca-js/foca-openapi/commit/b98a31e5bb3bc7df71066929b5d226512cb5bcb1))
+
 # [2.0.0](https://github.com/foca-js/foca-openapi/compare/1.3.0...2.0.0) (2025-01-01)
 
 
