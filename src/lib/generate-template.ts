@@ -10,7 +10,7 @@ export const generateTemplate = async (
   docs: OpenAPIV3.Document,
   config: Pick<OpenapiClientConfig, 'projectName' | 'classMode'>,
 ) => {
-  const { projectName, classMode = 'rest' } = config;
+  const { projectName = '', classMode = 'rest' } = config;
   const className = `OpenapiClient${upperFirst(camelCase(projectName))}`;
   const metas = documentToMeta(docs);
 
@@ -21,28 +21,27 @@ export const generateTemplate = async (
         ? generateUriModelClassWithGroup(className, metas)
         : generateUriModelClass(className, metas);
 
-  const dts = `
+  const content = `
+    import { BaseOpenapiClient } from 'foca-openapi';
+
     ${generateNamespaceTpl(className, metas)}
-    ${classTpl.dts}
+    ${classTpl}
     ${generatePathRelationTpl(className, metas)}
+    ${generateContentTypeTpl(metas)}
 `;
 
-  const js = `
-  ${classTpl.js}
-  ${generateContentTypeTpl(className, metas)}
-  `;
-
   return {
-    [className]: {
-      dts: await prettier.format(dts, { parser: 'typescript', printWidth: 120 }),
-      js: await prettier.format(js, { parser: 'typescript', printWidth: 120 }),
-    },
+    [projectName]: await prettier.format(content, {
+      parser: 'typescript',
+      printWidth: 120,
+      semi: true,
+    }),
   };
 };
 
 export const generateNamespaceTpl = (className: string, metas: Metas) => {
   return `
-declare namespace ${className} {
+export namespace ${className} {
   ${methods
     .flatMap((method) => {
       let content = metas[method].flatMap((meta) => {
@@ -51,7 +50,7 @@ declare namespace ${className} {
         (<const>['query', 'params', 'body', 'response']).forEach((key) => {
           const interfaceName = upperFirst(camelCase(meta.key + '_' + key));
           if (meta[key].types.length) {
-            opts.push(`type ${interfaceName} = ${meta[key].types.join(' | ')}\n`);
+            opts.push(`export type ${interfaceName} = ${meta[key].types.join(' | ')}\n`);
           }
         });
 
@@ -64,9 +63,8 @@ declare namespace ${className} {
 };
 
 export const generateMethodModeClass = (className: string, metas: Metas) => {
-  return {
-    dts: `
-declare class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
+  return `
+export class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${methods
     .map((method) => {
       if (!metas[method].length) return '';
@@ -90,32 +88,22 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
 
       return `${method}<K extends keyof ${className}_${method}_paths>(
         uri: K, ...rest: ${opts}
-      ): Promise<${className}_${method}_paths[K]['response']>`;
-    })
-    .join('\n')}
-}`,
-    js: `
-var ${className} = class extends BaseOpenapiClient {
-  ${methods
-    .map((method) => {
-      if (!metas[method].length) return '';
-      return `${method}(uri, opts) {
-        return this.request(uri, "get", opts);
-      }`;
+      ): Promise<${className}_${method}_paths[K]['response']> {
+        return this.request(uri, "get", ...rest);
+      }
+      `;
     })
     .join('\n')}
 
-  pickContentTypes(uri, method) {
-    return contentTypes${className}[method + " " + uri] || [void 0, void 0];
+  protected override pickContentTypes(uri: string, method: string) {
+    return contentTypes[method + " " + uri] || [void 0, void 0];
   }
-};`,
-  };
+}`;
 };
 
 export const generateUriModelClass = (className: string, metas: Metas) => {
-  return {
-    dts: `
-declare class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
+  return `
+export class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${methods
     .flatMap((method) => {
       return metas[method].map((meta) => {
@@ -123,29 +111,18 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
           meta.query.optional && meta.params.optional && meta.body.optional;
 
         return `
-        ${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
-      });
-    })
-    .join('\n')}
-}`,
-    js: `
-var ${className} = class extends BaseOpenapiClient {
-  ${methods
-    .flatMap((method) => {
-      return metas[method].map((meta) => {
-        return `
-        ${generateComments(meta)}${camelCase(meta.key)}(opts) {
+        ${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']> {
           return this.request('${meta.uri}', "${method}", opts);
-        }`;
+        }
+        `;
       });
     })
     .join('\n')}
 
-  pickContentTypes(uri, method) {
-    return contentTypes${className}[method + " " + uri] || [void 0, void 0];
-  }
-};`,
-  };
+    protected override pickContentTypes(uri: string, method: string) {
+      return contentTypes[method + " " + uri] || [void 0, void 0];
+    }
+}`;
 };
 
 export const generateUriModelClassWithGroup = (className: string, metas: Metas) => {
@@ -155,12 +132,11 @@ export const generateUriModelClassWithGroup = (className: string, metas: Metas) 
     ),
   ];
 
-  return {
-    dts: `
-declare class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
+  return `
+export class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${namespaces
     .map((ns) => {
-      return `readonly ${snakeCase(ns)}: {
+      return `readonly ${snakeCase(ns)} = {
       ${methods
         .flatMap((method) => {
           return metas[method]
@@ -169,44 +145,26 @@ declare class ${className}<T extends object = object> extends BaseOpenapiClient<
               const optional =
                 meta.query.optional && meta.params.optional && meta.body.optional;
 
-              return `${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']>`;
+              return `${generateComments(meta)}${camelCase(meta.key)}(opts${optional ? '?' : ''}: ${className}_${method}_paths['${meta.uri}']['request'] & BaseOpenapiClient.UserInputOpts<T>): Promise<${className}_${method}_paths['${meta.uri}']['response']> {
+                return this.request('${meta.uri}', '${method}', opts);
+              }`;
             });
         })
-        .join('\n')}
+        .join(',\n')}
     }`;
     })
     .join('\n')}
-}`,
-    js: `
-var ${className} = class extends BaseOpenapiClient {
-  ${namespaces
-    .map((ns) => {
-      return `${snakeCase(ns)} = {
-      ${methods
-        .flatMap((method) => {
-          return metas[method]
-            .filter((meta) => meta.tags.includes(ns))
-            .map((meta) => {
-              return `${generateComments(meta)}${camelCase(meta.key)}: (opts) => {
-                return this.request('${meta.uri}', '${method}', opts);
-              },`;
-            });
-        })
-        .join('\n')}
-      }`;
-    })
-    .join('\n')}
 
-  pickContentTypes(uri, method) {
-    return contentTypes${className}[method + ' ' + uri] || [void 0, void 0];
-  }
-};`,
-  };
+    protected override pickContentTypes(uri: string, method: string) {
+      return contentTypes[method + " " + uri] || [void 0, void 0];
+    }
+}`;
 };
 
-export const generateContentTypeTpl = (className: string, metas: Metas) => {
+export const generateContentTypeTpl = (metas: Metas) => {
   return `
-  const contentTypes${className} = {
+  const contentTypes: Record<string, [BaseOpenapiClient.UserInputOpts['requestBodyType'],
+    BaseOpenapiClient.UserInputOpts['responseType']]> = {
   ${methods
     .map((method) => {
       if (!metas[method].length) return '';

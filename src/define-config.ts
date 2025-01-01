@@ -47,6 +47,13 @@ export interface OpenapiClientConfig {
    * 加载完openapi文档后的事件，允许直接对文档进行修改
    */
   onDocumentLoaded?: (doc: OpenAPIV3.Document) => OpenAPIV3.Document | void;
+  /**
+   * 输出文件路径。
+   *
+   * - 如果没有配置项目名，默认值：`./src/openapi/openapi.ts`
+   * - 如果配置了项目名，默认值：`./src/openapi/${projectName}.ts`
+   */
+  outputFile?: string;
 }
 
 export type DefineConfigOptions =

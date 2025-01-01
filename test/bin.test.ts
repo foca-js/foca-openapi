@@ -17,8 +17,8 @@ test('生成 bin.mjs', async () => {
 
 test('生成runtime并合并代码', { timeout: 9_000 }, async () => {
   execSync('node dist/bin.mjs', { encoding: 'utf8', stdio: 'inherit' });
-  expect(readFileSync(path.resolve('dist', 'index.d.ts'), 'utf8')).toContain(
-    'declare namespace OpenapiClient {',
+  expect(readFileSync(path.resolve('src', 'openapi', 'openapi.ts'), 'utf8')).toContain(
+    'export namespace OpenapiClient {',
   );
 });
 
@@ -27,15 +27,17 @@ test('配置数组生成多个client', { timeout: 9_000 }, async () => {
     encoding: 'utf8',
     stdio: 'inherit',
   });
-  const content = readFileSync(path.resolve('dist', 'index.d.ts'), 'utf8');
-  expect(content).toContain('declare namespace OpenapiClientFoo {');
-  expect(content).toContain('declare namespace OpenapiClientBar {');
-  expect(content).not.toContain('declare namespace OpenapiClient {');
+  expect(readFileSync(path.resolve('src', 'openapi', 'foo.ts'), 'utf8')).toContain(
+    'export namespace OpenapiClientFoo {',
+  );
+  expect(readFileSync(path.resolve('src', 'openapi', 'bar.ts'), 'utf8')).toContain(
+    'export namespace OpenapiClientBar {',
+  );
 });
 
 test('静默模式', { timeout: 9_000 }, async () => {
   execSync('node dist/bin.mjs --silent', { encoding: 'utf8', stdio: 'inherit' });
-  expect(readFileSync(path.resolve('dist', 'index.d.ts'), 'utf8')).toContain(
-    'declare namespace OpenapiClient {',
+  expect(readFileSync(path.resolve('src', 'openapi', 'openapi.ts'), 'utf8')).toContain(
+    'export namespace OpenapiClient {',
   );
 });

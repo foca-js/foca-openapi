@@ -33,7 +33,7 @@ export default defineConfig({
 
 ## 2. 执行指令
 
-指令的作用是把openapi文档转换为前端服务，代码会自动合并到库文件中
+指令的作用是把openapi文档转换为前端服务，生成的文件会自动放到 src/openapi 目录
 
 ```bash
 npx openapi
@@ -44,8 +44,8 @@ npx openapi
 使用合适的请求适配器创建好服务后，就可以导出给各个模块使用了
 
 ```typescript
-// ./src/services/http.ts
-import { OpenapiClient } from 'foca-openapi';
+// ./src/openapi/index.ts
+import { OpenapiClient } from './openapi/openapi';
 import { fetchAdapter } from 'foca-openapi/adapters/fetch';
 
 const adapter = fetchAdapter({ baseURL: 'http://api.com' });
@@ -69,6 +69,7 @@ export const client = new OpenapiClient(adapter);
 如果一个项目需要融合多个openapi文档，则可以用数组的形式配置
 
 ```typescript
+// openapi.config.ts
 import { defineConfig } from 'foca-openapi';
 
 export default defineConfig([
@@ -88,7 +89,9 @@ export default defineConfig([
 执行指令后就会生成两个类
 
 ```typescript
-import { OpenapiClientFoo, OpenapiClientBar } from 'foca-openapi';
+// ./src/openapi/index.ts
+import { OpenapiClientFoo } from './foo';
+import { OpenapiClientBar } from './bar';
 
 export const fooClient = new OpenapiClientFoo(adapter1);
 export const barClient = new OpenapiClientBar(adapter2);
@@ -143,6 +146,15 @@ npx openapi --config my-custom.config.ts
 类型：`string`<br>
 
 openapi本地或者远程文件，支持格式：`yaml | json`
+
+### outputFile
+
+类型 `string`<br>
+
+输出文件路径
+
+- 如果没有配置项目名，默认值：`./src/openapi/openapi.ts`
+- 如果配置了项目名，默认值：`./src/openapi/${projectName}.ts`
 
 ### includeUriPrefix
 
