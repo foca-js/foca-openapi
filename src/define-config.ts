@@ -50,7 +50,7 @@ export interface OpenapiClientConfig {
    * ```json
    * {
    *   "paths": {
-   *     "/client/users": {
+   *     "/some/client/users": {
    *       "get": {
    *         "operationId": "List_users",
    *         "parameters": [],
@@ -60,7 +60,7 @@ export interface OpenapiClientConfig {
    *   }
    * }
    * ```
-   * 1. 如果以 `method+uri` 的形式生成，则效果为：`openapi.getClientUsers()`
+   * 1. 如果以 `method+uri` 的形式生成，则效果为：`openapi.getSomeClientUsers()`
    * 2. 如果以 `operationId` 的形式生成，则效果为：`openapi.listUsers()`
    *
    * 注意：如果operationId字段不存在，则仍以`method+uri`的规则生成
