@@ -104,12 +104,13 @@ spinner.add({
 
 spinner.add({
   title: '写入指定文件',
-  task: async (ctx) => {
-    await Promise.all(
+  task: async (ctx, task) => {
+    const files = await Promise.all(
       ctx.configs.map((config) => {
         return saveToFile(config, ctx.projects);
       }),
     );
+    task.title += ' ' + colors.gray(files.join(', '));
   },
 });
 
