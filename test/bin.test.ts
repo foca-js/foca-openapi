@@ -15,7 +15,7 @@ test('生成 bin.mjs', async () => {
   expect(existsSync(path.resolve('dist', 'bin.mjs')));
 });
 
-test('生成runtime并合并代码', { timeout: 9_000 }, async () => {
+test('写入指定文件', { timeout: 9_000 }, async () => {
   execSync('node dist/bin.mjs', { encoding: 'utf8', stdio: 'inherit' });
   expect(readFileSync(path.resolve('src', 'openapi', 'openapi.ts'), 'utf8')).toContain(
     'export namespace OpenapiClient {',

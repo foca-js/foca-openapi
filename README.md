@@ -204,6 +204,34 @@ await client.user.getUsersById(opts);
 
 **注意**：rpc-group模式下，如果没有提供tags，则默认合并到`default`分组
 
+### rpcName
+
+类型：`'method+uri' | 'operationId'`<br>
+默认值：`'method+uri'`
+
+指定在rpc(-group)模式下方法名的生成规则。
+
+假设有这么一段openapi文档：
+
+```json
+{
+  "paths": {
+    "/client/users": {
+      "get": {
+        "operationId": "List_users",
+        "parameters": [],
+        "summary": "Users"
+      }
+    }
+  }
+}
+```
+
+1. 如果以 `method+uri` 的形式生成，则效果为：`openapi.getClientUsers()`
+2. 如果以 `operationId` 的形式生成，则效果为：`openapi.listUsers()`
+
+**注意**：如果operationId字段不存在，则仍以`method+uri`的规则生成
+
 ### onDocumentLoaded
 
 类型：`(docs: Document) => Document | void`

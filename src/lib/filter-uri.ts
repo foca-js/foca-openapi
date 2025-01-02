@@ -1,7 +1,7 @@
 import type { OpenAPIV3 } from 'openapi-types';
 import type { OpenapiClientConfig } from '../define-config';
 
-export const filterUrl = (docs: OpenAPIV3.Document, config: OpenapiClientConfig) => {
+export const filterUri = (docs: OpenAPIV3.Document, config: OpenapiClientConfig) => {
   if (!config.includeUriPrefix) return;
   const patterns = Array.isArray(config.includeUriPrefix)
     ? config.includeUriPrefix

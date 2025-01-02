@@ -10,7 +10,7 @@ import { pathToOpenapi } from './lib/path-to-openapi';
 import { saveToFile } from './lib/save-to-file';
 import { generateTemplate } from './lib/generate-template';
 import { filterTag } from './lib/filter-tag';
-import { filterUrl } from './lib/filter-url';
+import { filterUri } from './lib/filter-uri';
 import { readConfig } from './lib/read-config';
 import { SilentSpinner } from './silent-spinner';
 
@@ -80,7 +80,7 @@ spinner.add({
   },
   task: async (ctx) => {
     ctx.configs.forEach((config, i) => {
-      filterUrl(ctx.docs[i]!, config);
+      filterUri(ctx.docs[i]!, config);
     });
     await sleep();
   },

@@ -44,6 +44,29 @@ export interface OpenapiClientConfig {
    */
   classMode?: 'rest' | 'rpc' | 'rpc-group';
   /**
+   * 指定在rpc(-group)模式下方法名的生成规则。默认：`method+uri`
+   *
+   * 假设有这么一段openapi文档：
+   * ```json
+   * {
+   *   "paths": {
+   *     "/client/users": {
+   *       "get": {
+   *         "operationId": "List_users",
+   *         "parameters": [],
+   *         "summary": "Users"
+   *       }
+   *     }
+   *   }
+   * }
+   * ```
+   * 1. 如果以 `method+uri` 的形式生成，则效果为：`openapi.getClientUsers()`
+   * 2. 如果以 `operationId` 的形式生成，则效果为：`openapi.listUsers()`
+   *
+   * 注意：如果operationId字段不存在，则仍以`method+uri`的规则生成
+   */
+  rpcName?: 'method+uri' | 'operationId';
+  /**
    * 加载完openapi文档后的事件，允许直接对文档进行修改
    */
   onDocumentLoaded?: (doc: OpenAPIV3.Document) => OpenAPIV3.Document | void;

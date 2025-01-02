@@ -12,5 +12,20 @@ test('key从路由获取', () => {
     },
   });
 
-  expect(documentToMeta(docs)['get'][0]!.key).toBe('get_users_by_id_by_name');
+  expect(documentToMeta(docs, 'method+uri')['get'][0]!.key).toBe(
+    'get_users_by_id_by_name',
+  );
+});
+
+test('key从operationId获取', () => {
+  const docs = getBasicDocument({
+    '/users/{id}/{name}': {
+      get: {
+        operationId: 'Abc_def IJK',
+        responses: {},
+      },
+    },
+  });
+
+  expect(documentToMeta(docs, 'operationId')['get'][0]!.key).toBe('abc_def_ijk');
 });

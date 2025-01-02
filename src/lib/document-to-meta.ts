@@ -4,6 +4,7 @@ import { snakeCase } from 'lodash-es';
 import { parseParameters } from './parse-parameters';
 import { parseRequestBody } from './parse-request-body';
 import { parseResponse } from './parse-response';
+import type { OpenapiClientConfig } from '../define-config';
 
 export type Metas = Record<
   Methods,
@@ -11,6 +12,7 @@ export type Metas = Record<
     key: string;
     uri: string;
     method: Methods;
+    operationId?: string;
     contentTypes: string[];
     query: { optional: boolean; types: [string] | [] };
     params: { optional: boolean; types: [string] | [] };
@@ -23,7 +25,10 @@ export type Metas = Record<
   }[]
 >;
 
-export const documentToMeta = (docs: OpenAPIV3.Document) => {
+export const documentToMeta = (
+  docs: OpenAPIV3.Document,
+  rpcName: OpenapiClientConfig['rpcName'],
+) => {
   const metas: Metas = {
     get: [],
     post: [],
@@ -39,7 +44,11 @@ export const documentToMeta = (docs: OpenAPIV3.Document) => {
       metas[method].push({
         uri,
         method,
-        key: snakeCase(`${method}_${uri.replaceAll(/{(.+?)}/g, '_by_$1')}`),
+        key: snakeCase(
+          rpcName === 'operationId' && methodItem.operationId
+            ? methodItem.operationId
+            : `${method}_${uri.replaceAll(/{(.+?)}/g, '_by_$1')}`,
+        ),
         query: parseParameters(docs, pathItem, methodItem, 'query'),
         params: parseParameters(docs, pathItem, methodItem, 'path'),
         ...parseRequestBody(docs, methodItem),
