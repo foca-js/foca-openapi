@@ -1,5 +1,12 @@
 
 
+# [2.1.0](https://github.com/foca-js/foca-openapi/compare/2.0.2...2.1.0) (2025-01-02)
+
+
+### Features
+
+* 允许配置rpc方法名的生成规则 ([38e55c0](https://github.com/foca-js/foca-openapi/commit/38e55c08829abf87acc182c6e0437236b5c2aa28))
+
 ## [2.0.2](https://github.com/foca-js/foca-openapi/compare/2.0.1...2.0.2) (2025-01-01)
 
 
