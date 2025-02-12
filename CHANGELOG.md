@@ -1,5 +1,12 @@
 
 
+## [2.1.1](https://github.com/foca-js/foca-openapi/compare/2.1.0...2.1.1) (2025-02-12)
+
+
+### Bug Fixes
+
+* rest模式下生成了错误的method ([e1f1437](https://github.com/foca-js/foca-openapi/commit/e1f143731cb0906a544578be15fc1f22a5ff0b9f))
+
 # [2.1.0](https://github.com/foca-js/foca-openapi/compare/2.0.2...2.1.0) (2025-01-02)
 
 
