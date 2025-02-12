@@ -19,8 +19,8 @@ export const generateTemplate = async (
     classMode === 'rest'
       ? generateMethodModeClass(className, metas)
       : classMode === 'rpc-group'
-        ? generateUriModelClassWithGroup(className, metas)
-        : generateUriModelClass(className, metas);
+        ? generateRpcModelClassWithGroup(className, metas)
+        : generateRpcModelClass(className, metas);
 
   let content = `
     ${generateNamespaceTpl(className, metas)}
@@ -96,7 +96,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
       return `${method}<K extends keyof ${className}_${method}_paths>(
         uri: K, ...rest: ${opts}
       ): Promise<${className}_${method}_paths[K]['response']> {
-        return this.request(uri, "get", ...rest);
+        return this.request(uri, "${method}", ...rest);
       }
       `;
     })
@@ -106,7 +106,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
 }`;
 };
 
-export const generateUriModelClass = (className: string, metas: Metas) => {
+export const generateRpcModelClass = (className: string, metas: Metas) => {
   return `
 export class ${className}<T extends object = object> extends BaseOpenapiClient<T> {
   ${methods
@@ -128,7 +128,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
 }`;
 };
 
-export const generateUriModelClassWithGroup = (className: string, metas: Metas) => {
+export const generateRpcModelClassWithGroup = (className: string, metas: Metas) => {
   const namespaces = [
     ...new Set(
       methods.flatMap((method) => metas[method].flatMap((meta) => meta.tags || [])),

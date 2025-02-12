@@ -5,8 +5,8 @@ import {
   generateNamespaceTpl,
   generatePathRelationTpl,
   generateTemplate,
-  generateUriModelClass,
-  generateUriModelClassWithGroup,
+  generateRpcModelClass,
+  generateRpcModelClassWithGroup,
 } from '../../src/lib/generate-template';
 import prettier from 'prettier';
 import { getBasicMetas } from '../mocks/get-basic-matea';
@@ -369,7 +369,7 @@ describe('类', () => {
           uri: K,
           ...rest: [opts?: Client_patch_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_patch_paths[K]['response']> {
-          return this.request(uri, 'get', ...rest);
+          return this.request(uri, 'patch', ...rest);
         }
 
         protected override pickContentTypes(uri: string, method: string) {
@@ -381,7 +381,7 @@ describe('类', () => {
   });
 
   test('[uri] 只生成接口对应的方法', async () => {
-    const content = generateUriModelClass('Client', metas);
+    const content = generateRpcModelClass('Client', metas);
     await expect(formatDocs(content)).resolves.toMatchInlineSnapshot(`
       "export class Client<T extends object = object> extends BaseOpenapiClient<T> {
         /**
@@ -498,7 +498,7 @@ describe('类', () => {
   });
 
   test('命名空间', async () => {
-    const content = generateUriModelClassWithGroup('Client', metas);
+    const content = generateRpcModelClassWithGroup('Client', metas);
     await expect(formatDocs(content)).resolves.toMatchInlineSnapshot(`
       "export class Client<T extends object = object> extends BaseOpenapiClient<T> {
         readonly user = {
