@@ -1,4 +1,4 @@
-import { rule } from '@aomex/core';
+import { rule } from '@aomex/common';
 import { body, params, query, response, Router } from '@aomex/web';
 
 export const router = new Router();
