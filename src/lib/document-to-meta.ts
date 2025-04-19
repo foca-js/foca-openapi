@@ -28,6 +28,7 @@ export type Metas = Record<
 export const documentToMeta = (
   docs: OpenAPIV3.Document,
   rpcName: OpenapiClientConfig['rpcName'],
+  looseInputNumber?: boolean,
 ) => {
   const metas: Metas = {
     get: [],
@@ -49,8 +50,8 @@ export const documentToMeta = (
             ? methodItem.operationId
             : `${method}_${uri.replaceAll(/{(.+?)}/g, '_by_$1')}`,
         ),
-        query: parseParameters(docs, pathItem, methodItem, 'query'),
-        params: parseParameters(docs, pathItem, methodItem, 'path'),
+        query: parseParameters(docs, pathItem, methodItem, 'query', looseInputNumber),
+        params: parseParameters(docs, pathItem, methodItem, 'path', looseInputNumber),
         ...parseRequestBody(docs, methodItem),
         ...parseResponse(docs, methodItem),
         deprecated: methodItem.deprecated,

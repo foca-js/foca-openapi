@@ -232,6 +232,20 @@ await client.user.getUsersById(opts);
 
 **注意**：如果operationId字段不存在，则仍以`method+uri`的规则生成
 
+### looseInputNumber
+
+类型：`boolean`<br>
+默认值：`false`
+
+开启后，`query`和`params`对象中的属性类型，`number`会被解析为`number | string`。<br>
+不管是否开启都不会对请求造成影响，因为最终都会拼接到请求链接上变成一段完整的uri。
+
+```typescript
+// http://host:port/users/1?tag=234
+openapi.getUsersById({ params: { id: 1 }, query: { tag: 234 } });
+openapi.getUsersById({ params: { id: '1' }, query: { tag: '234' } });
+```
+
 ### onDocumentLoaded
 
 类型：`(docs: Document) => Document | void`

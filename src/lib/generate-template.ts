@@ -9,11 +9,19 @@ import { pickContentTypes } from './template';
 
 export const generateTemplate = async (
   docs: OpenAPIV3.Document,
-  config: Pick<OpenapiClientConfig, 'projectName' | 'classMode' | 'rpcName'>,
+  config: Pick<
+    OpenapiClientConfig,
+    'projectName' | 'classMode' | 'rpcName' | 'looseInputNumber'
+  >,
 ) => {
-  const { projectName = '', classMode = 'rest', rpcName = 'method+uri' } = config;
+  const {
+    projectName = '',
+    classMode = 'rest',
+    rpcName = 'method+uri',
+    looseInputNumber = false,
+  } = config;
   const className = `OpenapiClient${upperFirst(camelCase(projectName))}`;
-  const metas = documentToMeta(docs, rpcName);
+  const metas = documentToMeta(docs, rpcName, looseInputNumber);
 
   const classTpl =
     classMode === 'rest'

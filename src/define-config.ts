@@ -77,6 +77,18 @@ export interface OpenapiClientConfig {
    * - 如果配置了项目名，默认值：`./src/openapi/${projectName}.ts`
    */
   outputFile?: string;
+  /**
+   * 开启后，`query`和`params`对象的属性类型中，`number`会被解析为`number | string`。默认值：`false`
+   *
+   * 不管是否开启都不会对请求造成影响，因为最终都会拼接到请求链接上变成一段完整的uri。
+   *
+   * ```typescript
+   * // http://host:port/users/1?tag=234
+   * openapi.getUsersById({ params: { id: 1 }, query: { tag: 234 } });
+   * openapi.getUsersById({ params: { id: '1' }, query: { tag: '234' } });
+   * ```
+   */
+  looseInputNumber?: boolean;
 }
 
 export type DefineConfigOptions =

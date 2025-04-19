@@ -2,6 +2,10 @@ import type { OpenapiClientAdapter, Methods } from './lib/adapter';
 import { utils } from './utils';
 
 export namespace string {
+  /**
+   * '12345'
+   */
+  export type Number = string;
   export type BigInt = string;
   /**
    * 2020-02-12T07:20:50.52Z

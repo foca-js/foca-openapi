@@ -35,6 +35,7 @@ const docs = getBasicDocument({
         },
         { $ref: '#/components/parameters/refA' },
         { $ref: '#/components/parameters/refB' },
+        { $ref: '#/components/parameters/refC' },
       ],
     },
   },
@@ -54,12 +55,18 @@ docs.components = {
       required: true,
       schema: { type: 'integer' },
     },
+    refC: {
+      name: 'ref_c',
+      in: 'path',
+      required: true,
+      schema: { type: 'integer', nullable: true },
+    },
   },
 };
 
 test('解析查询字符串', () => {
-  const result = parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'query');
-  expect(result).toMatchInlineSnapshot(`
+  expect(parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'query', false))
+    .toMatchInlineSnapshot(`
     {
       "optional": false,
       "types": [
@@ -74,21 +81,55 @@ test('解析查询字符串', () => {
       ],
     }
   `);
+
+  expect(parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'query', true))
+    .toMatchInlineSnapshot(`
+      {
+        "optional": false,
+        "types": [
+          "{ foo: (number | string.Number)
+            ;
+      bar?: (number | string.Number)
+            ;
+      ref_a?: (number | string.Number)
+            ;
+      bazz: (string)
+             }",
+        ],
+      }
+    `);
 });
 
 test('解析路径参数', () => {
-  const result = parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'path');
-  expect(result).toMatchInlineSnapshot(`
-    {
-      "optional": false,
-      "types": [
-        "{ id: (number)
-          ;
-    ref_b: (number)
-           }",
-      ],
-    }
-  `);
+  expect(parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'path', false))
+    .toMatchInlineSnapshot(`
+      {
+        "optional": false,
+        "types": [
+          "{ id: (number)
+            ;
+      ref_b: (number)
+            ;
+      ref_c: (number | null)
+             }",
+        ],
+      }
+    `);
+
+  expect(parseParameters(docs, docs.paths['/']!, docs.paths['/']!.get!, 'path', true))
+    .toMatchInlineSnapshot(`
+      {
+        "optional": false,
+        "types": [
+          "{ id: (number | string.Number)
+            ;
+      ref_b: (number | string.Number)
+            ;
+      ref_c: (number | string.Number | null)
+             }",
+        ],
+      }
+    `);
 });
 
 test('未找到参数则变成可选', () => {

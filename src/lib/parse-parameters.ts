@@ -8,6 +8,7 @@ export const parseParameters = (
   pathItem: OpenAPIV3.PathItemObject,
   methodItem: OpenAPIV3.OperationObject,
   key: string,
+  looseInputNumber?: boolean,
 ): { optional: boolean; types: [string] | [] } => {
   const parameters = (methodItem.parameters || [])
     .concat(pathItem.parameters || [])
@@ -20,7 +21,14 @@ export const parseParameters = (
       return `${generateComments(parameter)}${parameter.name}${parameter.required ? '' : '?'}: ${parseSchema(docs, parameter.schema)}
       `;
     })
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((type) => {
+      if (!looseInputNumber) return type;
+      return type
+        .replaceAll('(number)', '(number | string.Number)')
+        .replaceAll('(number | null)', '(number | string.Number | null)');
+    });
+
   return {
     optional: parameters.every((parameter) => !parameter.required),
     types: types.length ? [`{ ${types.join(';\n')} }`] : [],
