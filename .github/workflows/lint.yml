@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ts: [5.0.x, 5.1.x, 5.2.x, 5.3.x, 5.4.x, 5.5.x]
+        ts: [5.0.x, 5.1.x, 5.2.x, 5.3.x, 5.4.x, 5.5.x, 5.6.x, 5.7.x, 5.8.x]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -32,7 +32,7 @@ jobs:
         with:
           cache: 'pnpm'
           node-version-file: 'package.json'
-      - name: Use Typescript@${{ matrix.ts }} & @types/node@${{ matrix.node-dts }}
+      - name: Use Typescript@${{ matrix.ts }}
         run: |
           pnpm install
           pnpm install typescript@${{ matrix.ts }}
