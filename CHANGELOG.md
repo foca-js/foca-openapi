@@ -1,4 +1,11 @@
+# Changelog
 
+# [2.2.0](https://github.com/foca-js/foca-openapi/compare/2.1.1...2.2.0) (2025-04-19)
+
+
+### Features
+
+* 使用项目内的prettier配置对生成的文件进行格式化 ([4f53541](https://github.com/foca-js/foca-openapi/commit/4f5354196fd8beb0c40f89aad60800d36cfa43c5))
 
 ## [2.1.1](https://github.com/foca-js/foca-openapi/compare/2.1.0...2.1.1) (2025-02-12)
 
