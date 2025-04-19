@@ -1,5 +1,12 @@
 # Changelog
 
+# [2.3.0](https://github.com/foca-js/foca-openapi/compare/2.2.0...2.3.0) (2025-04-19)
+
+
+### Features
+
+* 添加looseInputNumber配置，支持将number类型解析为number | string ([fcd8540](https://github.com/foca-js/foca-openapi/commit/fcd8540fc0e899c60b71c1209b60931a518e6a2d))
+
 # [2.2.0](https://github.com/foca-js/foca-openapi/compare/2.1.1...2.2.0) (2025-04-19)
 
 
