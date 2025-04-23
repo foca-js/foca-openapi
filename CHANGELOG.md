@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/foca-js/foca-openapi/compare/2.3.0...2.3.1) (2025-04-23)
+
+
+### Bug Fixes
+
+* 修正生成模板中的可选URI格式 ([59ffa65](https://github.com/foca-js/foca-openapi/commit/59ffa655e2b90a0c476c2cc17374b94cee5e61f7))
+
 # [2.3.0](https://github.com/foca-js/foca-openapi/compare/2.2.0...2.3.0) (2025-04-19)
 
 
