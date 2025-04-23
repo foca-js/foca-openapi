@@ -19,7 +19,7 @@ const prettierOptions: prettier.Options = {
 
 const formatDocs = (content: string) => prettier.format(content, prettierOptions);
 
-test('完整的类型提示', async () => {
+test('完整的文件内容', async () => {
   const docs = getBasicDocument({
     '/users': {
       get: {
@@ -456,6 +456,18 @@ describe('类', () => {
           responseTypes: [],
           tags: [],
         },
+        {
+          uri: '/c',
+          method: 'get',
+          key: 'cc',
+          query: { optional: true, types: [] },
+          params: { optional: true, types: [] },
+          body: { optional: true, types: [] },
+          response: { types: [] },
+          contentTypes: [],
+          responseTypes: [],
+          tags: [],
+        },
       ],
     });
     const content = generateMethodModeClass('Client', metas);
@@ -463,7 +475,7 @@ describe('类', () => {
       "export class Client<T extends object = object> extends BaseOpenapiClient<T> {
         get<K extends keyof Client_get_paths>(
           uri: K,
-          ...rest: K extends '/b'
+          ...rest: K extends '/b' | '/c'
             ? [opts?: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
             : [opts: Client_get_paths[K]['request'] & BaseOpenapiClient.UserInputOpts<T>]
         ): Promise<Client_get_paths[K]['response']> {

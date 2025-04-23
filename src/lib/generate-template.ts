@@ -104,7 +104,7 @@ export class ${className}<T extends object = object> extends BaseOpenapiClient<T
       } else if (optionalUris.length === 0) {
         opts = `[opts: ${optType}]`;
       } else {
-        opts = `K extends '${optionalUris.join(' | ')}' ? [opts?: ${optType}] : [opts: ${optType}]`;
+        opts = `K extends '${optionalUris.join("' | '")}' ? [opts?: ${optType}] : [opts: ${optType}]`;
       }
 
       return `${method}<K extends keyof ${className}_${method}_paths>(
