@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      foca-axios:
+        specifier: ^4.1.2
+        version: 4.1.2
       listr2:
         specifier: ^8.3.2
         version: 8.3.2
@@ -84,9 +87,6 @@ importers:
       axios:
         specifier: ^1.8.4
         version: 1.8.4
-      foca-axios:
-        specifier: ^4.1.2
-        version: 4.1.2
       husky:
         specifier: ^9.1.7
         version: 9.1.7

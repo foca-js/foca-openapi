@@ -3,6 +3,7 @@ import { pathToOpenapi } from '../../src/lib/path-to-openapi';
 import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import type { OpenAPIV3 } from 'openapi-types';
+import axios from 'foca-axios';
 
 test('从本地获取json', async () => {
   const result = await pathToOpenapi('./openapi/openapi.json');
@@ -19,18 +20,13 @@ test('从本地获取yaml', async () => {
 });
 
 test('从远程获取', async () => {
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = vitest.fn().mockResolvedValueOnce({
-    ok: true,
-    text: () => {
-      return Promise.resolve(
-        JSON.stringify(readFileSync(path.resolve('openapi', 'openapi.json'), 'utf8')),
-      );
-    },
+  const originalFetch = axios.request;
+  axios.request = vitest.fn().mockImplementation(async () => {
+    return JSON.stringify(readFileSync(path.resolve('openapi', 'openapi.json'), 'utf8'));
   });
   const result = await pathToOpenapi('http://example.com');
   expect(result).toMatchFileSnapshot(path.resolve('openapi', 'openapi.json'));
-  globalThis.fetch = originalFetch;
+  axios.request = originalFetch;
 });
 
 test('支持加载事件', async () => {

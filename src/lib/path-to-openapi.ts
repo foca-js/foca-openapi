@@ -3,6 +3,7 @@ import path from 'node:path';
 import type { OpenAPIV3 } from 'openapi-types';
 import YAML from 'yaml';
 import type { OpenapiClientConfig } from '../define-config';
+import axios from 'foca-axios';
 
 export const pathToOpenapi = async (
   uri: string,
@@ -10,16 +11,16 @@ export const pathToOpenapi = async (
 ): Promise<OpenAPIV3.Document> => {
   let originContent: string;
   if (uri.startsWith('http:') || uri.startsWith('https:')) {
-    const response = await fetch(uri, { method: 'get' });
-    originContent = await response.text();
+    // 使用fetch时会出现偶发性错误：`connect ECONNREFUSED 0.0.0.0:443`
+    originContent = await axios.get(uri, { responseType: 'text' });
   } else {
     originContent = await readFile(path.resolve(uri), 'utf8');
   }
 
   let document: OpenAPIV3.Document;
-  if (originContent.startsWith('{')) {
+  try {
     document = JSON.parse(originContent);
-  } else {
+  } catch {
     document = YAML.parse(originContent);
   }
 
