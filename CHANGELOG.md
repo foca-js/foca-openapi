@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/foca-js/foca-openapi/compare/2.3.1...2.3.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* 使用axios代替fetch以防止请求出错 ([26dc344](https://github.com/foca-js/foca-openapi/commit/26dc34400999ec5313ceee50ab7f7fb55dfec4a0))
+
 ## [2.3.1](https://github.com/foca-js/foca-openapi/compare/2.3.0...2.3.1) (2025-04-23)
 
 
