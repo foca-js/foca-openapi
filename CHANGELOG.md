@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.3](https://github.com/foca-js/foca-openapi/compare/2.3.2...2.3.3) (2025-06-20)
+
+
+### Bug Fixes
+
+* 生成的文档注释在特定情况下可能提前结束 ([0d8f63e](https://github.com/foca-js/foca-openapi/commit/0d8f63e4a684ef751f0ba007847683446531e70e))
+
 ## [2.3.2](https://github.com/foca-js/foca-openapi/compare/2.3.1...2.3.2) (2025-05-22)
 
 
