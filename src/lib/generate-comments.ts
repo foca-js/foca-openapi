@@ -10,5 +10,7 @@ export const generateComments = (opts: {
   if (opts.method) comments.push(` * @method ${opts.method.toUpperCase()}`);
   if (opts.deprecated) comments.push('* @deprecated');
 
-  return comments.length ? `\n/**\n${comments.join('\n')}\n*/\n` : '';
+  return comments.length
+    ? `\n/**\n${comments.join('\n').replaceAll('*/', '*\\/')}\n*/\n`
+    : '';
 };

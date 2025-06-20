@@ -64,3 +64,14 @@ test('method', () => {
     "
   `);
 });
+
+test('避免文档注释提前结束', () => {
+  expect(generateComments({ description: 'foo */ **/ / *\/ bar' }))
+    .toMatchInlineSnapshot(`
+    "
+    /**
+    * foo *\\/ **\\/ / *\\/ bar
+    */
+    "
+  `);
+});
