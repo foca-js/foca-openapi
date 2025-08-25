@@ -1,6 +1,6 @@
 {
   "name": "foca-openapi",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "根据openapi文档生成请求客户端",
   "scripts": {
     "test": "vitest",

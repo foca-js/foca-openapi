@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.4](https://github.com/foca-js/foca-openapi/compare/2.3.3...2.3.4) (2025-08-25)
+
+
+### Bug Fixes
+
+* 布尔值在枚举类型中被解析为字符串类型 ([1861a48](https://github.com/foca-js/foca-openapi/commit/1861a48c3e4aee10bab60278405f9d8d57e7cf7c))
+
 ## [2.3.3](https://github.com/foca-js/foca-openapi/compare/2.3.2...2.3.3) (2025-06-20)
 
 
