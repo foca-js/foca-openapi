@@ -12,7 +12,7 @@ export const parseSchema = (
   if (ofType) return `(${ofType}${nullable})`;
 
   if (parsed.enum?.length) {
-    return `(${parsed.enum.map((item) => (typeof item === 'number' ? item : `"${item}"`)).join(' | ')}${nullable})`;
+    return `(${parsed.enum.map((item) => (typeof item === 'number' || typeof item === 'boolean' ? item : `"${item}"`)).join(' | ')}${nullable})`;
   }
 
   switch (parsed.type) {

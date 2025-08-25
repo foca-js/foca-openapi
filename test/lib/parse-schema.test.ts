@@ -89,8 +89,8 @@ describe('常规', () => {
 
   test('枚举', () => {
     expect(
-      parseSchema(docs, { enum: ['foo', 'bar', 'baz', 1, 2] }),
-    ).toMatchInlineSnapshot(`"("foo" | "bar" | "baz" | 1 | 2)"`);
+      parseSchema(docs, { enum: ['foo', 'bar', 'baz', 1, 2, true, false] }),
+    ).toMatchInlineSnapshot(`"("foo" | "bar" | "baz" | 1 | 2 | true | false)"`);
   });
 
   test('bigint转为字符串', () => {
